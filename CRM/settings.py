@@ -86,6 +86,11 @@ TEMPLATES = [
     },
 ]
 
+LOGIN_URL = '/login/'
+
+# settings.py
+LOGIN_REDIRECT_URL = '/test1/'  # Redirect to the desired path after login
+
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
