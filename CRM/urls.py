@@ -17,9 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from crm_home import views
-
+from django.urls import path, include
 urlpatterns = [
+    path('', include('account.urls')),
     path('admin/', admin.site.urls),
     path('pay/',views.home, name="base_home"),
     path('profile/',views.my_profile, name="profile_page"),
+    
 ]

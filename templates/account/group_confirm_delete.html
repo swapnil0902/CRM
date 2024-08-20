@@ -1,0 +1,8 @@
+<!-- group_confirm_delete.html -->
+<h1>Confirm Delete</h1>
+<p>Are you sure you want to delete "{{ group.name }}"?</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Yes, delete</button>
+    <a href="{% url 'group_list' %}">Cancel</a>
+</form>
