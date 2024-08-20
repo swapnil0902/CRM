@@ -20,5 +20,6 @@ from crm_home import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',views.home),
+    path('pay/',views.home, name="base_home"),
+    path('profile/',views.my_profile, name="profile_page"),
 ]
