@@ -1,0 +1,73 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'crm_home/index.css' %}">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/contact/" class="btn">Contact Admin</a>
+            <a href="/login/" class="btn">Login</a>
+        </nav>
+    </header>
+
+    <main>
+        <h1>User Responsibilities</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Responsibilities</th>
+                    <th>Account Manager</th>
+                    <th>User</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Create User Roles</td>
+                    <td>&#10004;</td>
+                    <td>&#10006;</td>
+                </tr>
+                <tr>
+                    <td>Modify Permissions for User Roles</td>
+                    <td>&#10004;</td>
+                    <td>&#10006;</td>
+                </tr>
+                <tr>
+                    <td>Create New User Roles</td>
+                    <td>&#10004;</td>
+                    <td>&#10006;</td>
+                </tr>
+                <tr>
+                    <td>Schedule & View Appointments</td>
+                    <td>&#10004;</td>
+                    <td>&#10006;</td>
+                </tr>
+                <tr>
+                    <td>Create Lead</td>
+                    <td>&#10004;</td>
+                    <td>&#10004;</td>
+                </tr>
+                <tr>
+                    <td>Access Customer Records</td>
+                    <td>&#10004;</td>
+                    <td>&#10004;</td>
+                </tr>
+                <tr>
+                    <td>Create & View Tasks</td>
+                    <td>&#10004;</td>
+                    <td>&#10004;</td>
+                </tr>
+                <tr>
+                    <td>View the list of tasks</td>
+                    <td>&#10004;</td>
+                    <td>&#10004;</td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+</body>
+</html>
