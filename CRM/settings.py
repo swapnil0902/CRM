@@ -81,7 +81,6 @@ DATABASES = {
         'PASSWORD': 'sql1234',
         'HOST': 'localhost',
         'PORT': '5432'
-        :Adasdjdkdc
     }
 }
 
