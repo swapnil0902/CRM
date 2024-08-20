@@ -21,4 +21,5 @@ from crm_home import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.home),
+    path('dash/', views.dashboard)
 ]

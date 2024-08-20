@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    {% block title %}
+        <title>Customer Relationship Management</title>
+    {% endblock %}
+    <link rel="stylesheet" type="text/css" href="{% static 'crm/styles.css' %}">
+</head>
+<body>  
+<header id="home">
+    <div class="navbar" id="navbar">
+        <div class="navbar-tabs" id="navbar-tabs">
+            <ul class="navbar-tabs-ul">
+                <li>{{ user.username }}</li>
+                {% comment %} {% if is_user %} {% endcomment %}
+                    <li><a href="#">Dashboard</a></li>   
+                    <li><a href="#">Task & Diary Management</a></li>
+                    <li><a href="#">Appointment Management</a></li> 
+                    <li><a href="#">Lead </a></li> 
+                    <li><a href="#">Customer Records</a></li> 
+                    <li><a href="#">My Profile</a></li> 
+                    <li><a href="#">Logout</a></li>
+                {% comment %} {% elif is_accMngr %}
+                    <li><a href="{% url '' %}">Dashboard</a></li>   
+                    <li><a href="{% url '' %}">Task & Diary Management</a></li>
+                    <li><a href="{% url '' %}">Appointment Management</a></li> 
+                    <li><a href="{% url '' %}">Lead </a></li> 
+                    <li><a href="{% url '' %}">Customer Records</a></li> 
+                    <li><a href="{% url '' %}">My Profile</a></li> 
+                    <li><a href="{% url '' %}">Manager Panel</a></li>
+                    <li><a href="{% url '' %}">Logout</a></li>
+                {% elif is_admin %}
+                    <li><a href="{% url '' %}">Dashboard</a></li>   
+                    <li><a href="{% url '' %}">Task & Diary Management</a></li>
+                    <li><a href="{% url '' %}">Appointment Management</a></li> 
+                    <li><a href="{% url '' %}">Lead </a></li> 
+                    <li><a href="{% url '' %}">Customer Records</a></li> 
+                    <li><a href="{% url '' %}">Admin Panel</a></li> 
+                    <li><a href="{% url '' %}">Logout</a></li>
+                {% endif %} {% endcomment %}
+            </ul>
+        </div>
+    </div>
+</header>
+    <h1>Customer Relationship Management</h1>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+</body>
+</html>

@@ -5,14 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'crm_home/index.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'crm_home/styles.css' %}">
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="/contact/" class="btn">Contact Admin</a>
-            <a href="/login/" class="btn">Login</a>
-        </nav>
+    <header id="home">
+        <div class="navbar" id="navbar">
+        <div class="navbar-tabs" id="navbar-tabs">
+          <ul class="navbar-tabs-ul">
+                  <li class="left"><a href="/contact/" class="btn">Contact Admin</a></li>
+                  <li class="right"><a href="/login/" class="btn">Login</a></li>
+          </ul>
+        </div>
+      </div>
     </header>
 
     <main>
