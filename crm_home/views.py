@@ -9,3 +9,4 @@ def dashboard(request):
 
 def my_profile(request):
     return render(request,"crm_home/my_profile.html")
+>>>>>>> f28fe03cce8e8b986914811a34557360ded2101a

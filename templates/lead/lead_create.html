@@ -1,0 +1,44 @@
+{% extends "crm/base.html" %}
+{% load static %}
+
+{% block title %}
+    Create Lead
+{% endblock %}
+
+{% block stylesheets %}
+        <link rel="stylesheet" type="text/css" href="{% static 'lead/styles.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1>Create Lead</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td>{{ form.first_name.label }}</td>
+                <td>{{ form.first_name }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.last_name.label }}</td>
+                <td>{{ form.last_name }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.email.label }}</td>
+                <td>{{ form.email }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.phone_number.label }}</td>
+                <td>{{ form.phone_number }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.address.label }}</td>
+                <td>{{ form.address }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.status.label }}</td>
+                <td>{{ form.status }}</td>
+            </tr>
+        </table>
+        <button type="submit">Create Lead</button>
+    </form>
+{% endblock %}
