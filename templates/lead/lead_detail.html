@@ -1,4 +1,5 @@
 {% extends "crm/base.html" %}
+{% load static %}
 
 {% block title %}
     Edit Lead
@@ -14,6 +15,10 @@
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Save Changes</button>
-        <a href="{% url 'lead_delete' lead.id %}">Delete Lead</a>
+    </form>
+    <form method="post" action="{% url 'lead_detail' lead.id %}" style="margin-top: 20px;">
+        {% csrf_token %}
+        <input type="hidden" name="_method" value="DELETE">
+        <button type="submit">Delete Lead</button>
     </form>
 {% endblock %}

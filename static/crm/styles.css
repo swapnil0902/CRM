@@ -37,11 +37,6 @@ ul li a:hover {
     color: #fff; /* Invert colors on hover */
 }
 
-
-
-
-
-
 header{
     width: 100%;
     height: 150px;
@@ -53,7 +48,7 @@ header{
     background-color: #0FA4AF;
     backdrop-filter: blur(10px);
     height: 80px;
-    width: 100%;
+    width: 90%;
     display: flex;
     align-items: center;
     padding: 0px 20px;
@@ -67,11 +62,13 @@ header{
 .navbar-tabs{
     display: flex;
     height: 100%;
+    width: 95%;
     align-items: center;
     justify-content: center;
 }
 .navbar-tabs-ul{
     height: 100%;
+    width: fit-content;
     display: flex;
     list-style: none;
     align-items: center;
@@ -106,21 +103,6 @@ header{
     font-weight: 100;
 }
 
-/* header .btn {
-    color: #F7EFE5;
-    background-color: #C8A1E0;
-    padding: 10px 20px;
-    text-decoration: none;
-    border-radius: 5px;
-    margin-left: 10px;
-    transition: background-color 0.3s ease;
-}
-
-header .btn:hover {
-    background-color: #E2BFD9;
-} */
-
-/* Table Styles */
 main {
     margin: 20px;
     width: 80%;

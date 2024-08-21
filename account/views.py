@@ -7,7 +7,7 @@ from .forms import GroupForm
 
 # @login_required
 def home(request):
-    return render(request, 'account/home.html')
+    return render(request, 'crm/dashboard.html')
 
  
 
