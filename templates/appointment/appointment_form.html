@@ -1,0 +1,16 @@
+<!-- templates/appointments/appointment_form.html -->
+{% extends "crm/base.html" %}
+
+{% block title %}
+    {% if form.instance.pk %}Update Appointment{% else %}Create Appointment{% endif %}
+{% endblock %}
+
+{% block content %}
+    <h1>{% if form.instance.pk %}Update Appointment{% else %}Create Appointment{% endif %}</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">{% if form.instance.pk %}Update{% else %}Create{% endif %} Appointment</button>
+    </form>
+    <a href="{% url 'appointment_list' %}">Back to Appointment List</a>
+{% endblock %}

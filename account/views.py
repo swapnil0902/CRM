@@ -17,7 +17,7 @@ def admin_dashboard(request):
 
 @login_required
 def home(request):
-    return render(request, 'account/home.html')
+    return render(request, 'crm/dashboard.html')
 
  
 

@@ -1,0 +1,79 @@
+{% extends "crm/base.html" %}
+{% load static %}
+
+{% block title %}
+    Create Lead
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F7EFE5;
+            color: #674188;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #C8A1E0;
+        }
+
+        form {
+            background-color: #E2BFD9;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        form input, form select, form textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #674188;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button[type="submit"] {
+            background-color: #674188;
+            color: #F7EFE5;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-weight: bold;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #C8A1E0;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 15px;
+            color: #674188;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #C8A1E0;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <h1>Create Task</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Create New Task</button>
+    </form>
+    <a href="{% url 'task_list' %}">Back to Task List</a>
+{% endblock %}
