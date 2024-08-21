@@ -67,12 +67,23 @@ def lead_create(request):
         form = LeadForm(request.POST, user=request.user)
         if form.is_valid():
             lead = form.save(commit=False)
-            # Set other lead fields as needed, e.g., lead.staff = request.user.staff
+
+            if request.user.groups.filter(name='Staff').exists():  # Staff user automatically assigned
+                lead.staff = request.user
+            elif request.user.groups.filter(name='Account Manager').exists():  # Account Manager assigns lead
+                assigned_to_id = request.POST.get('staff')  # Use 'staff' from the form data
+                if assigned_to_id:
+                    lead.staff = get_object_or_404(User, pk=assigned_to_id)
+                else:
+                    form.add_error('staff', 'You must assign this lead to a staff member.')
+                    return render(request, 'lead/lead_create.html', {'form': form, 'user': request.user})
+
+            # Now lead.staff is set, and we can safely save the lead instance
             lead.save()
-            return redirect('lead_list')
+            return redirect('lead-view')
     else:
         form = LeadForm(user=request.user)
-        if request.user.groups.filter(name='Account Manager').exists():
+        if request.user.groups.filter(name='Account Manager').exists():  # Only Account Managers see company users
             company = get_object_or_404(Company, pk=request.user.userprofile.company.pk)
             form.fields['staff'].queryset = User.objects.filter(userprofile__company=company)
 
