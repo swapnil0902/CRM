@@ -31,6 +31,3 @@ def createAuthToken(sender, instance, created, **kwargs):
 @receiver(post_delete, sender=settings.AUTH_USER_MODEL)
 def delete_user_token(sender, instance, **kwargs):
     Token.objects.filter(user=instance).delete()
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.models import Group
-from .forms import GroupForm

@@ -1,0 +1,36 @@
+{% extends "crm/base.html" %}
+{% load static %}
+
+{% block title %}
+    <title>Lead</title>
+{% endblock %}
+
+{% block content %}
+    <h1>Lead List</h1>
+    <a href="{% url 'lead_create' %}">Create New Lead</a> 
+    <table>
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for lead in leads %}
+            <tr>
+                <td>{{ lead.first_name }}</td>
+                <td>{{ lead.last_name }}</td>
+                <td>{{ lead.email }}</td>
+                <td>{{ lead.phone_number }}</td>
+                <td>{{ lead.status }}</td>
+                <td><a href="{% url 'lead_edit' lead.id %}">Edit</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
