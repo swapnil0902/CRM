@@ -17,7 +17,7 @@ class Lead(models.Model):
     address = models.TextField(blank=True, null=True)
     status = status = models.CharField(max_length=30, choices=STATUS_CHOICES)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
-    staff = models.OneToOneField(User, on_delete=models.CASCADE, default=None)
+    staff = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def _str_(self):
         return f'{self.first_name} {self.last_name}'
