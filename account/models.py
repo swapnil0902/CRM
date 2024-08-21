@@ -31,3 +31,17 @@ def createAuthToken(sender, instance, created, **kwargs):
 @receiver(post_delete, sender=settings.AUTH_USER_MODEL)
 def delete_user_token(sender, instance, **kwargs):
     Token.objects.filter(user=instance).delete()
+
+
+from django.db import models
+from django.contrib.auth.models import User
+
+class CustomerRequest(models.Model):
+    first_name = models.CharField(max_length=150)
+    last_name = models.CharField(max_length=150)
+    email = models.EmailField(unique=True)
+    mobile=models.IntegerField(max_length=150)
+    approved = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"

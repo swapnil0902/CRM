@@ -3,10 +3,12 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-    <h2>Create a New Group</h2>
-    <form method="post" action="{% url 'group_create' %}">
+<body>
+    <h2>Customer Request Form</h2>
+    <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Save</button>
+        <button type="submit">Submit</button>
     </form>
-{% endblock %}
+</body>
+{% endblock%}

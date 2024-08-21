@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import Group, Permission,User
 import string
 import random
+from django.core.exceptions import ValidationError
 
 class GroupForm(forms.ModelForm):
     permissions = forms.ModelMultipleChoiceField(
@@ -13,6 +14,12 @@ class GroupForm(forms.ModelForm):
     class Meta:
         model = Group
         fields = ['name', 'permissions']
+
+    def clean_name(self):
+        name = self.cleaned_data.get('name')
+        if Group.objects.filter(name=name).exclude(pk=self.instance.pk).exists():
+            raise ValidationError('Group with this Name already exists.')
+        return name
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -59,3 +66,11 @@ class ActivatePasswordForm(forms.Form):
             raise forms.ValidationError("The new passwords do not match.")
 
         return cleaned_data
+    
+from django import forms
+from .models import CustomerRequest
+
+class CustomerRequestForm(forms.ModelForm):
+    class Meta:
+        model = CustomerRequest
+        fields = ['first_name', 'last_name', 'email','mobile' ]

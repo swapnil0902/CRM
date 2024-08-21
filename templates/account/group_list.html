@@ -1,3 +1,8 @@
+{% extends 'account/Admin_Base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
 <h1>Groups</h1>
 <a href="{% url 'group_create' %}">Create new group</a>
 <ul>
@@ -9,3 +14,4 @@
         </li>
     {% endfor %}
 </ul>
+{% endblock %}

@@ -1,8 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Signup</title>
-</head>
+{% extends 'account/Admin_Base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
 <body>
     <h2>Sign Up</h2>
     <form method="post">
@@ -11,4 +11,4 @@
         <button type="submit">Register</button>
     </form>
 </body>
-</html>
+{% endblock%}
