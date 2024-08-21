@@ -1,0 +1,44 @@
+{% extends "crm/base.html" %}
+
+{% block title %}
+    Appointment List
+{% endblock %}
+
+{% block content %}
+    <h1>Appointment List</h1>
+    <a href="{% url 'appointment_create' %}">Create New Appointment</a><br/><br/>
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Start Date/Time</th>
+                <th>End Date/Time</th>
+                <th>Location</th>
+                <th>Attendees</th>
+                <th>Customer</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for appointment in appointments %}
+            <tr>
+                <td>{{ appointment.title }}</td>
+                <td>{{ appointment.description }}</td>
+                <td>{{ appointment.start_date }}</td>
+                <td>{{ appointment.end_date }}</td>
+                <td>{{ appointment.location }}</td>
+                <td>{{ appointment.attendees.all|join:", " }}</td>
+                <td>{{ appointment.customer }}</td>
+                <td><a href="{% url 'appointment_update' appointment.pk %}">Update</a></td>
+                <td><a href="{% url 'appointment_delete' appointment.pk %}">Delete</a></td>
+            </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="10">No appointments available.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

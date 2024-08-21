@@ -1,0 +1,23 @@
+{% extends "crm/base.html" %}
+
+{% block title %}
+    Task Details
+{% endblock %}
+
+{% block stylesheets %}
+        <link rel="stylesheet" type="text/css" href="{% static 'lead/styles.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1>{{ task.title }}</h1>
+    <p><strong>Client Name:</strong> {{ task.client_name }}</p>
+    <p><strong>Description:</strong> {{ task.description }}</p>
+    <p><strong>Due Date:</strong> {{ task.due_date }}</p>
+    <p><strong>Due Date:</strong> {{ task.due_time }}</p>
+    <p><strong>Priority:</strong> {{ task.priority }}</p>
+    <p><strong>Status:</strong> {{ task.status }}</p>
+    <p><strong>Assigned To:</strong> {{ task.assigned_to.username }}</p>
+    <p><strong>Customer:</strong> {{ task.customer }}</p>
+    <a href="{% url 'task_list' %}">Back to Task List</a>
+    </form>
+{% endblock %}

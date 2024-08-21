@@ -22,9 +22,9 @@ def lead_create(request):
     if request.method == 'POST':
         form = LeadForm(request.POST)
         if form.is_valid():
-            lead = form.save(commit=False)
-            # Set other lead fields as needed, e.g., lead.staff = request.user.staff
-            lead.save()
+            lead = form.save(commit=False)  # Don't commit yet, as we need to set staff
+            lead.staff = request.user  # Assuming 'staff' is linked to the user creating the lead
+            lead.save()  # Now save the lead with the staff member assigned
             return redirect('lead_list')
     else:
         form = LeadForm()

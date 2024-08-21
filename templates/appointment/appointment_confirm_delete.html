@@ -1,0 +1,14 @@
+{% extends "crm/base.html" %}
+
+{% block title %}
+    Confirm Delete Appointment
+{% endblock %}
+
+{% block content %}
+    <h1>Are you sure you want to delete "{{ appointment.title }}"?</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit">Confirm</button>
+        <a href="{% url 'appointment_list' %}">Cancel</a>
+    </form>
+{% endblock %}

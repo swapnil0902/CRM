@@ -21,8 +21,10 @@ urlpatterns = [
     path('', include('account.urls')),
     path('admin/', admin.site.urls),
     path('',views.home),
+    path('appointment/', include('appointment.urls')),
     path('dash/', views.dashboard, name="dashboard"),
     path('profile/',views.my_profile, name="profile_page"),
     path('lead/', include('lead.urls')),
+    path('task/', include('task.urls')),
     path('customer/', include('customer.urls')),
 ]
