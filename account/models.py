@@ -40,7 +40,7 @@ class CustomerRequest(models.Model):
     first_name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
     email = models.EmailField(unique=True)
-    mobile=models.IntegerField(max_length=150)
+    mobile=models.IntegerField()
     approved = models.BooleanField(default=False)
 
     def __str__(self):
