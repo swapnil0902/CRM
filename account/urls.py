@@ -16,5 +16,5 @@ urlpatterns = [
     path('update-group/<int:pk>/', views.group_update, name='group_update'),
     path('groups/<int:pk>/delete/', views.group_delete, name='group_delete'),
     path('activate/', views.activate_password, name='activate_password'),
-    path('logout', views.logout, name='logout'),
+    path('logout', views.logout_view, name='logout'),
 ]
