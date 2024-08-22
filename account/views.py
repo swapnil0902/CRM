@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import Group
 from .forms import GroupForm
+from django.contrib.auth import logout
 
 
 def admin_dashboard(request):
@@ -256,3 +257,9 @@ def activate_password(request):
         form = ActivatePasswordForm()
 
     return render(request, 'account/activate_password.html', {'form': form})
+
+
+@login_required
+def logout_view(request):
+    logout(request)
+    return redirect("home")
