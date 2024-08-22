@@ -17,4 +17,7 @@ urlpatterns = [
     path('groups/<int:pk>/delete/', views.group_delete, name='group_delete'),
     path('activate/', views.activate_password, name='activate_password'),
     path('logout', views.logout_view, name='logout'),
+    path('request-company/', views.company_request_view, name='request_company'),
+    # path('company-request-submitted/', views.TemplateView.as_view(template_name='account/company_request_submitted.html'), name='company_request_submitted'),
+
 ]
