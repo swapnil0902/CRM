@@ -20,7 +20,7 @@ def update_user_profile(request):
         form = UserUpdateForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-            return redirect('profile')  # Redirect to the profile page or wherever you prefer
+            return redirect('profile_page')  # Redirect to the profile page or wherever you prefer
     else:
         form = UserUpdateForm(instance=request.user)
     
@@ -41,7 +41,7 @@ def profile_view(request):
         form = UserChangeForm(instance=request.user)
     
     editable = 'edit' in request.GET
-    return render(request, 'profile.html', {'form': form, 'editable': editable})
+    return render(request, 'crm_home/my_profile.html', {'form': form, 'editable': editable})
 
 def create_company(request):
     if request.method == 'POST':
