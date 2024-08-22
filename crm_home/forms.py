@@ -69,3 +69,11 @@ class AccountManagerForm(forms.ModelForm):
         user.groups.add(account_manager_group)
 
         return user_profile, password
+    
+
+
+
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name']

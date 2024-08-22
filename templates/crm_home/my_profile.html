@@ -124,32 +124,12 @@
                 {% elif is_accMngr %}
                     <p>Account Manager at {{user.userprofile.company}}</p>
                 {% endif %}
-                <p>johndoe@example.com</p>
-                <p>+1 234 567 890</p>
+                <p>{{user.email}}</p>
             </div>
         </div>
 
         <div class="profile-actions">
-            <a href="#" class="btn">Edit Profile</a>
-            <a href="#" class="btn">Settings</a>
-        </div>
-
-        <div class="profile-content">
-            <div class="profile-section">
-                <h2>About Me</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin lacinia velit eget erat vulputate, sed dignissim erat bibendum.</p>
-            </div>
-            <div class="profile-section">
-                <h2>My Courses</h2>
-                <p>Course 1: Advanced Python Programming</p>
-                <p>Course 2: Introduction to Django</p>
-                <p>Course 3: Data Science with Python</p>
-            </div>
-            <div class="profile-section">
-                <h2>My Achievements</h2>
-                <p>Top Instructor Award 2023</p>
-                <p>Best Course in Data Science 2023</p>
-            </div>
+            <a href="{% url 'update_profile' %}" class="btn">Edit Profile</a>
         </div>
     </div>
 

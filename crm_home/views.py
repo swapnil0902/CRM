@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .forms import CompanyForm
+from .forms import CompanyForm, UserUpdateForm
 from .models import Company
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.forms import UserChangeForm
@@ -14,6 +14,21 @@ def dashboard(request):
 
 def my_profile(request):
     return render(request,"crm_home/my_profile.html")
+
+def update_user_profile(request):
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')  # Redirect to the profile page or wherever you prefer
+    else:
+        form = UserUpdateForm(instance=request.user)
+    
+    return render(request, 'crm_home/update_profile.html', {'form': form})
+
+
+
+
 
 # @login_required
 def profile_view(request):

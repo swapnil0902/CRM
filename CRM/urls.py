@@ -16,7 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from crm_home import views
+from django.contrib.auth import views as auth_views
 from django.urls import path, include
+
+
 urlpatterns = [
     path('', include('account.urls')),
     path('admin/', admin.site.urls),
@@ -24,6 +27,8 @@ urlpatterns = [
     path('appointment/', include('appointment.urls')),
     path('dash/', views.dashboard, name="dashboard"),
     path('profile/',views.my_profile, name="profile_page"),
+    path('update-profile/', views.update_user_profile, name='update_profile'),
+    path('change-password/', auth_views.PasswordChangeView.as_view(template_name='crm_home/change_password.html'), name='change_password'),
     path('lead/', include('lead.urls')),
     path('task/', include('task.urls')),
     path('customer/', include('customer.urls')),
