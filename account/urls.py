@@ -16,7 +16,8 @@ urlpatterns = [
     ########################## request ###########################################################
     path('customer-requests/', views.customer_requests_view, name='customer_requests'),
     path('request-submitted/', views.request_submitted_view, name='request_submitted'),
-
+    path('create-company-from-request/<int:request_id>/', crm_homeview.prefilled_create_company, name='prefilled_create_company'),
+    path('list-new-company-requests/', views.list_new_company_requests, name='list_new_company_requests'),
 
     ############################# groups #########################################################
     path('groups/', views.group_list, name='group_list'),
@@ -31,18 +32,26 @@ urlpatterns = [
     #################################### activate password #######################################
     path('activate/', views.activate_password, name='activate_password'),
 
+    #################################### companies #######################################
+    path('companies/', crm_homeview.company_list, name='company_list'),
+    path('company/<int:pk>/', crm_homeview.company_detail, name='company_detail'),
+    path('create-company/', crm_homeview.create_company, name="create_company"),
+    path('request-company/', views.company_request_view, name='request_company'),
+
     #################################### customer list ###########################################
     path('company_customers/', cust_views.company_customer_list, name='company_customer_list'),
+    path('company_customers/<int:customer_id>/', cust_views.company_customer_detail, name='company_customer_detail'),
+    path('company_customers/<int:customer_id>/delete/', cust_views.company_customer_delete, name='company_customer_delete'),
+    
 
     #################################### lead list ###########################################
     path('company_lead/', ld_views.company_lead_list, name='company_lead_list'),
-    path('logout', views.logout_view, name='logout'),
-    path('request-company/', views.company_request_view, name='request_company'),
-    path('create-company/', crm_homeview.create_company, name="create_company"),
-    path('companies/', crm_homeview.company_list, name='company_list'),
-    path('company/<int:pk>/', crm_homeview.company_detail, name='company_detail'),
-    path('list-new-company-requests/', views.list_new_company_requests, name='list_new_company_requests'),
-    path('create-company-from-request/<int:request_id>/', crm_homeview.prefilled_create_company, name='prefilled_create_company'),
+    
+    
+    
+    
+    
+  
 
 
 

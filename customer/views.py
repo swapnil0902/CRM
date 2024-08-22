@@ -91,3 +91,33 @@ def company_customer_list(request):
     customers = Customer.objects.filter(company=company)
 
     return render(request, 'customer/company_customer_list.html', {'customers': customers})
+
+@api_view(['GET', 'DELETE'])
+def company_customer_delete(request, customer_id):
+    lead = get_object_or_404(Customer, id=customer_id)
+
+    lead.delete()
+    return redirect('company_customer_list')
+
+
+@api_view(['POST', 'GET'])
+def company_customer_detail(request, customer_id):
+    try:
+        customer = get_object_or_404(Customer, id=customer_id)
+    except Http404:
+        return redirect('company_customer_list')  # Redirect if customer is not found or not authorized
+
+    if request.method == 'POST':
+        form = CustomerForm(request.POST, instance=customer)
+        if form.is_valid():
+            form.save()
+            return redirect('company_customer_detail', customer_id=customer_id)
+        else:
+            return render(request, 'customer/company_customer_detail.html', {'form': form})
+
+    elif request.method == 'GET':
+        form = CustomerForm(instance=customer)
+        return render(request, 'customer/company_customer_detail.html', {'form': form})
+
+    else:
+        return HttpResponseNotAllowed(['GET', 'POST'])

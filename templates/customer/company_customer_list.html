@@ -32,8 +32,8 @@
                     <td>{{ customer.address }}</td>
                     <td>{{ customer.company.name }}</td>
                     <td>{{ customer.staff.username }}</td>
-                    <td><a href="{% url 'customer_detail' customer.id %}">Details</a></td>
-                    <td><a href="{% url 'customer_delete' customer.id %}">Delete</a></td>
+                    <td><a href="{% url 'company_customer_detail' customer.id %}">Details</a></td>
+                    <td><a href="{% url 'company_customer_delete' customer.id %}">Delete</a></td>
                 </tr>
             {% empty %}
                 <tr>
