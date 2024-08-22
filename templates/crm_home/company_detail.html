@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ company.name }}</title>
+</head>
+<body>
+    <h1>{{ company.name }}</h1>
+    <p>Service: {{ company.service }}</p>
+
+    <h2>Users in {{ company.name }}</h2>
+    {% if users %}
+        <ul>
+            {% for user_profile in users %}
+                <li>{{ user_profile.staff.username }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No users associated with this company yet.</p>
+        {% endif %}
+        <h2>Add Account Manager</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Add Account Manager</button>
+        </form>
+    
+
+    <a href="{% url 'company_list' %}">Back to Company List</a>
+</body>
+</html>

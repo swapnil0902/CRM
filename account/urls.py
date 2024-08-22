@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
-
+from crm_home import views as crm_homeview
 urlpatterns = [
     path('test1/', views.home, name='home'),
     path('login/', auth_views.LoginView.as_view(), name='login'),
@@ -15,7 +15,9 @@ urlpatterns = [
     path('create/', views.group_create, name='group_create'),
     path('create-group/', views.group_create, name='group_create'),
     path('update-group/<int:pk>/', views.group_update, name='group_update'),
-    # path('groups/<int:pk>/update/', views.group_update, name='group_update'),
     path('groups/<int:pk>/delete/', views.group_delete, name='group_delete'),
     path('activate/', views.activate_password, name='activate_password'),
+    path('create-company/', crm_homeview.create_company, name='create_company'),
+    path('companies/', crm_homeview.company_list, name='company_list'),
+    path('company/<int:pk>/', crm_homeview.company_detail, name='company_detail'),
 ]

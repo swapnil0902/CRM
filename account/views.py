@@ -256,3 +256,9 @@ def activate_password(request):
         form = ActivatePasswordForm()
 
     return render(request, 'account/activate_password.html', {'form': form})
+
+
+
+from django.shortcuts import render, get_object_or_404, redirect
+from crm_home.models import Company, UserProfile
+

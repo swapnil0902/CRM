@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company List</title>
+</head>
+<body>
+    <h1>List of Companies</h1>
+    <ul>
+        {% for company in companies %}
+            <li><a href="{% url 'company_detail' company.pk %}">{{ company.name }}</a> - {{ company.service }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
