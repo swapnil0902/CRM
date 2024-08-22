@@ -21,4 +21,13 @@
         <input type="hidden" name="_method" value="DELETE">
         <button type="submit">Delete Lead</button>
     </form>
+    <a href="{% url 'lead-view' %}">Back to List</a>
+
+    {% if request.GET.alert %}
+    <script type="text/javascript">
+        alert("Lead has been converted to a customer!");
+    </script>
+    {% endif %}
+    
+
 {% endblock %}

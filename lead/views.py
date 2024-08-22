@@ -8,6 +8,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from .serializers import LeadSerializer
+from django.http import Http404
 
 User = get_user_model()
 
@@ -27,13 +28,16 @@ def lead_list(request):
 # @login_required
 @api_view(['POST', 'GET'])
 def lead_detail(request, lead_id):
-    lead = get_object_or_404(Lead, id=lead_id)
+    try:
+        lead = get_object_or_404(Lead, id=lead_id)
+    except Http404:
+        return redirect('lead-view') 
     # if lead.staff != request.user:
     #     # Handle unauthorized access (e.g., raise PermissionDenied)
     #     return HttpResponseForbidden()
     # return render(request, 'lead/lead_detail.html', {'lead': lead})
     if request.method == 'POST':
-        form = LeadForm(request.POST, instance=lead)
+        form = LeadForm(request.POST, instance=lead, user = request.user)
         if form.is_valid():
             form.save()
             return redirect('lead_detail', lead_id=lead_id)
@@ -45,11 +49,11 @@ def lead_detail(request, lead_id):
     #     return redirect('lead-view')
     
     elif request.method == 'GET':
-        form = LeadForm(instance=lead)
+        form = LeadForm(instance=lead, user = request.user)
         return render(request, 'lead/lead_detail.html', {'lead': lead, 'form': form})
     
     else:
-        return HttpResponseNotAllowed(['GET', 'POST', 'DELETE'])
+        return HttpResponseNotAllowed(['GET', 'POST'])
     
 
 @api_view(['GET', 'DELETE'])
@@ -70,7 +74,9 @@ def lead_create(request):
 
             if request.user.groups.filter(name='Staff').exists():  # Staff user automatically assigned
                 lead.staff = request.user
+                lead.company = request.user.userprofile.company
             elif request.user.groups.filter(name='Account Manager').exists():  # Account Manager assigns lead
+                lead.company = request.user.userprofile.company
                 assigned_to_id = request.POST.get('staff')  # Use 'staff' from the form data
                 if assigned_to_id:
                     lead.staff = get_object_or_404(User, pk=assigned_to_id)

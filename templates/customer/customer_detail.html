@@ -1,0 +1,20 @@
+{% extends "crm/base.html" %}
+{% load static %}
+
+{% block title %}
+    Edit Lead
+{% endblock %}
+
+{% block stylesheets %}
+        <link rel="stylesheet" type="text/css" href="{% static 'lead/styles.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1>Customer Detail</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+    </form>
+    <a href="{% url 'customer-view' %}">Back to List</a>
+{% endblock %}
