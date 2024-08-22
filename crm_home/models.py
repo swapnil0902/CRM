@@ -29,10 +29,4 @@ class UserProfile(models.Model):
         return f"{self.staff.username} - {self.company.name}"
     
 
-@receiver(post_delete, sender=User)
-def delete_user_from_companies(sender, instance, **kwargs):
-    instance.companies.clear()
-
-
-
 

@@ -1,0 +1,19 @@
+{% extends "crm/base.html" %}
+{% load static %}
+
+{% block title %}
+    Create customer
+{% endblock %}
+
+{% block stylesheets %}
+        <link rel="stylesheet" type="text/css" href="{% static 'customer/styles.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1>Create Customer</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Create Customer</button>
+    </form>
+{% endblock %}

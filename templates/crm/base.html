@@ -17,21 +17,21 @@
                 <li>{{ user.username }}</li>
                 {% comment %} {% if is_user %} {% endcomment %}
                     <li><a href="{% url 'dashboard' %}">Dashboard</a></li>   
-                    <li><a href="#">Task & Diary Management</a></li>
-                    <li><a href="#">Appointment Management</a></li> 
+                    <li><a href="{% url 'task_list' %}">Task & Diary Management</a></li>
+                    <li><a href="{% url 'appointment_list' %}">Appointment Management</a></li> 
                     <li><a href="{% url 'lead-view' %}">Lead </a></li> 
                     <li><a href="{% url 'customer-view' %}">Customer Records</a></li>
                     <li><a href="{% url 'profile_page' %}">My Profile</a></li> 
-                    <li><a href="#">Logout</a></li>
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
                 {% comment %} {% elif is_accMngr %}
                     <li><a href="{% url 'dashboard' %}">Dashboard</a></li>   
-                    <li><a href="{% url '' %}">Task & Diary Management</a></li>
-                    <li><a href="{% url '' %}">Appointment Management</a></li> 
+                    <li><a href="{% url 'task_list' %}">Task & Diary Management</a></li>
+                    <li><a href="{% url 'appointment_list' %}">Appointment Management</a></li> 
                     <li><a href="{% url 'lead-view' %}">Lead </a></li> 
                     <li><a href="{% url 'customer-view' %}">Customer Records</a></li> 
                     <li><a href="{% url 'profile_page' %}">My Profile</a></li> 
                     <li><a href="{% url '' %}">Manager Panel</a></li>
-                    <li><a href="{% url '' %}">Logout</a></li>
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
                 {% elif is_admin %}
                     <li><a href="{% url '' %}">Dashboard</a></li>   
                     <li><a href="{% url '' %}">Task & Diary Management</a></li>
