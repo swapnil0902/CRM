@@ -41,7 +41,7 @@ def task_create(request):
         form = TaskForm(request.POST)
         if form.is_valid():
             task = form.save(commit=False)
-            task.assigned_to = request.user
+            task.assigned_to = form.cleaned_data['assigned_to']
             task.save()
             return redirect('task_list')
     else:

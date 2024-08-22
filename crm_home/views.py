@@ -2,8 +2,10 @@ from django.shortcuts import render,redirect
 from .forms import CompanyForm
 from .models import Company
 from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.models import User
 
 # Create your views here.
+
 def home(request):
     return render(request,"crm_home/index.html")
 
