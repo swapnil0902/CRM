@@ -263,3 +263,9 @@ def activate_password(request):
 def logout_view(request):
     logout(request)
     return redirect("home")
+
+
+
+from django.shortcuts import render, get_object_or_404, redirect
+from crm_home.models import Company, UserProfile
+
