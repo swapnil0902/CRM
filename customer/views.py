@@ -76,3 +76,18 @@ def customer_delete(request, customer_id):
 
     lead.delete()
     return redirect('customer-view')
+
+
+@login_required
+def company_customer_list(request):
+    # Check if the user is authenticated
+    if not request.user.is_authenticated:
+        return redirect('login')  # Redirect to login if not authenticated
+
+    # Get the company of the currently logged-in user
+    company = request.user.userprofile.company
+
+    # Filter customers based on the user's company
+    customers = Customer.objects.filter(company=company)
+
+    return render(request, 'customer/company_customer_list.html', {'customers': customers})

@@ -95,5 +95,19 @@ def lead_create(request):
 
     return render(request, 'lead/lead_create.html', {'form': form, 'user': request.user})
 
-# def lead(request):
-#     return render(request, "lead/lead.html")
+
+
+
+@login_required
+def company_lead_list(request):
+    # Check if the user is authenticated
+    if not request.user.is_authenticated:
+        return redirect('login')  # Redirect to login if not authenticated
+
+    # Get the company of the currently logged-in user
+    company = request.user.userprofile.company
+
+    # Filter customers based on the user's company
+    leads = Lead.objects.filter(company=company)
+
+    return render(request, 'lead/company_lead_list.html', {'leads': leads})

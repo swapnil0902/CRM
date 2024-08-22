@@ -3,37 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Profile</title>
+    <title>Udemy Profile</title>
     <style>
-        /* General Styles */
         body {
             font-family: Arial, sans-serif;
-            background-color: #F7EFE5;
+            background-color: #f5f7fa;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
         }
 
         .profile-container {
-            background-color: #E2BFD9;
-            width: 450px;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            text-align: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
         }
 
         .profile-picture {
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            background-color: #C8A1E0;
-            margin-bottom: 20px;
-            display: inline-block;
             overflow: hidden;
+            margin-right: 20px;
         }
 
         .profile-picture img {
@@ -42,35 +45,19 @@
             object-fit: cover;
         }
 
-        .user-details {
-            text-align: left;
-            margin-top: 20px;
+        .profile-info {
+            flex: 1;
         }
 
-        .user-details label {
-            font-size: 16px;
+        .profile-info h1 {
+            margin: 0;
+            font-size: 28px;
             color: #333;
-            display: block;
-            margin-bottom: 5px;
         }
 
-        .user-details input[readonly], .user-details textarea[readonly] {
-            background-color: #eee;
-            border: 1px solid #ccc;
+        .profile-info p {
+            margin: 5px 0;
             color: #555;
-        }
-
-        .user-details input, .user-details textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        .user-details textarea {
-            resize: vertical;
-            height: 80px;
         }
 
         .profile-actions {
@@ -80,8 +67,8 @@
         }
 
         .btn {
-            background-color: #674188;
-            color: #F7EFE5;
+            background-color: #007bff;
+            color: #ffffff;
             padding: 10px 15px;
             border: none;
             border-radius: 5px;
@@ -89,50 +76,81 @@
             font-size: 14px;
             transition: background-color 0.3s ease;
             cursor: pointer;
-            width: 48%;
-            text-align: center;
         }
 
         .btn:hover {
-            background-color: #C8A1E0;
+            background-color: #0056b3;
         }
 
+        .profile-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .profile-section {
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        .profile-section:last-child {
+            margin-right: 0;
+        }
+
+        .profile-section h2 {
+            font-size: 20px;
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+
+        .profile-section p {
+            color: #555;
+        }
     </style>
 </head>
 <body>
 
     <div class="profile-container">
-        <div class="profile-picture">
-            <img src="https://via.placeholder.com/150" alt="Profile Picture">
+        <div class="profile-header">
+            <div class="profile-picture">
+                <img src="https://via.placeholder.com/120" alt="Profile Picture">
+            </div>
+            <div class="profile-info">
+                <h1>{{user.username}}</h1>
+                {% if is_staff %}
+                    <p>Staff at {{user.userprofile.company}}</p>
+                {% elif is_accMngr %}
+                    <p>Account Manager at {{user.userprofile.company}}</p>
+                {% endif %}
+                <p>johndoe@example.com</p>
+                <p>+1 234 567 890</p>
+            </div>
         </div>
 
-        <form method="GET">
-            <div class="user-details">
-                <label for="firstName">First Name:</label>
-                <input type="text" id="firstName" name="firstName" value="{{ user.first_name }}" {% if not editable %}readonly{% endif %}>
+        <div class="profile-actions">
+            <a href="#" class="btn">Edit Profile</a>
+            <a href="#" class="btn">Settings</a>
+        </div>
 
-                <label for="lastName">Last Name:</label>
-                <input type="text" id="lastName" name="lastName" value="{{auth_user.last_name}}" {% if not editable %}readonly{% endif %}>
-
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" value="{{user.email}}" {% if not editable %}readonly{% endif %}>
-
-                <label for="phone">Phone:</label>
-                <input type="tel" id="phone" name="phone" value="+1 234 567 890" {% if not editable %}readonly{% endif %}>
-
-                <label for="bio">Bio:</label>
-                <textarea id="bio" name="bio" {% if not editable %}readonly{% endif %}>A brief bio about John Doe...</textarea>
+        <div class="profile-content">
+            <div class="profile-section">
+                <h2>About Me</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin lacinia velit eget erat vulputate, sed dignissim erat bibendum.</p>
             </div>
-
-            <div class="profile-actions">
-                {% if not editable %}
-                <a href="?edit=true" class="btn">Edit Profile</a>
-                {% else %}
-                <button type="submit" class="btn">Update Profile</button>
-                {% endif %}
-                <a href="#" class="btn">Settings</a>
+            <div class="profile-section">
+                <h2>My Courses</h2>
+                <p>Course 1: Advanced Python Programming</p>
+                <p>Course 2: Introduction to Django</p>
+                <p>Course 3: Data Science with Python</p>
             </div>
-        </form>
+            <div class="profile-section">
+                <h2>My Achievements</h2>
+                <p>Top Instructor Award 2023</p>
+                <p>Best Course in Data Science 2023</p>
+            </div>
+        </div>
     </div>
 
 </body>

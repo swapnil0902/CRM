@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from .forms import CompanyForm
 from .models import Company
 from django.shortcuts import render, get_object_or_404
-from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserChangeForm
 
 # Create your views here.
 
@@ -14,6 +14,19 @@ def dashboard(request):
 
 def my_profile(request):
     return render(request,"crm_home/my_profile.html")
+
+# @login_required
+def profile_view(request):
+    if request.method == 'POST':
+        form = UserChangeForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')  # Redirect to profile page after updating
+    else:
+        form = UserChangeForm(instance=request.user)
+    
+    editable = 'edit' in request.GET
+    return render(request, 'profile.html', {'form': form, 'editable': editable})
 
 def create_company(request):
     if request.method == 'POST':
