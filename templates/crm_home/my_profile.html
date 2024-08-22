@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
+    <title>My Profile</title>
     <style>
         /* General Styles */
         body {
@@ -19,8 +19,8 @@
 
         .profile-container {
             background-color: #E2BFD9;
-            width: 350px;
-            padding: 20px;
+            width: 450px;
+            padding: 30px;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
             text-align: center;
@@ -42,29 +42,40 @@
             object-fit: cover;
         }
 
-        .username {
-            font-size: 24px;
-            font-weight: bold;
-            color: #674188;
-            margin-bottom: 10px;
+        .user-details {
+            text-align: left;
+            margin-top: 20px;
         }
 
-        .email, .phone {
+        .user-details label {
             font-size: 16px;
             color: #333;
+            display: block;
             margin-bottom: 5px;
         }
 
-        .bio {
-            font-size: 14px;
+        .user-details input[readonly], .user-details textarea[readonly] {
+            background-color: #eee;
+            border: 1px solid #ccc;
             color: #555;
-            margin-bottom: 20px;
-            padding: 0 10px;
+        }
+
+        .user-details input, .user-details textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .user-details textarea {
+            resize: vertical;
+            height: 80px;
         }
 
         .profile-actions {
             display: flex;
-            justify-content: space-around;
+            justify-content: space-between;
             margin-top: 20px;
         }
 
@@ -78,11 +89,14 @@
             font-size: 14px;
             transition: background-color 0.3s ease;
             cursor: pointer;
+            width: 48%;
+            text-align: center;
         }
 
         .btn:hover {
             background-color: #C8A1E0;
         }
+
     </style>
 </head>
 <body>
@@ -91,15 +105,34 @@
         <div class="profile-picture">
             <img src="https://via.placeholder.com/150" alt="Profile Picture">
         </div>
-        <div class="username">John Doe</div>
-        <div class="email">johndoe@example.com</div>
-        <div class="phone">+1 234 567 890</div>
 
+        <form method="GET">
+            <div class="user-details">
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" name="firstName" value="{{ user.first_name }}" {% if not editable %}readonly{% endif %}>
 
-        <div class="profile-actions">
-            <a href="#" class="btn">Edit Profile</a>
-            <a href="#" class="btn">Settings</a>
-        </div>
+                <label for="lastName">Last Name:</label>
+                <input type="text" id="lastName" name="lastName" value="{{auth_user.last_name}}" {% if not editable %}readonly{% endif %}>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="{{user.email}}" {% if not editable %}readonly{% endif %}>
+
+                <label for="phone">Phone:</label>
+                <input type="tel" id="phone" name="phone" value="+1 234 567 890" {% if not editable %}readonly{% endif %}>
+
+                <label for="bio">Bio:</label>
+                <textarea id="bio" name="bio" {% if not editable %}readonly{% endif %}>A brief bio about John Doe...</textarea>
+            </div>
+
+            <div class="profile-actions">
+                {% if not editable %}
+                <a href="?edit=true" class="btn">Edit Profile</a>
+                {% else %}
+                <button type="submit" class="btn">Update Profile</button>
+                {% endif %}
+                <a href="#" class="btn">Settings</a>
+            </div>
+        </form>
     </div>
 
 </body>
