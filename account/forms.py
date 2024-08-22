@@ -80,12 +80,11 @@ from crm_home.models import Company
 
 
 class CustomerRequestForm(forms.ModelForm):
-    # company = forms.ModelChoiceField(queryset=Company.objects.all(), label="Select a Company")
     company = forms.ModelChoiceField(queryset=Company.objects.all(), empty_label="Select a Company")
 
     class Meta:
         model = CustomerRequest
-        fields =  '__all__'
+        fields = ['first_name', 'last_name', 'email','mobile','company' ]
 
    
 

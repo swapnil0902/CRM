@@ -182,7 +182,7 @@ def manual_signup(request):
 
 from django.shortcuts import render, redirect
 from .forms import CustomerRequestForm
-from .models import CustomerRequest
+from .models import CustomerRequest,CompanyRequest
 
 # def customer_request_view(request):
 #     if request.method == 'POST':
@@ -195,22 +195,6 @@ from .models import CustomerRequest
 #     return render(request, 'account/customer_request_form.html', {'form': form})
 from crm_home.models import Company
 from .forms import CompanyRequestForm
-# def customer_request_view(request):
-#     # Retrieve the list of all companies
-#     companies = Company.objects.all()
-
-#     if request.method == 'POST':
-#         form = CustomerRequestForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('request_submitted')  # Redirect to a thank you page or similar
-#     else:
-#         form = CustomerRequestForm()
-
-#     return render(request, 'account/customer_request_form.html', {
-#         'form': form,
-#         'companies': companies  # Pass the list of companies to the template
-#     })
 
 
 def customer_request_view(request):
@@ -240,6 +224,10 @@ def company_request_view(request):
     else:
         form = CompanyRequestForm()
     return render(request, 'account/company_request_form.html', {'form': form})
+
+def list_new_company_requests(request):
+    requests = CompanyRequest.objects.all()
+    return render(request, 'account/list_new_company_requests.html', {'requests': requests})
 
 def request_submitted_view(request):
     return render(request, 'account/request_submitted.html')

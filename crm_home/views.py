@@ -54,9 +54,54 @@ def create_company(request):
     
     return render(request, 'crm_home/create_company.html', {'form': form})
 
+# views.py
+
+from django.shortcuts import render, redirect, get_object_or_404
+from account.forms import CompanyRequestForm
+from account.models import CompanyRequest
+
+
+# views.py
+
+from django.shortcuts import render, redirect, get_object_or_404
+from .forms import CompanyForm  # Ensure this form corresponds to the Company model
+from .models import Company
+
+def prefilled_create_company(request, request_id=None):
+    if request_id:
+        # Fetch the Company object based on request_id
+        company = get_object_or_404(CompanyRequest, pk=request_id)
+        initial_data = {
+            'name': company.name,
+            'service': company.service,
+        }
+    else:
+        initial_data = {}
+
+    print(initial_data)  # Debugging line to check initial data
+
+    if request.method == 'POST':
+        form = CompanyForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('company_list')  # Redirect to a success page or list of companies
+        else:
+            # Form is invalid; re-render with error messages
+            return render(request, 'crm_home/create_company.html', {'form': form})
+    
+    else:
+        # Initialize form with initial data if available
+        form = CompanyForm(initial=initial_data)
+
+    return render(request, 'crm_home/create_company.html', {'form': form})
+
+
+
 def company_list(request):
     companies = Company.objects.all()
     return render(request, 'crm_home/company_list.html', {'companies': companies})
+
+
 
 # def company_detail(request, pk):
 #     company = get_object_or_404(Company, pk=pk)
