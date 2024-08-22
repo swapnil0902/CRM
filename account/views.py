@@ -21,7 +21,7 @@ from django.shortcuts import get_object_or_404
 
 
 
-def admin_dashboard(request):
+def mngr_dashboard(request):
     users = User.objects.all()
     account_managers = User.objects.filter(groups__name='Account Manager')
     
@@ -29,7 +29,7 @@ def admin_dashboard(request):
         'users': users,
         'account_managers': account_managers,
     }
-    return render(request, 'account/admin_dashboard.html', context)
+    return render(request, 'account/mngr_dashboard.html', context)
 
 @login_required
 def home(request):
@@ -41,17 +41,6 @@ def group_list(request):
     groups = Group.objects.all()
     return render(request, 'account/group_list.html', {'groups': groups})
 
-# def group_create(request):
-#     print("insider")
-#     if request.method == 'POST':
-#         form = GroupForm(request.POST)
-#         if form.is_valid():
-#             group = form.save()
-#             print("something")
-#             return redirect('admin-dashboard')
-#     else:
-#         form = GroupForm()
-#     return render(request, 'account/group_form.html', {'form': form})
 
 def group_create(request):
     print("insider")
@@ -60,7 +49,7 @@ def group_create(request):
         if form.is_valid():
             group = form.save()
             print("something")
-            return redirect('admin_dashboard')
+            return redirect('mngr_dashboard')
         else:
             print("Form errors:", form.errors)
     else:
@@ -97,7 +86,7 @@ def group_delete(request, pk):
     group = get_object_or_404(Group, pk=pk)
     if request.method == 'POST':
         group.delete()
-        return redirect('admin_dashboard')
+        return redirect('mngr_dashboard')
     return render(request, 'account/group_confirm_delete.html', {'group': group})
 
 

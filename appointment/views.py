@@ -6,12 +6,18 @@ from .forms import AppointmentForm
 @login_required
 def appointment_create(request):
     if request.method == 'POST':
-        form = AppointmentForm(request.POST)
+        form = AppointmentForm(request.POST, user=request.user)
         if form.is_valid():
-            form.save()
+            appointment = form.save(commit=False)
+            if request.user.groups.filter(name='Staff').exists():
+                appointment.save()  # Save the appointment first before setting many-to-many relationships
+                appointment.attendees.set([request.user])  # Assign the current user to the attendees
+            else:
+                appointment.save()
+            form.save_m2m()  # Save many-to-many relationships like attendees
             return redirect('appointment_list')
     else:
-        form = AppointmentForm()
+        form = AppointmentForm(user=request.user)
     return render(request, 'appointment/appointment_form.html', {'form': form})
 
 @login_required
