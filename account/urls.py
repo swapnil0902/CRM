@@ -18,6 +18,14 @@ urlpatterns = [
     path('activate/', views.activate_password, name='activate_password'),
     path('logout', views.logout_view, name='logout'),
     path('request-company/', views.company_request_view, name='request_company'),
+    path('create-company/', crm_homeview.create_company, name="create_company"),
+    path('companies/', crm_homeview.company_list, name='company_list'),
+    path('company/<int:pk>/', crm_homeview.company_detail, name='company_detail'),
+    path('list-new-company-requests/', views.list_new_company_requests, name='list_new_company_requests'),
+    path('create-company-from-request/<int:request_id>/', crm_homeview.prefilled_create_company, name='prefilled_create_company'),
+
+
+
     # path('company-request-submitted/', views.TemplateView.as_view(template_name='account/company_request_submitted.html'), name='company_request_submitted'),
 
 ]
