@@ -16,6 +16,7 @@
                     <th>Status</th>
                     <th>Date Submitted</th>
                     <th>Actions</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -26,6 +27,7 @@
                     <td>{{ request.email }}</td>
                     <td>{{ request.mobile }}</td>
                     <td>{{ request.approved }}</td>
+                    <td>{{ request.company }}</td>
                     <td>{{ request.date_joined|date:"F j, Y" }}</td>
                     <td>
                         {% comment %} <a href="{% url 'assign_role' request.id %}" class="btn btn-primary">Assign Role</a> {% endcomment %}

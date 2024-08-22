@@ -36,4 +36,8 @@ urlpatterns = [
 
     #################################### lead list ###########################################
     path('company_lead/', ld_views.company_lead_list, name='company_lead_list'),
+    path('logout', views.logout_view, name='logout'),
+    path('request-company/', views.company_request_view, name='request_company'),
+    # path('company-request-submitted/', views.TemplateView.as_view(template_name='account/company_request_submitted.html'), name='company_request_submitted'),
+
 ]

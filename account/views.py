@@ -114,7 +114,7 @@ def signup(request, request_id=None):
                 }
             )
             plain_message = strip_tags(html_message)
-
+            print(user.company)
             # Send the email
             send_mail(
                 'Your Account Details and Instructions',
@@ -184,16 +184,62 @@ from django.shortcuts import render, redirect
 from .forms import CustomerRequestForm
 from .models import CustomerRequest
 
+# def customer_request_view(request):
+#     if request.method == 'POST':
+#         form = CustomerRequestForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('request_submitted')  # Redirect to a thank you page or similar
+#     else:
+#         form = CustomerRequestForm()
+#     return render(request, 'account/customer_request_form.html', {'form': form})
+from crm_home.models import Company
+from .forms import CompanyRequestForm
+# def customer_request_view(request):
+#     # Retrieve the list of all companies
+#     companies = Company.objects.all()
+
+#     if request.method == 'POST':
+#         form = CustomerRequestForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('request_submitted')  # Redirect to a thank you page or similar
+#     else:
+#         form = CustomerRequestForm()
+
+#     return render(request, 'account/customer_request_form.html', {
+#         'form': form,
+#         'companies': companies  # Pass the list of companies to the template
+#     })
+
+
 def customer_request_view(request):
+    # Retrieve the list of all companies
+    companies = Company.objects.all()
+
     if request.method == 'POST':
         form = CustomerRequestForm(request.POST)
         if form.is_valid():
+            # Save the form instance and print the company value for debugging
             form.save()
+            print("Form Data:", form.cleaned_data)
             return redirect('request_submitted')  # Redirect to a thank you page or similar
     else:
         form = CustomerRequestForm()
-    return render(request, 'account/customer_request_form.html', {'form': form})
 
+    return render(request, 'account/customer_request_form.html', {
+        'form': form # Pass the list of companies to the template
+    })
+
+def company_request_view(request):
+    if request.method == 'POST':
+        form = CompanyRequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('request_submitted')  # Redirect to a thank you page
+    else:
+        form = CompanyRequestForm()
+    return render(request, 'account/company_request_form.html', {'form': form})
 
 def request_submitted_view(request):
     return render(request, 'account/request_submitted.html')

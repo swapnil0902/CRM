@@ -35,13 +35,25 @@ def delete_user_token(sender, instance, **kwargs):
 
 from django.db import models
 from django.contrib.auth.models import User
+from crm_home.models import Company
+
 
 class CustomerRequest(models.Model):
     first_name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
     email = models.EmailField(unique=True)
-    mobile=models.IntegerField()
+    mobile = models.IntegerField()
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, default = 1) 
     approved = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+    
+class CompanyRequest(models.Model):
+    name = models.CharField(max_length=255)
+    service = models.CharField(max_length=100)
+    description = models.TextField()
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
