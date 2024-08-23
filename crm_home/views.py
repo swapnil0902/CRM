@@ -1,64 +1,44 @@
-from django.shortcuts import render,redirect
-from .forms import CompanyForm, UserUpdateForm
 from .models import Company
-from django.shortcuts import render, get_object_or_404
-from django.contrib.auth.forms import UserChangeForm
-
-from django.shortcuts import render, redirect, get_object_or_404
 from django.core.mail import send_mail
-from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-
-from .forms import AccountManagerForm
-
+from account.models import CompanyRequest
+from django.template.loader import render_to_string
+from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from account.forms import CompanyRequestForm
-from account.models import CompanyRequest
-
-from django.shortcuts import render, redirect, get_object_or_404
-from .forms import CompanyForm  # Ensure this form corresponds to the Company model
-from .models import Company
+from .forms import CompanyForm,AccountManagerForm,CompanyForm,UserUpdateForm
+  
 
 # Create your views here.
-
+########################         ##########################################
 def home(request):
     return render(request,"crm_home/index.html")
 
+
+########################         ##########################################
 def dashboard(request):
     return render(request, "crm/dashboard.html")
 
+
+########################         ##########################################
 def my_profile(request):
     return render(request,"crm_home/my_profile.html")
 
+
+########################         ##########################################
 def update_user_profile(request):
     if request.method == 'POST':
         form = UserUpdateForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-            return redirect('profile_page')  # Redirect to the profile page or wherever you prefer
+            return redirect('profile_page')  
     else:
         form = UserUpdateForm(instance=request.user)
     
     return render(request, 'crm_home/update_profile.html', {'form': form})
 
 
-
-
-
-@login_required
-def profile_view(request):
-    if request.method == 'POST':
-        form = UserChangeForm(request.POST, instance=request.user)
-        if form.is_valid():
-            form.save()
-            return redirect('profile')  
-    else:
-        form = UserChangeForm(instance=request.user)
-    
-    editable = 'edit' in request.GET
-    return render(request, 'crm_home/my_profile.html', {'form': form, 'editable': editable})
-
+########################         ##########################################
 def create_company(request):
     if request.method == 'POST':
         form = CompanyForm(request.POST)
@@ -67,15 +47,13 @@ def create_company(request):
             return redirect('company_list') 
     else:
         form = CompanyForm()
-    
+
     return render(request, 'crm_home/create_company.html', {'form': form})
 
 
-
+########################         ##########################################
 def prefilled_create_company(request, request_id=None):
-    # Check if there is a request_id to prefill the form
     if request_id:
-        # Fetch the Company object based on request_id
         company = get_object_or_404(CompanyRequest, pk=request_id)
         initial_data = {
             'name': company.name,
@@ -89,9 +67,8 @@ def prefilled_create_company(request, request_id=None):
     if request.method == 'POST':
         form = CompanyForm(request.POST)
         if form.is_valid():
-            # Save the new company
             form.save()
-            return redirect('company_list')  # Redirect to a success page or list of companies
+            return redirect('company_list') 
         else:
             return render(request, 'crm_home/create_company.html', {'form': form})
     
@@ -101,11 +78,13 @@ def prefilled_create_company(request, request_id=None):
     return render(request, 'crm_home/create_company.html', {'form': form})
 
 
+########################         ##########################################
 def company_list(request):
     companies = Company.objects.all()
     return render(request, 'crm_home/company_list.html', {'companies': companies})
 
 
+########################         ##########################################
 def company_detail(request, pk):
     company = get_object_or_404(Company, pk=pk)
     users = company.users.all()
@@ -147,3 +126,4 @@ def company_detail(request, pk):
         'users': users,
         'form': form
     })
+########################         ##########################################
