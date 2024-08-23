@@ -4,6 +4,7 @@ from . import views
 from crm_home import views as crm_homeview
 from customer import views as cust_views
 from lead import views as ld_views
+from appointment import views as appt_views
 
 urlpatterns = [
     ################### Login, Logout, signup, contact-admin #####################################
@@ -49,6 +50,10 @@ urlpatterns = [
     path('company_lead/<int:lead_id>/', ld_views.company_lead_detail, name='company_lead_detail'),
     path('company_lead/<int:lead_id>/delete/', ld_views.company_lead_delete, name='company_lead_delete'),
     
+    #################################### appointment list ###########################################
+    path('company_appointment/', appt_views.company_appointment_list, name='company_appointment_list'),
+    path('company_appointment/<int:appointment_id>/', appt_views.company_appointment_update, name='company_appointment_update'),
+    path('company_appointment/<int:appointment_id>/delete/', appt_views.company_appointment_delete, name='company_appointment_delete'),
     
     
     
