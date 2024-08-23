@@ -78,8 +78,8 @@ def prefilled_create_company(request, request_id=None):
         # Fetch the Company object based on request_id
         company = get_object_or_404(CompanyRequest, pk=request_id)
         initial_data = {
-            'name': company_request.name,
-            'service': company_request.service,
+            'name': company.name,
+            'service': company.service,
         }
     else:
         initial_data = {}
