@@ -46,6 +46,9 @@ urlpatterns = [
 
     #################################### lead list ###########################################
     path('company_lead/', ld_views.company_lead_list, name='company_lead_list'),
+    path('company_lead/<int:lead_id>/', ld_views.company_lead_detail, name='company_lead_detail'),
+    path('company_lead/<int:lead_id>/delete/', ld_views.company_lead_delete, name='company_lead_delete'),
+    
     
     
     

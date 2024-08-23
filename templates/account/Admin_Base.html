@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin Dashboard{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'account/styles.css' %}">
+    <style>
+        /* You can add base styles here or use the external stylesheet */
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <!-- You can include a navigation bar here if needed -->
+    </nav>
+    
+    <!-- Container for Sidebar and Content -->
+    <div class="container">
+        <!-- Left Sidebar -->
+        <div class="sidebar">
+            <h2><a href="{% url 'mngr_dashboard' %}"> Company Admin Panel</a></h2>
+            <ul>
+                <li>{{ user.username }}</li>
+                <li><a href="{% url 'group_create' %}">Add Role</a></li>
+                <li><a href="{% url 'group_list' %}">List of Roles</a></li>
+                <li><a href="{% url 'customer_requests' %}">See Customer Requests</a></li>
+                <li><a href="{% url 'company_customer_list' %}">Customer List</a></li>
+                <li><a href="{% url 'company_lead_list' %}">Lead List</a></li>
+                <li><a href="{% url 'company_lead_list' %}">Appointment List of all Users</a></li>
+                <li><a href="{% url 'company_lead_list' %}">All Tasks</a></li>
+                <li><a href="{% url 'dashboard' %}">Back to Dashboard</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="content">
+            {% block content %}
+            <!-- Child templates will insert their content here -->
+            {% endblock %}
+        </div>
+    </div>
+</body>
+</html>

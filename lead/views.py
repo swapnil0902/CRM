@@ -32,10 +32,6 @@ def lead_detail(request, lead_id):
         lead = get_object_or_404(Lead, id=lead_id)
     except Http404:
         return redirect('lead-view') 
-    # if lead.staff != request.user:
-    #     # Handle unauthorized access (e.g., raise PermissionDenied)
-    #     return HttpResponseForbidden()
-    # return render(request, 'lead/lead_detail.html', {'lead': lead})
     if request.method == 'POST':
         form = LeadForm(request.POST, instance=lead, user = request.user)
         if form.is_valid():
@@ -43,10 +39,6 @@ def lead_detail(request, lead_id):
             return redirect('lead_detail', lead_id=lead_id)
         else:
             return render(request, 'lead/lead_detail.html', {'lead': lead, 'form': form})
-    
-    # elif request.method == 'DELETE':
-    #     lead.delete()
-    #     return redirect('lead-view')
     
     elif request.method == 'GET':
         form = LeadForm(instance=lead, user = request.user)
@@ -111,3 +103,34 @@ def company_lead_list(request):
     leads = Lead.objects.filter(company=company)
 
     return render(request, 'lead/company_lead_list.html', {'leads': leads})
+
+
+@api_view(['POST', 'GET'])
+def company_lead_detail(request, lead_id):
+    try:
+        lead = get_object_or_404(Lead, id=lead_id)
+    except Http404:
+        return redirect('company_lead_list') 
+    if request.method == 'POST':
+        form = LeadForm(request.POST, instance=lead, user = request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('company_lead_detail', lead_id=lead_id)
+        else:
+            return render(request, 'lead/company_lead_detail.html', {'lead': lead, 'form': form})
+    
+    elif request.method == 'GET':
+        form = LeadForm(instance=lead, user = request.user)
+        return render(request, 'lead/company_lead_detail.html', {'lead': lead, 'form': form})
+    
+    else:
+        return HttpResponseNotAllowed(['GET', 'POST'])
+    
+
+
+@api_view(['GET', 'DELETE'])
+def company_lead_delete(request, lead_id):
+    lead = get_object_or_404(Lead, id=lead_id)
+
+    lead.delete()
+    return redirect('company_lead_list')

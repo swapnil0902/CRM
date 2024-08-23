@@ -21,8 +21,8 @@ from django.shortcuts import get_object_or_404
 
 
 
-def mngr_dashboard(request):
-    users = User.objects.all()
+def mngr_dashboard(request): #################################
+    users = User.objects.filter(groups__name='Staff')
     account_managers = User.objects.filter(groups__name='Account Manager')
     
     context = {

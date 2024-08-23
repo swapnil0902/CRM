@@ -30,7 +30,7 @@
                     <li><a href="{% url 'lead-view' %}">Lead </a></li> 
                     <li><a href="{% url 'customer-view' %}">Customer Records</a></li> 
                     <li><a href="{% url 'profile_page' %}">My Profile</a></li> 
-                    {% comment %} <li><a href="{% url '' %}">Manager Panel</a></li> {% endcomment %}
+                    <li><a href="{% url 'mngr_dashboard' %}">Manager Panel</a></li>
                 {% elif is_admin %}
                     <li><a href="{% url 'dashboard' %}">Dashboard</a></li>   
                     <li><a href="{% url 'task_list' %}">Task & Diary Management</a></li>
