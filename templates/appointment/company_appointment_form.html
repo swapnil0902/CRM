@@ -1,8 +1,8 @@
 <!-- templates/appointments/appointment_form.html -->
-{% extends "account/mngr_base.html" %}
+{% extends "account/Mngr_Base.html" %}
 
 {% block title %}
-    {% if form.instance.pk %}Update Appointment{% else %}Create Appointment{% endif %}
+    {% if form.instance.pk %}Update Company Appointment{% else %}Create Appointment{% endif %}
 {% endblock %}
 
 {% block content %}
@@ -12,5 +12,5 @@
         {{ form.as_p }}
         <button type="submit">{% if form.instance.pk %}Update{% else %}Create{% endif %} Appointment</button>
     </form>
-    <a href="{% url 'appointment_list' %}">Back to Appointment List</a>
+    <a href="{% url 'company_appointment_list' %}">Back to Appointment List</a>
 {% endblock %}

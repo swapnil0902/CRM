@@ -11,22 +11,25 @@ from .forms import ActivatePasswordForm
 from django.contrib.auth.models import User
 from .forms import SignUpForm
 from django.contrib.auth import login, authenticate
-
 from django.core.mail import send_mail  # For sending the generated password
-
 from django.core.mail import send_mail
 from django.utils.html import strip_tags
 from django.template.loader import render_to_string
 from django.shortcuts import get_object_or_404
+from django.shortcuts import render, redirect
+from .models import UserRequest,CompanyRequest
+from crm_home.models import Company
+from .forms import UserRequestForm
+
 
 
 
 def mngr_dashboard(request): #################################
-    users = User.objects.filter(groups__name='Staff')
+    staffs = User.objects.filter(groups__name='Staff')
     account_managers = User.objects.filter(groups__name='Account Manager')
     
     context = {
-        'users': users,
+        'staffs': staffs,
         'account_managers': account_managers,
     }
     return render(request, 'account/mngr_dashboard.html', context)
@@ -80,7 +83,7 @@ def group_delete(request, pk):
 
 def signup(request, request_id=None):
     if request_id:
-        customer_request = get_object_or_404(CustomerRequest, id=request_id)  # Fetch the customer request
+        user_request = get_object_or_404(UserRequest, id=request_id)  # Fetch the user request
 
     if request.method == 'POST':
         form = SignUpForm(request.POST)
@@ -112,17 +115,17 @@ def signup(request, request_id=None):
                 fail_silently=False,
                 html_message=html_message,  # Send the HTML version
             )
-            if customer_request:
-                customer_request.delete()
+            if user_request:
+                user_request.delete()
 
             return redirect('home')
     else:
-        # Pre-fill the signup form with customer request data
+        # Pre-fill the signup form with user request data
         initial_data = {
-            'first_name': customer_request.first_name,
-            'last_name': customer_request.last_name,
-            'email': customer_request.email,
-            # 'username': customer_request.username,  # Assuming you have a username field in your request model
+            'first_name': user_request.first_name,
+            'last_name': user_request.last_name,
+            'email': user_request.email,
+            # 'username': user_request.username,  # Assuming you have a username field in your request model
         }
         form = SignUpForm(initial=initial_data)
 
@@ -168,49 +171,45 @@ def manual_signup(request):
 
     return render(request, 'account/signup.html', {'form': form})
 
-from django.shortcuts import render, redirect
-from .forms import CustomerRequestForm
-from .models import CustomerRequest,CompanyRequest
 
-# def customer_request_view(request):
+
+# def user_request_view(request):
 #     if request.method == 'POST':
-#         form = CustomerRequestForm(request.POST)
+#         form = userRequestForm(request.POST)
 #         if form.is_valid():
 #             form.save()
 #             return redirect('request_submitted')  # Redirect to a thank you page or similar
 #     else:
-#         form = CustomerRequestForm()
-#     return render(request, 'account/customer_request_form.html', {'form': form})
-from crm_home.models import Company
-from .forms import CompanyRequestForm
+#         form = userRequestForm()
+#     return render(request, 'account/user_request_form.html', {'form': form})
 
 
-def customer_request_view(request):
+def user_request_view(request):
     # Retrieve the list of all companies
     companies = Company.objects.all()
 
     if request.method == 'POST':
-        form = CustomerRequestForm(request.POST)
+        form = UserRequestForm(request.POST)
         if form.is_valid():
             # Save the form instance and print the company value for debugging
             form.save()
             print("Form Data:", form.cleaned_data)
             return redirect('request_submitted')  # Redirect to a thank you page or similar
     else:
-        form = CustomerRequestForm()
+        form = UserRequestForm()
 
-    return render(request, 'account/customer_request_form.html', {
+    return render(request, 'account/user_request_form.html', {
         'form': form # Pass the list of companies to the template
     })
 
 def company_request_view(request):
     if request.method == 'POST':
-        form = CompanyRequestForm(request.POST)
+        form = UserRequestForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('request_submitted')  # Redirect to a thank you page
     else:
-        form = CompanyRequestForm()
+        form = UserRequestForm()
     return render(request, 'account/company_request_form.html', {'form': form})
 
 def list_new_company_requests(request):
@@ -220,12 +219,12 @@ def list_new_company_requests(request):
 def request_submitted_view(request):
     return render(request, 'account/request_submitted.html')
 
-def customer_requests_view(request):
-    # Fetch all customer requests from the database
-    customer_requests = CustomerRequest.objects.all()
+def user_requests_view(request):
+    # Fetch all user requests from the database
+    user_requests = UserRequest.objects.all()
     
-    # Render the template with the customer requests
-    return render(request, 'account/customer_requests.html', {'customer_requests': customer_requests})
+    # Render the template with the user requests
+    return render(request, 'account/user_requests.html', {'user_requests': user_requests})
 
 
 # @login_required

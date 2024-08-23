@@ -84,6 +84,4 @@ def company_appointment_update(request, pk):
 def company_appointment_delete(request, pk):
     appointment = get_object_or_404(Appointment, pk=pk)
     appointment.delete()
-    return redirect('company_appointment_list')
-
-####################################### The End ##################################################################
+    return redirect('account/company_appointment_list')

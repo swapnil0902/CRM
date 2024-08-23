@@ -73,11 +73,13 @@ def create_company(request):
 
 
 def prefilled_create_company(request, request_id=None):
+    # Check if there is a request_id to prefill the form
     if request_id:
+        # Fetch the Company object based on request_id
         company = get_object_or_404(CompanyRequest, pk=request_id)
         initial_data = {
-            'name': company.name,
-            'service': company.service,
+            'name': company_request.name,
+            'service': company_request.service,
         }
     else:
         initial_data = {}
@@ -87,8 +89,9 @@ def prefilled_create_company(request, request_id=None):
     if request.method == 'POST':
         form = CompanyForm(request.POST)
         if form.is_valid():
+            # Save the new company
             form.save()
-            return redirect('company_list')  
+            return redirect('company_list')  # Redirect to a success page or list of companies
         else:
             return render(request, 'crm_home/create_company.html', {'form': form})
     

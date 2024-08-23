@@ -11,11 +11,11 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path('signup/<int:request_id>/', views.signup, name='signup'),
     path('signup/', views.manual_signup, name='Msignup'),
-    path('logout', views.logout_view, name='logout'),
-    path('contact/', views.customer_request_view, name='customer_request'),
+    path('logout/', views.logout_view, name='logout'),
+    path('contact/', views.user_request_view, name='customer_request'),
     
     ########################## request ###########################################################
-    path('customer-requests/', views.customer_requests_view, name='customer_requests'),
+    path('user-requests/', views.user_requests_view, name='user_requests'),
     path('request-submitted/', views.request_submitted_view, name='request_submitted'),
     path('create-company-from-request/<int:request_id>/', crm_homeview.prefilled_create_company, name='prefilled_create_company'),
     path('list-new-company-requests/', views.list_new_company_requests, name='list_new_company_requests'),
