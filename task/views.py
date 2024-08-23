@@ -48,11 +48,7 @@ def task_create(request):
         form = TaskForm()
     return render(request, 'task/task_create.html', {'form': form})
 
-# View task details
-@login_required
-def task_detail(request, task_id):
-    task = get_object_or_404(Task, id=task_id)
-    return render(request, 'task/task_detail.html', {'task': task})
+
 
 def update_task(request, pk):
     task = get_object_or_404(Task, pk=pk)
