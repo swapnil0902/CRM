@@ -1,8 +1,12 @@
-from django import forms
-from django.contrib.auth.models import Group, Permission,User
 import string
 import random
+from django import forms
+from crm_home.models import Company
 from django.core.exceptions import ValidationError
+from .models import CustomerRequest,CompanyRequest
+from django.contrib.auth.models import Group, Permission,User
+
+#####################################        #############################################
 from django import forms
 from .models import UserRequest,CompanyRequest
 from crm_home.models import Company
@@ -29,6 +33,7 @@ class GroupForm(forms.ModelForm):
         if self.instance.pk:
             self.fields['permissions'].initial = self.instance.permissions.all()
 
+#####################################        #############################################
 
 class SignUpForm(forms.ModelForm):
     group = forms.ModelChoiceField(queryset=Group.objects.all(), required=True, label="Select Group")
@@ -49,11 +54,9 @@ class SignUpForm(forms.ModelForm):
             user.save()
             group = self.cleaned_data['group']
             user.groups.add(group)
-        return user, password  # Return the user and the generated password
+        return user, password
 
-
-
-from django.contrib.auth.forms import PasswordChangeForm
+#####################################        #############################################
 
 class ActivatePasswordForm(forms.Form):
     old_password = forms.CharField(widget=forms.PasswordInput, label='Old Password')
@@ -70,6 +73,7 @@ class ActivatePasswordForm(forms.Form):
 
         return cleaned_data
     
+#####################################        #############################################
 
 
 # class CustomerRequestForm(forms.ModelForm):
@@ -87,10 +91,11 @@ class UserRequestForm(forms.ModelForm):
         model = UserRequest
         fields = ['first_name', 'last_name', 'email','mobile','company' ]
 
-   
-
+#####################################        #############################################
 
 class CompanyRequestForm(forms.ModelForm):
     class Meta:
         model = CompanyRequest
         fields = ['name', 'service', 'description']
+
+#####################################        #############################################

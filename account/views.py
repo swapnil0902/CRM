@@ -61,18 +61,6 @@ def group_create(request):
 
 
 
-
-# def group_update(request, pk):
-#     group = get_object_or_404(Group, pk=pk)
-#     if request.method == 'POST':
-#         form = GroupForm(request.POST, instance=group)
-#         if form.is_valid():
-#             form.save()
-#             return redirect("group_list")
-#     else:
-#         form = GroupForm(instance=group)
-#     return render(request, 'account/group_form.html', {'form': form})
-
 def group_update(request, pk):
     group = get_object_or_404(Group, pk=pk)
     if request.method == 'POST':
