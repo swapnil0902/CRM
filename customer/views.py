@@ -1,23 +1,13 @@
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from customer.models import Customer
 from .forms import CustomerForm
-from django.shortcuts import get_object_or_404, redirect
-from django.http import HttpResponseNotAllowed, Http404
+from django.shortcuts import render
+from customer.models import Customer
 from rest_framework.decorators import api_view
+from django.http import HttpResponseNotAllowed, Http404
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect, render
 
-# @login_required
-# def customer_list(request):
-#     # Filter customers based on the logged-in user
-#     if request.user.groups.filter(name='Account Manager').exists():
-#         # If the user is an Account Manager, show customers for the Account Manager's company
-#         company = request.user.userprofile.company
-#         customers = Customer.objects.filter(company=company)
-#     else:
-#         # If the user is a Staff, show customers assigned to them
-#         customers = Customer.objects.filter(staff=request.user)
 
-#     return render(request, 'customer/customer_list.html', {'customers': customers})
+
 
 
 @login_required
