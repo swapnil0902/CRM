@@ -3,7 +3,7 @@ import random
 from django import forms
 from crm_home.models import Company
 from django.core.exceptions import ValidationError
-from .models import CustomerRequest,CompanyRequest
+from .models import UserRequest,CompanyRequest
 from django.contrib.auth.models import Group, Permission,User
 
 #####################################        #############################################

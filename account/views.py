@@ -61,12 +61,6 @@ def group_create(request):
 
 
 
-<<<<<<< HEAD
-
-
-
-=======
->>>>>>> d7aa66b4b7ce67f5faae8842d54eab5d871951c4
 def group_update(request, pk):
     group = get_object_or_404(Group, pk=pk)
     if request.method == 'POST':
