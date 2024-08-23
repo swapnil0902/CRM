@@ -3,6 +3,9 @@ from django.contrib.auth.models import Group, Permission,User
 import string
 import random
 from django.core.exceptions import ValidationError
+from django import forms
+from .models import UserRequest,CompanyRequest
+from crm_home.models import Company
 
 class GroupForm(forms.ModelForm):
     permissions = forms.ModelMultipleChoiceField(
@@ -67,9 +70,7 @@ class ActivatePasswordForm(forms.Form):
 
         return cleaned_data
     
-from django import forms
-from .models import CustomerRequest,CompanyRequest
-from crm_home.models import Company
+
 
 # class CustomerRequestForm(forms.ModelForm):
 #     company = forms.ModelChoiceField(queryset=Company.objects.all(), label="Select a Company")
@@ -79,11 +80,11 @@ from crm_home.models import Company
 #         fields = ['first_name', 'last_name', 'email','mobile','company' ]
 
 
-class CustomerRequestForm(forms.ModelForm):
+class UserRequestForm(forms.ModelForm):
     company = forms.ModelChoiceField(queryset=Company.objects.all(), empty_label="Select a Company")
 
     class Meta:
-        model = CustomerRequest
+        model = UserRequest
         fields = ['first_name', 'last_name', 'email','mobile','company' ]
 
    

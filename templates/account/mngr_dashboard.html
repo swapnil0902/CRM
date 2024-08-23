@@ -3,13 +3,13 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<h1>Welcome to the Admin Dashboard</h1>
+<h1>Welcome to the Manager Dashboard</h1>
 
 
-<h2>Users</h2>
+<h2>Staffs</h2>
 <ul>
     {% for staff in staffs %}
-        <li>{{ user.username }}: Email - {{ user.email }}</li>
+        <li>{{ staff.username }}: Email - {{ staff.email }}</li>
     {% empty %}
         <li>No users found.</li>
     {% endfor %}
