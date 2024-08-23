@@ -1,10 +1,10 @@
-from django import forms
 import string
 import random
+from django import forms
 from .models import Company,UserProfile,User
 from django.contrib.auth.models import User, Group
-# from .utils import generate_random_password
 
+#####################################        #############################################
 class CompanyForm(forms.ModelForm):
     class Meta:
         model = Company
@@ -19,8 +19,9 @@ class CompanyForm(forms.ModelForm):
         widget=forms.TextInput(attrs={'placeholder': 'Enter Service Provided'}),
     )
 
+
+#####################################        #############################################
 class AccountManagerForm(forms.ModelForm):
-    # Include fields for user details
     first_name = forms.CharField(max_length=30, label='First Name')
     last_name = forms.CharField(max_length=30, label='Last Name')
     username = forms.CharField(max_length=30, label='Username')
@@ -33,7 +34,6 @@ class AccountManagerForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(AccountManagerForm, self).__init__(*args, **kwargs)
-        # Add the user fields to the form
         self.fields['first_name'] = forms.CharField(max_length=30, label='First Name')
         self.fields['last_name'] = forms.CharField(max_length=30, label='Last Name')
         self.fields['username'] = forms.CharField(max_length=30, label='Username')
@@ -45,9 +45,8 @@ class AccountManagerForm(forms.ModelForm):
         return ''.join(random.choice(characters) for i in range(length))
     
     def save(self, commit=True):
-        # Create and save the User instance
         user = User(
-            username=self.cleaned_data['username'],  # Use email as username or set a specific username
+            username=self.cleaned_data['username'],  
             first_name=self.cleaned_data['first_name'],
             last_name=self.cleaned_data['last_name'],
             email=self.cleaned_data['email']
@@ -58,22 +57,21 @@ class AccountManagerForm(forms.ModelForm):
         if commit:
             user.save()
         
-        # Create and save the UserProfile instance
         user_profile = super(AccountManagerForm, self).save(commit=False)
         user_profile.staff = user
         if commit:
             user_profile.save()
         
-        # Add the user to the "Account Manager" group
         account_manager_group = Group.objects.get(name="Account Manager")
         user.groups.add(account_manager_group)
 
         return user_profile, password
     
 
-
-
+#####################################        #############################################
 class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name']
+
+#####################################        #############################################

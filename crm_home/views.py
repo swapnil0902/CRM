@@ -4,6 +4,22 @@ from .models import Company
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.forms import UserChangeForm
 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+
+from .forms import AccountManagerForm
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, get_object_or_404
+from account.forms import CompanyRequestForm
+from account.models import CompanyRequest
+
+from django.shortcuts import render, redirect, get_object_or_404
+from .forms import CompanyForm  # Ensure this form corresponds to the Company model
+from .models import Company
+
 # Create your views here.
 
 def home(request):
@@ -30,13 +46,13 @@ def update_user_profile(request):
 
 
 
-# @login_required
+@login_required
 def profile_view(request):
     if request.method == 'POST':
         form = UserChangeForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-            return redirect('profile')  # Redirect to profile page after updating
+            return redirect('profile')  
     else:
         form = UserChangeForm(instance=request.user)
     
@@ -48,28 +64,16 @@ def create_company(request):
         form = CompanyForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('company_list')  # Redirect to a success page or list of companies
+            return redirect('company_list') 
     else:
         form = CompanyForm()
     
     return render(request, 'crm_home/create_company.html', {'form': form})
 
-# views.py
 
-from django.shortcuts import render, redirect, get_object_or_404
-from account.forms import CompanyRequestForm
-from account.models import CompanyRequest
-
-
-# views.py
-
-from django.shortcuts import render, redirect, get_object_or_404
-from .forms import CompanyForm  # Ensure this form corresponds to the Company model
-from .models import Company
 
 def prefilled_create_company(request, request_id=None):
     if request_id:
-        # Fetch the Company object based on request_id
         company = get_object_or_404(CompanyRequest, pk=request_id)
         initial_data = {
             'name': company.name,
@@ -78,56 +82,26 @@ def prefilled_create_company(request, request_id=None):
     else:
         initial_data = {}
 
-    print(initial_data)  # Debugging line to check initial data
+    print(initial_data)  
 
     if request.method == 'POST':
         form = CompanyForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('company_list')  # Redirect to a success page or list of companies
+            return redirect('company_list')  
         else:
-            # Form is invalid; re-render with error messages
             return render(request, 'crm_home/create_company.html', {'form': form})
     
     else:
-        # Initialize form with initial data if available
         form = CompanyForm(initial=initial_data)
 
     return render(request, 'crm_home/create_company.html', {'form': form})
-
 
 
 def company_list(request):
     companies = Company.objects.all()
     return render(request, 'crm_home/company_list.html', {'companies': companies})
 
-
-
-# def company_detail(request, pk):
-#     company = get_object_or_404(Company, pk=pk)
-#     users = company.users.all()  # Assuming 'users' is the related name in the UserProfile model
-#     return render(request, 'crm_home/company_detail.html', {'company': company, 'users': users})
-
-from .forms import AccountManagerForm
-
-# def company_detail(request, pk):
-#     company = get_object_or_404(Company, pk=pk)
-#     users = company.users.all()
-
-#     if request.method == 'POST':
-#         form = AccountManagerForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             print("entered")
-#             return redirect('company_detail', pk=company.pk)
-#     else:
-#         form = AccountManagerForm(initial={'company': company})
-
-#     return render(request, 'crm_home/company_detail.html', {
-#         'company': company,
-#         'users': users,
-#         'form': form
-#     })
 
 def company_detail(request, pk):
     company = get_object_or_404(Company, pk=pk)
@@ -136,9 +110,9 @@ def company_detail(request, pk):
     if request.method == 'POST':
         form = AccountManagerForm(request.POST)
         if form.is_valid():
-            user_profile, password = form.save()  # Save the form and get the created user profile and password
+            user_profile, password = form.save()  
 
-            # Create the HTML email content
+           
             html_message = render_to_string(
                 'account/email_template.html',
                 {
@@ -146,16 +120,16 @@ def company_detail(request, pk):
                     'username': user_profile.staff.username,
                     'password': password,
                     'support_email': 'sivatejat509@gmail.com',
-                    'login_url': 'http://localhost:8000/login/',  # Replace with your actual login URL
+                    'login_url': 'http://localhost:8000/login/',  
                 }
             )
             plain_message = strip_tags(html_message)
 
-            # Send the email
+           
             send_mail(
                 'Your Account Details and Instructions',
                 plain_message,
-                'sivatejat509@gmail.com',  # Your sender email
+                'sivatejat509@gmail.com',  
                 [user_profile.staff.email],
                 fail_silently=False,
                 html_message=html_message,
@@ -170,51 +144,3 @@ def company_detail(request, pk):
         'users': users,
         'form': form
     })
-
-
-import secrets
-import string
-from django.shortcuts import render, redirect, get_object_or_404
-from django.core.mail import send_mail
-from django.template.loader import render_to_string
-from django.utils.html import strip_tags
-
-
-# def add_account_manager(request, company_id):
-#     company = get_object_or_404(Company, id=company_id)
-#     print("insider")
-#     if request.method == 'POST':
-#         form = AccountManagerForm(request.POST)
-#         print("insider")
-#         if form.is_valid():
-#             user_profile, password = form.save()
-#             print("form is valid")
-#             # Send the email with the generated password
-#             html_message = render_to_string(
-#                 'account/email_template.html',
-#                 {
-#                     'first_name': user_profile.staff.first_name,
-#                     'username': user_profile.staff.username,
-#                     'password': password,
-#                     'support_email': 'sivatejat509@gmail.com',
-#                     'login_url': 'http://localhost:8000/login/',
-#                 }
-#             )
-#             plain_message = strip_tags(html_message)
-
-#             send_mail(
-#                 'Your Account Details and Instructions',
-#                 plain_message,
-#                 'sivatejat509@gmail.com',
-#                 [user_profile.staff.email],
-#                 fail_silently=False,
-#                 html_message=html_message,
-#             )
-#             return redirect('company_detail', company_id=company.id)
-#     else:
-#         form = AccountManagerForm(initial={'company': company})
-
-#     return render(request, 'crm_home/add_account_manager.html', {
-#         'form': form,
-#         'company': company
-#     })
