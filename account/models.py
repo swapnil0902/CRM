@@ -38,7 +38,7 @@ from django.contrib.auth.models import User
 from crm_home.models import Company
 
 
-class CustomerRequest(models.Model):
+class UserRequest(models.Model):
     first_name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
     email = models.EmailField(unique=True)
