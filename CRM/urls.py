@@ -21,16 +21,31 @@ from django.urls import path, include
 
 
 urlpatterns = [
-    path('', include('account.urls')),
-    path('admin/', admin.site.urls),
+    #################### CRM_HOME URLS ########################################
     path('',views.home, name="home"),
-    path('appointment/', include('appointment.urls')),
     path('dash/', views.dashboard, name="dashboard"),
     path('profile/',views.my_profile, name="profile_page"),
     path('update-profile/', views.update_user_profile, name='update_profile'),
     path('change-password/', auth_views.PasswordChangeView.as_view(template_name='crm_home/change_password.html', success_url='/profile/' ), name='change_password'),
     # path('change-password/done/', auth_views.PasswordChangeDoneView.as_view(), name='password_change_done'),
+   
+    ################### ACCOUNT URL'S #########################################
+    path('', include('account.urls')),
+    
+    ################### ADMIN URL'S ###########################################
+    path('admin/', admin.site.urls),
+    
+    ################### APPOINTMENT URL'S #####################################
+    path('appointment/', include('appointment.urls')),
+    
+    ################### LEAD URL'S ############################################
     path('lead/', include('lead.urls')),
+    
+    ################### TASK URL'S ############################################
     path('task/', include('task.urls')),
+    
+    ################### CUSTOMER URL'S ########################################
     path('customer/', include('customer.urls')),
+
+    ###########################################################################
 ]
