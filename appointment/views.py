@@ -59,15 +59,14 @@ def appointment_list(request):
 @login_required
 def company_appointment_list(request):
     company = request.user.userprofile.company
-    appointments = Appointment.objects.filter(company=company)
+    appointments = Appointment.objects.filter(attendees__userprofile__company=company).distinct()
     return render(request, 'appointment/company_appointment_list.html', {'appointments': appointments})
 
 
 ############################# Updating Company List #############################################################
 @login_required
 def company_appointment_update(request, pk):
-    company = request.user.userprofile.company
-    appointment = get_object_or_404(Appointment, pk=pk, company=company)
+    appointment = get_object_or_404(Appointment, pk=pk)
     if request.method == 'POST':
         form = AppointmentForm(request.POST, instance=appointment)
         if form.is_valid():

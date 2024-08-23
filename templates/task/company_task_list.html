@@ -1,0 +1,73 @@
+{% extends "account/Mngr_Base.html" %}
+{% load static %}
+
+{% block title %}
+    <title>Tasks</title>
+{% endblock %}
+
+{% block content %}
+    <h1>Task List</h1>
+
+    <!-- Filtering Form -->
+    <form method="GET" action="{% url 'task_list' %}">
+        <fieldset>
+            <legend>Filter Tasks</legend>
+            {{ form.as_p }}
+            <button type="submit">Apply Filters</button>
+        </fieldset>
+    </form>
+
+    <!-- Sorting Form -->
+    <form method="GET" action="{% url 'task_list' %}">
+        <fieldset>
+            <legend>Sort Tasks</legend>
+            <label for="sort_by">Sort By:</label>
+            <select id="sort_by" name="sort_by">
+                <option value="due_date" {% if request.GET.sort_by == "due_date" %}selected{% endif %}>Due Date</option>
+                <option value="priority" {% if request.GET.sort_by == "priority" %}selected{% endif %}>Priority</option>
+                <option value="status" {% if request.GET.sort_by == "status" %}selected{% endif %}>Status</option>
+            </select>
+            <button type="submit">Sort</button>
+        </fieldset>
+    </form>
+
+    <!-- Task Table -->
+    <table>
+        <thead>
+            <tr>
+                <th>Client Name</th>
+                <th>Task Title</th>
+                <th>Description (optional)</th>
+                <th>Due Date</th>
+                <th>Due Time</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Assigned To</th>
+                <th>Customer</th>
+                <th>Update Task</th>
+                <th>Delete Task</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+            <tr>
+                <td>{{ task.client_name }}</td>
+                <td>{{ task.title }}</td>
+                <td>{{ task.description }}</td>
+                <td>{{ task.due_date }}</td>
+                <td>{{ task.due_time }}</td>
+                <td>{{ task.priority }}</td>
+                <td>{{ task.status }}</td>
+                <td>{{ task.assigned_to }}</td>
+                <td>{{ task.customer }}</td>
+                <td><a href="{% url 'task_update' task.pk %}">Update</a></td>
+                <td><a href="{% url 'task_delete' task.pk %}">Delete</a></td>
+            </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="11">No tasks available.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
