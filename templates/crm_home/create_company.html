@@ -1,14 +1,16 @@
 {% extends 'account/Admin_Page_base.html' %}
 
-{% block title %}About Page{% endblock %}
+{% block title %}Create Company{% endblock %}
 
 {% block content %}
-<body>
-    <h1>Create Company</h1>
+<div class="container mt-4">
+    <h1 class="mb-4">Create Company</h1>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Create Company</button>
+        <div class="mb-3">
+            {{ form.as_p }}
+        </div>
+        <button type="submit" class="btn btn-primary">Create Company</button>
     </form>
-</body>
+</div>
 {% endblock %}

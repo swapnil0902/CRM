@@ -3,15 +3,16 @@
 {% block title %}Requests{% endblock %}
 
 {% block content %}
-<body>
-    <h1>New Company Requests</h1>
-    <table>
-        <thead>
+<div class="container mt-4">
+    <h1 class="mb-4">New Company Requests</h1>
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
             <tr>
                 <th>Company Name</th>
                 <th>Service Type</th>
                 <th>Request Date</th>
                 <th>Assigned To</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -19,23 +20,21 @@
                 <tr>
                     <td>{{ request.name }}</td>
                     <td>{{ request.service }}</td>
-                    <td>{{ request.submitted_at }}</td>
+                    <td>{{ request.submitted_at|date:"F j, Y" }}</td>
                     <td>{{ request.assigned_to }}</td>
                     <td>
-                        <!-- Button to navigate to the create company view with parameters -->
                         <a href="{% url 'prefilled_create_company' request_id=request.id %}" 
-                        style="display: inline-block; padding: 5px 10px; font-size: 14px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px;">
-                        Create Company
+                           class="btn btn-success btn-sm">
+                           Create Company
                         </a>
-
                     </td>
                 </tr>
             {% empty %}
                 <tr>
-                    <td colspan="5">No requests found.</td>
+                    <td colspan="5" class="text-center">No requests found.</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
-</body>
+</div>
 {% endblock %}

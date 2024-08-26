@@ -3,12 +3,19 @@
 {% block title %}About Page{% endblock %}
 
 {% block content %}
-<body>
-    <h1>List of Companies</h1>
-    <ul>
+<div class="container mt-5">
+    <h1 class="mb-4">List of Companies</h1>
+    <div class="list-group">
         {% for company in companies %}
-            <li><a href="{% url 'company_detail' company.pk %}">{{ company.name }}</a> - {{ company.service }}</li>
+            <a href="{% url 'company_detail' company.pk %}" class="list-group-item list-group-item-action">
+                <h5 class="mb-1">{{ company.name }}</h5>
+                <p class="mb-1">{{ company.service }}</p>
+            </a>
+        {% empty %}
+            <div class="alert alert-warning" role="alert">
+                No companies found.
+            </div>
         {% endfor %}
-    </ul>
-</body>
-{% endblock%}
+    </div>
+</div>
+{% endblock %}

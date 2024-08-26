@@ -3,15 +3,21 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<h1>Groups</h1>
-<a href="{% url 'group_create' %}">Create new group</a>
-<ul>
-    {% for group in groups %}
-        <li>
-            {{ group.name }} - 
-            <a href="{% url 'group_update' group.pk %}">Edit</a> - 
-            <a href="{% url 'group_delete' group.pk %}">Delete</a>
-        </li>
-    {% endfor %}
-</ul>
+<div class="container mt-4">
+    <h1 class="mb-4">Groups</h1>
+    <a href="{% url 'group_create' %}" class="btn btn-primary mb-3">Create New Group</a>
+    <ul class="list-group">
+        {% for group in groups %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ group.name }}
+                <div>
+                    <a href="{% url 'group_update' group.pk %}" class="btn btn-warning btn-sm me-2">Edit</a>
+                    <a href="{% url 'group_delete' group.pk %}" class="btn btn-danger btn-sm">Delete</a>
+                </div>
+            </li>
+        {% empty %}
+            <li class="list-group-item">No groups available.</li>
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}
