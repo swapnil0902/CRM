@@ -1,14 +1,14 @@
 {% extends 'account/Mngr_Base.html' %}
 
-{% block title %}Dashboard{% endblock %}
+{% block title %}Sign Up{% endblock %}
 
 {% block content %}
-<body>
-    <h2>Sign Up</h2>
-    <form method="post">
+<div class="container mt-5">
+    <h2 class="mb-4">Sign Up</h2>
+    <form method="post" class="needs-validation" novalidate>
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Register</button>
+        <button type="submit" class="btn btn-primary">Register</button>
     </form>
-</body>
-{% endblock%}
+</div>
+{% endblock %}

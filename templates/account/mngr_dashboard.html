@@ -3,24 +3,41 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<h1>Welcome to the Manager Dashboard</h1>
+<div class="container mt-4">
+    <h1 class="mb-4">Welcome to the Manager Dashboard</h1>
+    
+    <div class="alert alert-info">
+        <strong>Company:</strong> {{ user.userprofile.company }}
+    </div>
 
-{{user.userprofile.company}}
-<h2>Staffs</h2>
-<ul>
-    {% for staff in staffs %}
-        <li>{{ staff.username }}: Email - {{ staff.email }}</li>
-    {% empty %}
-        <li>No users found.</li>
-    {% endfor %}
-</ul>
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2 class="h5">Staffs</h2>
+        </div>
+        <ul class="list-group list-group-flush">
+            {% for staff in staffs %}
+                <li class="list-group-item">
+                    <strong>{{ staff.username }}</strong>: Email - <a href="mailto:{{ staff.email }}">{{ staff.email }}</a>
+                </li>
+            {% empty %}
+                <li class="list-group-item">No users found.</li>
+            {% endfor %}
+        </ul>
+    </div>
 
-<h2>Account Managers</h2>
-<ul>
-    {% for manager in account_managers %}
-        <li>{{ manager.username }}: Email - {{ manager.email }}</li>
-    {% empty %}
-        <li>No account managers found.</li>
-    {% endfor %}
-</ul>
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2 class="h5">Account Managers</h2>
+        </div>
+        <ul class="list-group list-group-flush">
+            {% for manager in account_managers %}
+                <li class="list-group-item">
+                    <strong>{{ manager.username }}</strong>: Email - <a href="mailto:{{ manager.email }}">{{ manager.email }}</a>
+                </li>
+            {% empty %}
+                <li class="list-group-item">No account managers found.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
 {% endblock %}

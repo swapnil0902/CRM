@@ -6,15 +6,17 @@
 {% endblock %}
 
 {% block stylesheets %}
-        <link rel="stylesheet" type="text/css" href="{% static 'lead/styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'lead/styles.css' %}">
 {% endblock %}
 
 {% block content %}
-    <h1>Customer Detail</h1>
-    <form method="post">
+<div class="container mt-5">
+    <h1 class="mb-4">Customer Detail</h1>
+    <form method="post" class="border p-4 rounded">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Save</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a href="{% url 'company_customer_list' %}" class="btn btn-secondary ml-2">Back to List</a>
     </form>
-    <a href="{% url 'company_customer_list' %}">Back to List</a>
+</div>
 {% endblock %}

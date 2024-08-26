@@ -43,7 +43,7 @@ def lead_detail(request, lead_id):
             return render(request, 'lead/lead_detail.html', {'lead': lead, 'form': form})
     
     elif request.method == 'GET':
-        form = LeadForm(instance=lead, user = request.user)
+        form = LeadForm(instance=lead, user = request.user, initial={'staff': request.user})
         return render(request, 'lead/lead_detail.html', {'lead': lead, 'form': form})
     
     else:
@@ -118,7 +118,7 @@ def company_lead_detail(request, lead_id):
             return render(request, 'lead/company_lead_detail.html', {'lead': lead, 'form': form})
     
     elif request.method == 'GET':
-        form = LeadForm(instance=lead, user = request.user)
+        form = LeadForm(instance=lead, user = request.user, initial={'staff': request.user})
         return render(request, 'lead/company_lead_detail.html', {'lead': lead, 'form': form})
     
     else:

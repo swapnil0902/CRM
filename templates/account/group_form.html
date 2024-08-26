@@ -3,10 +3,14 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-    <h2>Create a New Group</h2>
+<div class="container mt-4">
+    <h2 class="mb-4">Create a New Group</h2>
     <form method="post" action="{% url 'group_create' %}">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Save</button>
+        <div class="mb-3">
+            {{ form.as_p }}
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
     </form>
+</div>
 {% endblock %}
