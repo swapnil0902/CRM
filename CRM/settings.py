@@ -97,12 +97,9 @@ TEMPLATES = [
     },
 ]
 
-<<<<<<< HEAD
 
 
 # CRISPY_TEMPLATE_PACK = 'bootstrap5'
-=======
->>>>>>> 65a2f3622064b357a418a1c0ed8133509090466d
 
 LOGIN_URL = '/login/'
 # LOGIN_URL = 'mfa:login'
