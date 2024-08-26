@@ -8,6 +8,34 @@
     {% block stylesheets %}
         <link rel="stylesheet" type="text/css" href="{% static 'crm/styles.css' %}">
     {% endblock %}
+    {% comment %} <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const sessionTimeout = 60; // Session timeout in seconds (1 minute)
+            const warningTime = 30; // Time before session expiry to show warning (in seconds)
+
+            let timeToWarning = sessionTimeout - warningTime;
+
+            
+
+            // Set timeout to show warning before session expires
+
+            // Check session status periodically
+            setInterval(checkSession, 10000); // Check every 10 seconds
+
+            function checkSession() {
+                fetch("{% url 'check_session' %}")
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.active) {
+                            console.log('Session expired. Redirecting to login.'); // Debugging log
+                            alert("Your session has expired. You will be redirected to the login page.");
+                            window.location.reload();
+                        }
+                    })
+                    .catch(error => console.error('Error checking session:', error));
+            }
+        });
+    </script> {% endcomment %}
 </head>
 <body>  
   
@@ -50,4 +78,5 @@
         {% endblock %}
     </main>
 </body>
+
 </html>

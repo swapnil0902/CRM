@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'customer',
     'lead',
     'task',
+    
 ]
 
 REST_FRAMEWORK = {
@@ -87,10 +88,12 @@ TEMPLATES = [
     },
 ]
 
+
+
 LOGIN_URL = '/login/'
 
 # settings.py
-LOGIN_REDIRECT_URL = '/dash/'  # Redirect to the desired path after login
+# LOGIN_REDIRECT_URL = '/dash/'  # Redirect to the desired path after login
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
@@ -163,3 +166,12 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_PASSWORD = 'dapbagrugczekiwb'
 EMAIL_USE_TLS = True
+
+
+# SESSION_COOKIE_AGE =180  # Time in seconds
+
+# # Expire session on browser close
+# SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# # Save the session on every request, so inactivity is properly tracked
+# SESSION_SAVE_EVERY_REQUEST = True

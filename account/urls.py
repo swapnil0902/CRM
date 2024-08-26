@@ -6,10 +6,15 @@ from customer import views as cust_views
 from lead import views as ld_views
 from appointment import views as appt_views
 from task import views as tk_views
-
+from django.urls import path, include
+from django.contrib import admin
 urlpatterns = [
+    # path('check-session/', views.check_session, name='check_session'),
+
+    # path('admin/', admin.site.urls),
     ################### Login, Logout, signup, contact-admin #####################################
-    path('login/', auth_views.LoginView.as_view(), name='login'),
+    path('loginS/', auth_views.LoginView.as_view(), name='login'),
+    path('login/', views.CustomLoginView.as_view(), name='login'),
     path('signup/<int:request_id>/', views.signup, name='signup'),
     path('signup/', views.manual_signup, name='Msignup'),
     path('logout/', views.logout_view, name='logout'),
@@ -31,8 +36,6 @@ urlpatterns = [
     ##################################### dashboards #############################################
     path('mngr-dashboard/', views.mngr_dashboard, name='mngr_dashboard'),
    
-    #################################### activate password #######################################
-    path('activate/', views.activate_password, name='activate_password'),
 
     #################################### companies #######################################
     path('companies/', crm_homeview.company_list, name='company_list'),
@@ -56,9 +59,9 @@ urlpatterns = [
     path('company_appointment/<int:pk>/delete/', appt_views.company_appointment_delete, name='company_appointment_delete'),
         
     #################################### task list ###########################################
-    path('company_task/', tk_views.company_task_list, name='company_task_list'),
-    path('company_task/<int:pk>/', tk_views.company_task_update, name='company_task_update'),
-    path('company_task/<int:pk>/delete/', tk_views.company_task_delete, name='company_task_delete'),
+    # path('company_task/', tk_views.company_task_list, name='company_task_list'),
+    # path('company_task/<int:pk>/', tk_views.company_task_update, name='company_task_update'),
+    # path('company_task/<int:pk>/delete/', tk_views.company_task_delete, name='company_task_delete'),
     
     
     

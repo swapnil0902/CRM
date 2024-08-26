@@ -31,6 +31,7 @@ urlpatterns = [
    
     ################### ACCOUNT URL'S #########################################
     path('', include('account.urls')),
+    #  path('admin/', admin.site.urls),
     
     ################### ADMIN URL'S ###########################################
     path('admin/', admin.site.urls),

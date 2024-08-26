@@ -27,6 +27,8 @@
                 <h5>CRM Application</h5>
                 <ul class="nav flex-column">
                     <!-- Add your URLs here -->
+                    <li class="nav-item"><a class="nav-link" href="{% url 'group_create' %}">Add Role</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'group_list' %}">List of Roles</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'list_new_company_requests' %}">Company_Requests</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'company_list' %}">Companies</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'create_company' %}">Create_Company</a></li>

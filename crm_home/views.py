@@ -16,16 +16,19 @@ def home(request):
 
 
 ########################         ##########################################
+@login_required
 def dashboard(request):
     return render(request, "crm/dashboard.html")
 
 
 ########################         ##########################################
+@login_required
 def my_profile(request):
     return render(request,"crm_home/my_profile.html")
 
 
 ########################         ##########################################
+@login_required
 def update_user_profile(request):
     if request.method == 'POST':
         form = UserUpdateForm(request.POST, instance=request.user)
@@ -39,6 +42,7 @@ def update_user_profile(request):
 
 
 ########################         ##########################################
+@login_required
 def create_company(request):
     if request.method == 'POST':
         form = CompanyForm(request.POST)
@@ -52,6 +56,7 @@ def create_company(request):
 
 
 ########################         ##########################################
+@login_required
 def prefilled_create_company(request, request_id=None):
     if request_id:
         company = get_object_or_404(CompanyRequest, pk=request_id)
@@ -79,12 +84,14 @@ def prefilled_create_company(request, request_id=None):
 
 
 ########################         ##########################################
+@login_required
 def company_list(request):
     companies = Company.objects.all()
     return render(request, 'crm_home/company_list.html', {'companies': companies})
 
 
 ########################         ##########################################
+@login_required
 def company_detail(request, pk):
     company = get_object_or_404(Company, pk=pk)
     users = company.users.all()
