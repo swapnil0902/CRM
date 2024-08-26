@@ -6,8 +6,9 @@ from .models import UserRequest,CompanyRequest
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import Group, Permission,User
-#####################################        #############################################
 
+
+#####################################        #############################################
 class GroupForm(forms.ModelForm):
     permissions = forms.ModelMultipleChoiceField(
         queryset=Permission.objects.all(),
@@ -50,7 +51,6 @@ class SignUpForm(forms.ModelForm):
         if commit:
             user.save()
 
-            # Save UserProfile with company association
             group = self.cleaned_data['group']
             user.groups.add(group)
             
@@ -79,16 +79,17 @@ class CustomAuthenticationForm(AuthenticationForm):
     pass
 
 
-
-
+##################################          ###############################################
 class UsernamePasswordResetForm(forms.Form):
     username = forms.CharField(max_length=150, required=True, label='Username')
 
 
+##################################          ###############################################
 class OTPForm(forms.Form):
     otp = forms.CharField(max_length=6, required=True, label='OTP')
 
 
+##################################          ################################################
 class SetNewPasswordForm(forms.Form):
     new_password = forms.CharField(widget=forms.PasswordInput, required=True, label='New Password')
     confirm_password = forms.CharField(widget=forms.PasswordInput, required=True, label='Confirm Password')
@@ -100,3 +101,5 @@ class SetNewPasswordForm(forms.Form):
 
         if new_password and confirm_password and new_password != confirm_password:
             self.add_error('confirm_password', 'Passwords do not match.')
+
+##################################          #################################################

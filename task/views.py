@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework.decorators import api_view
 
 
-#########################         #########################################
+######################### Tasks Details #########################################
 @login_required
 def task_list(request):
     tasks = Task.objects.filter(assigned_to=request.user)
@@ -36,7 +36,7 @@ def task_list(request):
     return render(request, 'task/task_list.html', {'tasks': tasks, 'form': form})
 
 
-########################         ##########################################
+######################## Creating Tasks ##########################################
 User = get_user_model()
 
 def task_create(request):
@@ -62,7 +62,8 @@ def task_create(request):
 
     return render(request, 'task/task_create.html', {'form': form})
 
-########################         ##########################################
+
+########################  Updating Tasks #############################################
 @login_required
 def update_task(request, pk):
     task = get_object_or_404(Task, pk=pk)
@@ -73,7 +74,7 @@ def update_task(request, pk):
     return render(request, 'task/task_update.html', {'form': form})
 
 
-########################         ##########################################
+######################## Deleting Tasks ##########################################
 @login_required
 def delete_task(request, pk):
     task = get_object_or_404(Task, pk=pk)
@@ -82,12 +83,8 @@ def delete_task(request, pk):
         return redirect('task_list')
     return render(request, 'task/task_delete.html', {'task': task})
 
-########################         ##########################################
 
-
-
-
-
+######################## Tasks List(Company-Wise) ##########################################
 def company_task_list(request):
     company = request.user.userprofile.company
     tasks = Task.objects.filter(assigned_to__userprofile__company=company)
@@ -110,7 +107,6 @@ def company_task_list(request):
         elif end_date:
             tasks = tasks.filter(due_date__lte=end_date)
 
-    # Sorting
     sort_by = request.GET.get('sort_by', 'due_date')
     if sort_by in ['due_date', 'priority', 'status']:
         tasks = tasks.order_by(sort_by)
@@ -118,7 +114,7 @@ def company_task_list(request):
     return render(request, 'task/company_task_list.html', {'tasks': tasks, 'form': form})
 
 
-
+######################## Update Tasks List(Company-Wise) ##########################################
 @login_required
 def company_task_update(request, pk):
     task = get_object_or_404(Task, pk=pk)
@@ -129,9 +125,12 @@ def company_task_update(request, pk):
     return render(request, 'task/company_task_update.html', {'form': form})
 
 
+######################## Delete Tasks List(Company-Wise) ##########################################
 @api_view(['GET', 'DELETE'])
 @login_required
 def company_task_delete(request, pk):
     task = get_object_or_404(Task, pk=pk)
     task.delete()
     return redirect('company_task_list')
+
+#################################### THE-END #######################################################
