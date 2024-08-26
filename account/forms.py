@@ -107,7 +107,7 @@ class UserRequestForm(forms.ModelForm):
 
     class Meta:
         model = UserRequest
-        fields = ['first_name', 'last_name', 'email','mobile','company' ]
+        fields = ['first_name', 'last_name', 'email','company' ]
 
 #####################################        #############################################
 

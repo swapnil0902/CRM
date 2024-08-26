@@ -39,7 +39,6 @@ class UserRequest(models.Model):
     first_name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
     email = models.EmailField(unique=True)
-    mobile = models.IntegerField()
     company = models.ForeignKey(Company, on_delete=models.CASCADE, default = 1) 
     approved = models.BooleanField(default=False)
 
