@@ -57,6 +57,12 @@ urlpatterns = [
     path('company_appointment/<int:pk>/', appt_views.company_appointment_update, name='company_appointment_update'),
     path('company_appointment/<int:pk>/delete/', appt_views.company_appointment_delete, name='company_appointment_delete'),
         
+<<<<<<< HEAD
+    # #################################### task list ###########################################
+    # path('company_task/', tk_views.company_task_list, name='company_task_list'),
+    # path('company_task/<int:pk>/', tk_views.company_task_update, name='company_task_update'),
+    # path('company_task/<int:pk>/delete/', tk_views.company_task_delete, name='company_task_delete'),
+=======
     #################################### task list ###########################################
     # path('company_task/', tk_views.company_task_list, name='company_task_list'),
     # path('company_task/<int:pk>/', tk_views.company_task_update, name='company_task_update'),
@@ -69,6 +75,7 @@ urlpatterns = [
 
 
 
+>>>>>>> 083b32bda1116cc553786e9c1786248944c78b42
     # path('company-request-submitted/', views.TemplateView.as_view(template_name='account/company_request_submitted.html'), name='company_request_submitted'),
 
 ]

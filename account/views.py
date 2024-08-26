@@ -1,3 +1,16 @@
+<<<<<<< HEAD
+from crm_home.models import Company
+from django.core.mail import send_mail
+from django.utils.html import strip_tags
+from .models import UserRequest,CompanyRequest
+from django.contrib.auth.models import User,Group
+from django.contrib.auth import login,authenticate
+from django.template.loader import render_to_string
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, get_object_or_404
+from .forms import SignUpForm, ActivatePasswordForm,UserRequestForm,GroupForm
+from django.contrib.auth import authenticate, update_session_auth_hash, logout
+=======
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import Group, User
@@ -25,6 +38,7 @@ from django.contrib.auth.decorators import login_required
 #         return JsonResponse({'active': False})
     
 
+>>>>>>> 083b32bda1116cc553786e9c1786248944c78b42
 
 
 

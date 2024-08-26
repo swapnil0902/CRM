@@ -1,7 +1,5 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
+from django.urls import path
 from .views import  lead_list, lead_detail, lead_create, lead_delete
-from django.conf.urls import handler403
 
 urlpatterns = [
     path('', lead_list, name='lead-view'),
