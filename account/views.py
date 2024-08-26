@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from crm_home.models import Company
 from django.core.mail import send_mail
 from django.utils.html import strip_tags
@@ -10,35 +9,6 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import SignUpForm, ActivatePasswordForm,UserRequestForm,GroupForm
 from django.contrib.auth import authenticate, update_session_auth_hash, logout
-=======
-from django.contrib.auth.decorators import login_required,user_passes_test
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.models import Group, User
-from django.contrib.auth import logout, update_session_auth_hash, authenticate, login as auth_login
-from django.core.mail import send_mail
-from django.utils.html import strip_tags
-from django.template.loader import render_to_string
-from .models import UserRequest, CompanyRequest
-from crm_home.models import Company, UserProfile
-from .forms import GroupForm, SignUpForm, UserRequestForm, CompanyRequestForm
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib import messages
-from django.views import View
-
-from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
-
-# @login_required
-# def check_session(request):
-#     if request.user.is_authenticated:
-#         # Session is active
-#         return JsonResponse({'active': True})
-#     else:
-#         # Session has expired
-#         return JsonResponse({'active': False})
-    
-
->>>>>>> 083b32bda1116cc553786e9c1786248944c78b42
 
 
 
