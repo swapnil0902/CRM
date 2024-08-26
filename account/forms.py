@@ -77,3 +77,26 @@ class CompanyRequestForm(forms.ModelForm):
 
 class CustomAuthenticationForm(AuthenticationForm):
     pass
+
+
+
+
+class UsernamePasswordResetForm(forms.Form):
+    username = forms.CharField(max_length=150, required=True, label='Username')
+
+
+class OTPForm(forms.Form):
+    otp = forms.CharField(max_length=6, required=True, label='OTP')
+
+
+class SetNewPasswordForm(forms.Form):
+    new_password = forms.CharField(widget=forms.PasswordInput, required=True, label='New Password')
+    confirm_password = forms.CharField(widget=forms.PasswordInput, required=True, label='Confirm Password')
+
+    def clean(self):
+        cleaned_data = super().clean()
+        new_password = cleaned_data.get('new_password')
+        confirm_password = cleaned_data.get('confirm_password')
+
+        if new_password and confirm_password and new_password != confirm_password:
+            self.add_error('confirm_password', 'Passwords do not match.')
