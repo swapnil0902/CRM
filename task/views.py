@@ -1,11 +1,14 @@
-# views.py
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
 from .models import Task
 from .forms import TaskForm,TaskFilterForm
+<<<<<<< HEAD
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, get_object_or_404
+=======
 from rest_framework.decorators import api_view
+>>>>>>> 083b32bda1116cc553786e9c1786248944c78b42
 
-# List all tasks
+
+#########################         #########################################
 @login_required
 def task_list(request):
     tasks = Task.objects.filter(assigned_to=request.user)
@@ -28,14 +31,14 @@ def task_list(request):
         elif end_date:
             tasks = tasks.filter(due_date__lte=end_date)
 
-    # Sorting
     sort_by = request.GET.get('sort_by', 'due_date')
     if sort_by in ['due_date', 'priority', 'status']:
         tasks = tasks.order_by(sort_by)
 
     return render(request, 'task/task_list.html', {'tasks': tasks, 'form': form})
 
-# Create a new task
+
+########################         ##########################################
 @login_required
 def task_create(request):
     if request.method == 'POST':
@@ -50,7 +53,8 @@ def task_create(request):
     return render(request, 'task/task_create.html', {'form': form})
 
 
-
+########################         ##########################################
+@login_required
 def update_task(request, pk):
     task = get_object_or_404(Task, pk=pk)
     form = TaskForm(request.POST or None, instance=task)
@@ -59,6 +63,9 @@ def update_task(request, pk):
         return redirect('task_list')
     return render(request, 'task/task_update.html', {'form': form})
 
+
+########################         ##########################################
+@login_required
 def delete_task(request, pk):
     task = get_object_or_404(Task, pk=pk)
     if request.method == 'POST':
@@ -66,6 +73,9 @@ def delete_task(request, pk):
         return redirect('task_list')
     return render(request, 'task/task_delete.html', {'task': task})
 
+<<<<<<< HEAD
+########################         ##########################################
+=======
 
 
 
@@ -118,3 +128,4 @@ def company_task_delete(request, pk):
     task = get_object_or_404(Task, pk=pk)
     task.delete()
     return redirect('company_task_list')
+>>>>>>> 083b32bda1116cc553786e9c1786248944c78b42
