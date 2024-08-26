@@ -6,7 +6,6 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
-# Create your models here.
 
 class Company(models.Model):
     id = models.AutoField(primary_key=True)
