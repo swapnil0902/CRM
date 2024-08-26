@@ -70,6 +70,7 @@ def delete_task(request, pk):
         return redirect('task_list')
     return render(request, 'task/task_delete.html', {'task': task})
 
+########################         ##########################################
 
 
 
