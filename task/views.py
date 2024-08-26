@@ -70,7 +70,14 @@ def delete_task(request, pk):
         return redirect('task_list')
     return render(request, 'task/task_delete.html', {'task': task})
 
+<<<<<<< HEAD
 ########################         ##########################################
+=======
+
+
+
+
+>>>>>>> 7fc13bc68127e5aaea5822e81506473c7453c4f5
 
 def company_task_list(request):
     company = request.user.userprofile.company
