@@ -2,15 +2,11 @@ import string
 import random
 from django import forms
 from crm_home.models import Company
+from .models import UserRequest,CompanyRequest
 from django.core.exceptions import ValidationError
-from .models import UserRequest,CompanyRequest
-from django.contrib.auth.models import Group, Permission,User
 from django.contrib.auth.forms import AuthenticationForm
-
+from django.contrib.auth.models import Group, Permission,User
 #####################################        #############################################
-from django import forms
-from .models import UserRequest,CompanyRequest
-from crm_home.models import Company,UserProfile
 
 class GroupForm(forms.ModelForm):
     permissions = forms.ModelMultipleChoiceField(
@@ -58,46 +54,7 @@ class SignUpForm(forms.ModelForm):
             group = self.cleaned_data['group']
             user.groups.add(group)
             
-        
         return user, password
-    
-
-
-# class SignUpForm(forms.ModelForm):
-#     group = forms.ModelChoiceField(queryset=Group.objects.all(), required=True, label="Select Group")
-#     company = forms.ModelChoiceField(queryset=Company.objects.all(), required=True, label="Select Company")
-
-#     class Meta:
-#         model = User
-#         fields = ['first_name', 'last_name', 'email', 'username']
-
-#     def generate_password(self, length=12):
-#         characters = string.ascii_letters + string.digits + string.punctuation
-#         return ''.join(random.choice(characters) for i in range(length))
-
-#     def save(self, commit=True):
-#         user = super().save(commit=False)
-#         password = self.generate_password()
-#         user.set_password(password)
-        
-#         if commit:
-#             user.save()
-
-#             # Assign selected group to user
-#             group = self.cleaned_data['group']
-#             user.groups.add(group)
-
-#             # Assign selected company and create UserProfile
-#             company = self.cleaned_data['company']
-#             UserProfile.objects.create(
-#                 staff=user,
-#                 company=company
-#             )
-        
-#         return user, password
-
-
-#####################################        #############################################
 
     
 #####################################        #############################################
@@ -118,7 +75,5 @@ class CompanyRequestForm(forms.ModelForm):
 
 #####################################        #############################################
 
-
 class CustomAuthenticationForm(AuthenticationForm):
-    # Add custom fields or override methods if needed
     pass

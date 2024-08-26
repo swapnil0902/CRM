@@ -1,5 +1,6 @@
 from .models import Task
 from .forms import TaskForm,TaskFilterForm
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework.decorators import api_view
@@ -36,25 +37,36 @@ def task_list(request):
 
 
 ########################         ##########################################
-@login_required
+User = get_user_model()
+
 def task_create(request):
     if request.method == 'POST':
-        form = TaskForm(request.POST)
+        form = TaskForm(request.POST, user=request.user)
         if form.is_valid():
             task = form.save(commit=False)
-            task.assigned_to = form.cleaned_data['assigned_to']
+            if request.user.groups.filter(name='Staff').exists():
+                task.assigned_to = request.user
+                task.company = request.user.userprofile.company
+            elif request.user.groups.filter(name='Account Manager').exists():
+                task.company = request.user.userprofile.company
+                assigned_to_id = request.POST.get('assigned_to')
+                if assigned_to_id:
+                    task.assigned_to = get_object_or_404(User, pk=assigned_to_id)
+                else:
+                    form.add_error('assigned_to', 'You must assign this task to a staff member.')
+                    return render(request, 'task/task_create.html', {'form': form})
             task.save()
             return redirect('task_list')
     else:
-        form = TaskForm()
-    return render(request, 'task/task_create.html', {'form': form})
+        form = TaskForm(user=request.user)  
 
+    return render(request, 'task/task_create.html', {'form': form})
 
 ########################         ##########################################
 @login_required
 def update_task(request, pk):
     task = get_object_or_404(Task, pk=pk)
-    form = TaskForm(request.POST or None, instance=task)
+    form = TaskForm(request.POST or None, instance=task, user = request.user)
     if form.is_valid():
         form.save()
         return redirect('task_list')
