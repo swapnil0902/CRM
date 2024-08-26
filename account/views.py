@@ -1,26 +1,14 @@
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.models import Group
-from .forms import GroupForm
-from django.contrib.auth import logout
-from django.contrib.auth import update_session_auth_hash
-from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, update_session_auth_hash
-from .forms import ActivatePasswordForm
-from django.contrib.auth.models import User
-from .forms import SignUpForm
-from django.contrib.auth import login, authenticate
-from django.core.mail import send_mail  # For sending the generated password
+from crm_home.models import Company
 from django.core.mail import send_mail
 from django.utils.html import strip_tags
-from django.template.loader import render_to_string
-from django.shortcuts import get_object_or_404
-from django.shortcuts import render, redirect
 from .models import UserRequest,CompanyRequest
-from crm_home.models import Company
-from .forms import UserRequestForm
-
+from django.contrib.auth.models import User,Group
+from django.contrib.auth import login,authenticate
+from django.template.loader import render_to_string
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, get_object_or_404
+from .forms import SignUpForm, ActivatePasswordForm,UserRequestForm,GroupForm
+from django.contrib.auth import authenticate, update_session_auth_hash, logout
 
 
 

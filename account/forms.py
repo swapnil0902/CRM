@@ -75,15 +75,6 @@ class ActivatePasswordForm(forms.Form):
     
 #####################################        #############################################
 
-
-# class CustomerRequestForm(forms.ModelForm):
-#     company = forms.ModelChoiceField(queryset=Company.objects.all(), label="Select a Company")
-
-#     class Meta:
-#         model = CustomerRequest
-#         fields = ['first_name', 'last_name', 'email','mobile','company' ]
-
-
 class UserRequestForm(forms.ModelForm):
     company = forms.ModelChoiceField(queryset=Company.objects.all(), empty_label="Select a Company")
 

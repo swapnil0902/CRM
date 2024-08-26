@@ -10,22 +10,24 @@ from rest_framework.decorators import api_view
 from .serializers import LeadSerializer
 from django.http import Http404
 
+
 User = get_user_model()
-
-
+########################         ##########################################
 class LeadViewSet(viewsets.ModelViewSet):
     queryset = Lead.objects.all()
     serializer_class = LeadSerializer
 
 
-# @login_required
+########################         ##########################################
+@login_required
 def lead_list(request):
     user = request.user 
     leads = Lead.objects.filter(staff=request.user )
-    # leads = Lead.objects.all()
     return render(request, 'lead/lead.html', {'leads': leads})
 
-# @login_required
+
+########################         ##########################################
+@login_required
 @api_view(['POST', 'GET'])
 def lead_detail(request, lead_id):
     try:
@@ -48,6 +50,7 @@ def lead_detail(request, lead_id):
         return HttpResponseNotAllowed(['GET', 'POST'])
     
 
+########################         ##########################################
 @api_view(['GET', 'DELETE'])
 def lead_delete(request, lead_id):
     lead = get_object_or_404(Lead, id=lead_id)
@@ -56,55 +59,50 @@ def lead_delete(request, lead_id):
     return redirect('lead-view')
 
 
-    
-
+########################         ##########################################
 def lead_create(request):
     if request.method == 'POST':
         form = LeadForm(request.POST, user=request.user)
         if form.is_valid():
             lead = form.save(commit=False)
 
-            if request.user.groups.filter(name='Staff').exists():  # Staff user automatically assigned
+            if request.user.groups.filter(name='Staff').exists(): 
                 lead.staff = request.user
                 lead.company = request.user.userprofile.company
-            elif request.user.groups.filter(name='Account Manager').exists():  # Account Manager assigns lead
+            elif request.user.groups.filter(name='Account Manager').exists():  
                 lead.company = request.user.userprofile.company
-                assigned_to_id = request.POST.get('staff')  # Use 'staff' from the form data
+                assigned_to_id = request.POST.get('staff')  
                 if assigned_to_id:
                     lead.staff = get_object_or_404(User, pk=assigned_to_id)
                 else:
                     form.add_error('staff', 'You must assign this lead to a staff member.')
                     return render(request, 'lead/lead_create.html', {'form': form, 'user': request.user})
 
-            # Now lead.staff is set, and we can safely save the lead instance
             lead.save()
             return redirect('lead-view')
     else:
         form = LeadForm(user=request.user)
-        if request.user.groups.filter(name='Account Manager').exists():  # Only Account Managers see company users
+        if request.user.groups.filter(name='Account Manager').exists(): 
             company = get_object_or_404(Company, pk=request.user.userprofile.company.pk)
             form.fields['staff'].queryset = User.objects.filter(userprofile__company=company)
 
     return render(request, 'lead/lead_create.html', {'form': form, 'user': request.user})
 
 
-
-
+########################         ##########################################
 @login_required
 def company_lead_list(request):
-    # Check if the user is authenticated
     if not request.user.is_authenticated:
-        return redirect('login')  # Redirect to login if not authenticated
+        return redirect('login')  
 
-    # Get the company of the currently logged-in user
     company = request.user.userprofile.company
 
-    # Filter customers based on the user's company
     leads = Lead.objects.filter(company=company)
 
     return render(request, 'lead/company_lead_list.html', {'leads': leads})
 
 
+########################         ##########################################
 @api_view(['POST', 'GET'])
 def company_lead_detail(request, lead_id):
     try:
@@ -127,10 +125,12 @@ def company_lead_detail(request, lead_id):
         return HttpResponseNotAllowed(['GET', 'POST'])
     
 
-
+########################         ##########################################
 @api_view(['GET', 'DELETE'])
 def company_lead_delete(request, lead_id):
     lead = get_object_or_404(Lead, id=lead_id)
 
     lead.delete()
     return redirect('company_lead_list')
+
+########################         ##########################################

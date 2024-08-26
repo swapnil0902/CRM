@@ -1,12 +1,14 @@
 from django.db import models
+from django.urls import reverse
+from urllib.parse import urlencode
 from crm_home.models import Company
-from django.contrib.auth.models import User
-from django.db.models.signals import post_save
 from django.dispatch import receiver
 from customer.models import Customer
 from django.shortcuts import redirect
-from django.urls import reverse
-from urllib.parse import urlencode
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+
+
 
 # Create your models here.
 
@@ -35,7 +37,6 @@ class Lead(models.Model):
 @receiver(post_save, sender=Lead)
 def handle_lead_status_change(sender, instance, **kwargs):
     if instance.status == 'Converted to Customer':
-        # Create a new Customer instance
         Customer.objects.create(
             first_name=instance.first_name,
             last_name=instance.last_name,
@@ -46,13 +47,10 @@ def handle_lead_status_change(sender, instance, **kwargs):
             staff=instance.staff
         )
 
-        # Delete the Lead instance
         instance.delete()
 
-        # Redirect to lead view with an alert
         url = reverse('lead-view')
         query_params = urlencode({'alert': 'true'})
         full_url = f"{url}?{query_params}"
 
-        # Redirect to lead view with an alert
         return redirect(full_url)

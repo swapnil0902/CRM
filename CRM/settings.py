@@ -47,6 +47,13 @@ INSTALLED_APPS = [
     'task',
 ]
 
+
+# AUTHENTICATION_BACKENDS = [
+#     'django.contrib.auth.backends.ModelBackend',
+#     'django_otp.backend.OTPBackend',
+# ]
+
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
@@ -66,6 +73,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_otp.middleware.OTPMiddleware',
 ]
 
 ROOT_URLCONF = 'CRM.urls'
@@ -88,6 +96,9 @@ TEMPLATES = [
 ]
 
 LOGIN_URL = '/login/'
+# LOGIN_URL = 'mfa:login'
+# SITE_ID = 1
+# TWO_FACTOR_AUTHENTICATION_REQUIRED = True
 
 # settings.py
 LOGIN_REDIRECT_URL = '/dash/'  # Redirect to the desired path after login

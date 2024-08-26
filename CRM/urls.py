@@ -30,7 +30,7 @@ urlpatterns = [
     # path('change-password/done/', auth_views.PasswordChangeDoneView.as_view(), name='password_change_done'),
    
     ################### ACCOUNT URL'S #########################################
-    path('', include('account.urls')),
+    path('account/', include('account.urls')), 
     
     ################### ADMIN URL'S ###########################################
     path('admin/', admin.site.urls),
