@@ -89,11 +89,6 @@ TEMPLATES = [
     },
 ]
 
-<<<<<<< HEAD
-
-=======
-CRISPY_TEMPLATE_PACK = 'bootstrap5'
->>>>>>> aacc3a727252f30b856a51fabd555e7eaafd54de
 
 LOGIN_URL = '/login/'
 
