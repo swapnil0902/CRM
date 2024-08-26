@@ -37,33 +37,6 @@ def is_User_or_Manager(user):
     return is_User(user) or is_Account_Manager(user)
 
 
-# class CustomLoginView(View):
-#     form_class = AuthenticationForm  # You can use CustomAuthenticationForm if you created it
-#     template_name = 'registration/login.html'  # Default template name used by built-in login view
-
-#     def get(self, request):
-#         form = self.form_class()
-#         return render(request, self.template_name, {'form': form})
-
-#     def post(self, request):
-#         form = self.form_class(request, data=request.POST)
-#         if form.is_valid():
-#             user = form.get_user()
-#             auth_login(request, user)
-#             if user.is_superuser:
-#                 next_url = '/companies/'
-#             elif user.groups.filter(name='Account Manager').exists():
-#                 next_url = '/dash/'
-#             elif user.groups.filter(name='Staff').exists():
-#                 next_url = '/dash/'
-#             else:
-#                 next_url = '/'
-
-#             return redirect(next_url)
-#         else:
-#             messages.error(request, 'Invalid username or password.')
-        
-#         return render(request, self.template_name, {'form': form})
 
 from django.core.mail import send_mail
 import random
@@ -347,3 +320,81 @@ def user_requests_view(request):
 def logout_view(request):
     logout(request)
     return redirect("/")
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.template.loader import render_to_string
+from django.core.mail import send_mail
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib import messages
+from .forms import UsernamePasswordResetForm, OTPForm, SetNewPasswordForm  # Ensure these forms are defined
+from django.http import HttpResponse
+
+def forgot_password(request):
+    if request.method == 'POST':
+        form = UsernamePasswordResetForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            try:
+                user = User.objects.get(username=username)
+                token = default_token_generator.make_token(user)
+                uid = urlsafe_base64_encode(force_bytes(user.pk))
+                current_site = get_current_site(request)
+                subject = 'Password Reset Requested'
+                # otp = "123456"  # You should generate a random OTP and store it securely
+                otp = str(random.randint(100000, 999999)) 
+                message = render_to_string('registration/password_reset_email.html', {
+                    'user': user,
+                    'domain': current_site.domain,
+                    'uid': uid,
+                    'token': token,
+                    'otp': otp,
+                })
+                send_mail(subject, message, None, [user.email])
+                request.session['reset_username'] = username  # Storing username for OTP verification
+                request.session['otp'] = otp  # Storing OTP for later verification
+                return redirect('verify_otp')  # Redirect to OTP verification page
+            except User.DoesNotExist:
+                form.add_error('username', 'User with this username does not exist.')
+    else:
+        form = UsernamePasswordResetForm()
+    
+    return render(request, 'registration/forgot_password.html', {'form': form})
+
+
+def verify_otp(request):
+    if request.method == 'POST':
+        form = OTPForm(request.POST)
+        if form.is_valid():
+            entered_otp = form.cleaned_data['otp']
+            stored_otp = request.session.get('otp')
+            if entered_otp == stored_otp:
+                return redirect('password_reset_confirm')
+            else:
+                form.add_error('otp', 'Invalid OTP. Please try again.')
+    else:
+        form = OTPForm()
+
+    return render(request, 'registration/verify_otp.html', {'form': form})
+
+
+def password_reset_confirm(request):
+    if request.method == 'POST':
+        form = SetNewPasswordForm(request.POST)
+        if form.is_valid():
+            username = request.session.get('reset_username')
+            new_password = form.cleaned_data['new_password']
+            try:
+                user = User.objects.get(username=username)
+                user.set_password(new_password)
+                user.save()
+                messages.success(request, 'Password reset successfully.')
+                return redirect('login')
+            except User.DoesNotExist:
+                form.add_error(None, 'Error resetting password. Please try again.')
+    else:
+        form = SetNewPasswordForm()
+
+    return render(request, 'registration/password_reset_form.html', {'form': form})
