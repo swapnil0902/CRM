@@ -1,11 +1,8 @@
 from .models import Task
 from .forms import TaskForm,TaskFilterForm
-<<<<<<< HEAD
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-=======
 from rest_framework.decorators import api_view
->>>>>>> 083b32bda1116cc553786e9c1786248944c78b42
 
 
 #########################         #########################################
@@ -73,13 +70,7 @@ def delete_task(request, pk):
         return redirect('task_list')
     return render(request, 'task/task_delete.html', {'task': task})
 
-<<<<<<< HEAD
 ########################         ##########################################
-=======
-
-
-
-
 
 def company_task_list(request):
     company = request.user.userprofile.company
@@ -128,4 +119,3 @@ def company_task_delete(request, pk):
     task = get_object_or_404(Task, pk=pk)
     task.delete()
     return redirect('company_task_list')
->>>>>>> 083b32bda1116cc553786e9c1786248944c78b42
