@@ -3,46 +3,44 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<body>
-    <div class="container Requestcontaineer mt-5">
-        <h1 class="mb-4">User Requests</h1>
-        <table class="table table-striped table-bordered">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Customer Name</th>
-                    <th>Email</th>
-                    <th>Mobile No </th>
-                    <th>Status</th>
-                    <th>Date Submitted</th>
-                    <th>Actions</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for request in user_requests %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{ request.first_name }}</td>
-                    <td>{{ request.email }}</td>
-                    <td>{{ request.mobile }}</td>
-                    <td>{{ request.approved }}</td>
-                    <td>{{ request.company }}</td>
-                    <td>{{ request.date_joined|date:"F j, Y" }}</td>
-                    <td>
-                        {% comment %} <a href="{% url 'assign_role' request.id %}" class="btn btn-primary">Assign Role</a> {% endcomment %}
-                        <a href="{% url 'signup' request.id %}" class="btn btn-success">Create Account</a>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="6">No customer requests found.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        
+<div class="container mt-5">
+    <h1 class="mb-4">User Requests</h1>
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>#</th>
+                <th>Customer Name</th>
+                <th>Email</th>
+                <th>Mobile No</th>
+                <th>Status</th>
+                <th>Company</th>
+                <th>Date Submitted</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for request in user_requests %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ request.first_name }}</td>
+                <td>{{ request.email }}</td>
+                <td>{{ request.mobile }}</td>
+                <td>{{ request.approved }}</td>
+                <td>{{ request.company }}</td>
+                <td>{{ request.date_joined|date:"F j, Y" }}</td>
+                <td>
+                    <a href="{% url 'signup' request.id %}" class="btn btn-success btn-sm">Create Account</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="8" class="text-center">No customer requests found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="text-right mt-3">
+        <a href="{% url 'Msignup' %}" class="btn btn-primary">Create Manually</a>
     </div>
-    <button> <a href="{% url 'Msignup' %}">Create Manualy</a></button>
-</body>
-{% endblock%}
+</div>
+{% endblock %}

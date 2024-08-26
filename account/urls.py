@@ -58,6 +58,13 @@ urlpatterns = [
     path('company_task/', tk_views.company_task_list, name='company_task_list'),
     path('company_task/<int:pk>/', tk_views.company_task_update, name='company_task_update'),
     path('company_task/<int:pk>/delete/', tk_views.company_task_delete, name='company_task_delete'),
+
+    path('forgot_password/', views.forgot_password, name='forgot_password'),
+    path('verify_otp/', views.verify_otp, name='verify_otp'),
+    path('password_reset_confirm/', views.password_reset_confirm, name='password_reset_confirm'), 
+
+
+
     
     
     

@@ -1,4 +1,3 @@
-<!-- templates/appointments/appointment_form.html -->
 {% extends "account/Mngr_Base.html" %}
 
 {% block title %}
@@ -6,11 +5,18 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{% if form.instance.pk %}Update Appointment{% else %}Create Appointment{% endif %}</h1>
+<div class="container mt-5">
+    <h1 class="mb-4">{% if form.instance.pk %}Update Appointment{% else %}Create Appointment{% endif %}</h1>
     <form method="POST">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">{% if form.instance.pk %}Update{% else %}Create{% endif %} Appointment</button>
+        <div class="mb-3">
+            {{ form.non_field_errors }}
+            {{ form.as_p }}
+        </div>
+        <button type="submit" class="btn btn-primary">
+            {% if form.instance.pk %}Update{% else %}Create{% endif %} Appointment
+        </button>
     </form>
-    <a href="{% url 'company_appointment_list' %}">Back to Appointment List</a>
+    <a href="{% url 'company_appointment_list' %}" class="btn btn-secondary mt-3">Back to Appointment List</a>
+</div>
 {% endblock %}
