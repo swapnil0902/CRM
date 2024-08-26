@@ -7,6 +7,11 @@ from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import CompanyForm,AccountManagerForm,CompanyForm,UserUpdateForm
+from django.db.models import Q
+from task.models import Task
+from appointment.models import Appointment
+from customer.models import Customer
+from lead.models import Lead
   
 
 # Create your views here.
@@ -127,3 +132,24 @@ def company_detail(request, pk):
         'form': form
     })
 ########################         ##########################################
+
+
+
+
+############################# Search #############################################################
+@login_required
+def master_search(request):
+    query = request.GET.get('q', '')
+
+    tasks = Task.objects.filter(Q(title__icontains=query) | Q(description__icontains=query))
+    appointments = Appointment.objects.filter(Q(title__icontains=query) | Q(description__icontains=query) | Q(location__icontains=query))
+    customers = Customer.objects.filter(Q(first_name__icontains=query) | Q(last_name__icontains=query) | Q(email__icontains=query))
+    leads = Lead.objects.filter(Q(first_name__icontains=query) | Q(last_name__icontains=query) | Q(email__icontains=query))
+
+    return render(request, 'crm_home/search_results.html', {
+        'query': query,
+        'tasks': tasks,
+        'appointments': appointments,
+        'customers': customers,
+        'leads': leads,
+    })

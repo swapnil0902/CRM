@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crispy_forms',
     'rest_framework',
     'rest_framework.authtoken',
     'account',
@@ -86,6 +87,8 @@ TEMPLATES = [
         },
     },
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 LOGIN_URL = '/login/'
 

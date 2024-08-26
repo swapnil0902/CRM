@@ -5,29 +5,35 @@
     Edit Lead
 {% endblock %}
 
-{% block stylesheets %}
-        <link rel="stylesheet" type="text/css" href="{% static 'lead/styles.css' %}">
-{% endblock %}
-
 {% block content %}
-    <h1>Edit Lead</h1>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Save Changes</button>
-    </form>
-    <form method="post" action="{% url 'lead_detail' lead.id %}" style="margin-top: 20px;">
-        {% csrf_token %}
-        <input type="hidden" name="_method" value="DELETE">
-        <button type="submit">Delete Lead</button>
-    </form>
-    <a href="{% url 'lead-view' %}">Back to List</a>
+    <div class="container mt-5">
+        <h1 class="mb-4">Edit Lead</h1>
+        
+        <!-- Edit Lead Form -->
+        <form method="POST" class="needs-validation" novalidate>
+            {% csrf_token %}
+            <div class="mb-3">
+                {{ form.as_p }}
+            </div>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+        
+        <!-- Delete Lead Form -->
+        <form method="post" action="{% url 'lead_detail' lead.id %}" class="mt-4">
+            {% csrf_token %}
+            <input type="hidden" name="_method" value="DELETE">
+            <button type="submit" class="btn btn-danger">Delete Lead</button>
+        </form>
+        
+        <!-- Back to List Link -->
+        <a href="{% url 'lead-view' %}" class="btn btn-secondary mt-3">Back to List</a>
 
-    {% if request.GET.alert %}
-    <script type="text/javascript">
-        alert("Lead has been converted to a customer!");
-    </script>
-    {% endif %}
+        <!-- Alert Script -->
+        {% if request.GET.alert %}
+        <script type="text/javascript">
+            alert("Lead has been converted to a customer!");
+        </script>
+        {% endif %}
+    </div>
     
-
 {% endblock %}

@@ -1,9 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Udemy Profile</title>
+{% extends 'crm/base.html' %}
+{% load static %}
+
+{% block title %}
+    <title>My Profile Page</title>
+    {% endblock %}
+
+    {% block content %}
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -98,8 +100,6 @@
             background-color: #0056b3;
         }
     </style>
-</head>
-<body>
 
     <div class="profile-container">
         <div class="profile-header">
@@ -131,5 +131,4 @@
         </div>
     </div>
 
-</body>
-</html>
+{% endblock %}
