@@ -9,7 +9,7 @@ from task import views as tk_views
 
 urlpatterns = [
     ################### Login, Logout, signup, contact-admin #####################################
-    path('login/', auth_views.LoginView.as_view(template_name='account/login.html'), name='login'),
+    path('login/', views.CustomLoginView.as_view(template_name='account/login.html'), name='login'),
     path('signup/<int:request_id>/', views.signup, name='signup'),
     path('signup/', views.manual_signup, name='Msignup'),
     path('logout/', views.logout_view, name='logout'),
