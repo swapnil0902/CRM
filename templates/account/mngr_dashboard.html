@@ -5,7 +5,7 @@
 {% block content %}
 <h1>Welcome to the Manager Dashboard</h1>
 
-
+{{user.userprofile.company}}
 <h2>Staffs</h2>
 <ul>
     {% for staff in staffs %}
@@ -24,61 +24,3 @@
     {% endfor %}
 </ul>
 {% endblock %}
-
-
-
-
-
-
-
-{% comment %} <!DOCTYPE html>
-{% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="{% static 'account/styles.css' %}">
-</head>
-<body>
-    <div class="container">
-        <!-- Left Sidebar -->
-        <div class="sidebar">
-            <h2>Admin Panel</h2>
-            <ul>
-                <li><a href="#" data-url="{% url 'group_create' %}">Add Role</a></li>
-                <li><a href="#" data-url="{% url 'group_list' %}">List of Roles</a></li>
-                <li><a href="#" data-url="{% url 'customer_requests' %}">See Customer Requests</a></li>
-                <!-- Add more links as needed -->
-            </ul>
-        </div>
-
-        <!-- Main Content Area -->
-        <div class="content" id="content-area">
-            <h2>Welcome to the Admin Dashboard</h2>
-            <p>Select an option from the sidebar to view more details.</p>
-        </div>
-    </div>
-
-    <!-- Include JavaScript -->
-    <script>
-        // Function to load content via AJAX
-        function loadContent(url) {
-            fetch(url)
-                .then(response => response.text())
-                .then(html => {
-                    document.getElementById('content-area').innerHTML = html;
-                })
-                .catch(error => console.error('Error loading content:', error));
-        }
-
-        // Attach event listeners to sidebar links
-        document.querySelectorAll('.sidebar ul li a').forEach(link => {
-            link.addEventListener('click', function(event) {
-                event.preventDefault();  // Prevent default link behavior
-                const url = this.getAttribute('data-url');
-                loadContent(url);
-            });
-        });
-    </script>
-</body>
-</html> {% endcomment %}

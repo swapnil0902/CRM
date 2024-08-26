@@ -2,19 +2,21 @@
 {% load static %}
 
 {% block title %}
-    Edit Customer
+    <title>Edit Customer</title>
 {% endblock %}
 
-{% block stylesheets %}
-        <link rel="stylesheet" type="text/css" href="{% static 'lead/styles.css' %}">
-{% endblock %}
+
 
 {% block content %}
-    <h1>Customer Detail</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Save</button>
-    </form>
-    <a href="{% url 'customer-view' %}">Back to List</a>
+    <div class="container mt-5">
+        <h1 class="mb-4">Edit Customer</h1>
+        <form method="post" class="needs-validation" novalidate>
+            {% csrf_token %}
+            <div class="mb-3">
+                {{ form.as_p }}
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a href="{% url 'customer-view' %}" class="btn btn-secondary ms-2">Back to List</a>
+        </form>
+    </div>
 {% endblock %}

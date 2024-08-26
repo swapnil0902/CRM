@@ -1,0 +1,10 @@
+<!-- templates/two_factor/core/login.html -->
+{% comment %} {% extends "base.html" %} {% endcomment %}
+{% load static %}
+{% block content %}
+  <form method="post" action="{% url 'two_factor:login' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Login</button>
+  </form>
+{% endblock %}

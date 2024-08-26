@@ -30,7 +30,12 @@ urlpatterns = [
     # path('change-password/done/', auth_views.PasswordChangeDoneView.as_view(), name='password_change_done'),
    
     ################### ACCOUNT URL'S #########################################
+<<<<<<< HEAD
     path('account/', include('account.urls')), 
+=======
+    path('', include('account.urls')),
+    #  path('admin/', admin.site.urls),
+>>>>>>> 083b32bda1116cc553786e9c1786248944c78b42
     
     ################### ADMIN URL'S ###########################################
     path('admin/', admin.site.urls),
@@ -46,6 +51,10 @@ urlpatterns = [
     
     ################### CUSTOMER URL'S ########################################
     path('customer/', include('customer.urls')),
+
+
+    ################### Search ########################################
+    path('search/', views.master_search, name='master_search'),
 
     ########################### THE END #######################################
 ]

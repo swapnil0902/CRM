@@ -2,18 +2,16 @@
 {% load static %}
 
 {% block title %}
-    Create customer
-{% endblock %}
-
-{% block stylesheets %}
-        <link rel="stylesheet" type="text/css" href="{% static 'customer/styles.css' %}">
+    <title>Create Customer</title>
 {% endblock %}
 
 {% block content %}
-    <h1>Create Customer</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Create Customer</button>
-    </form>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Create Customer</h1>
+        <form method="post" class="mx-auto" style="max-width: 600px;">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary w-100">Create Customer</button>
+        </form>
+    </div>
 {% endblock %}

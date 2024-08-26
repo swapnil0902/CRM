@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 
 
+
 ############################# Creating an appointment #########################################################
 @login_required
 def appointment_create(request):
@@ -84,3 +85,4 @@ def company_appointment_delete(request, pk):
     appointment = get_object_or_404(Appointment, pk=pk)
     appointment.delete()
     return redirect('account/company_appointment_list')
+

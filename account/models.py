@@ -5,6 +5,7 @@ from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 from django.db.models.signals import post_save, post_delete
 from django.contrib.auth.models import AbstractUser, Group, Permission
+from django.contrib.auth.models import User
 
 class User(AbstractUser):
     email = models.EmailField(unique=True)
@@ -53,3 +54,4 @@ class CompanyRequest(models.Model):
 
     def __str__(self):
         return self.name
+

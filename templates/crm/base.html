@@ -1,53 +1,161 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     {% block title %}
         <title>Customer Relationship Management</title>
     {% endblock %}
     {% block stylesheets %}
-        <link rel="stylesheet" type="text/css" href="{% static 'crm/styles.css' %}">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     {% endblock %}
+    {% comment %} <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const sessionTimeout = 60; // Session timeout in seconds (1 minute)
+            const warningTime = 30; // Time before session expiry to show warning (in seconds)
+
+            let timeToWarning = sessionTimeout - warningTime;
+
+            
+
+            // Set timeout to show warning before session expires
+
+            // Check session status periodically
+            setInterval(checkSession, 10000); // Check every 10 seconds
+
+            function checkSession() {
+                fetch("{% url 'check_session' %}")
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.active) {
+                            console.log('Session expired. Redirecting to login.'); // Debugging log
+                            alert("Your session has expired. You will be redirected to the login page.");
+                            window.location.reload();
+                        }
+                    })
+                    .catch(error => console.error('Error checking session:', error));
+            }
+        });
+    </script> {% endcomment %}
 </head>
 <body>  
   
 <header id="home">
-    <div class="navbar" id="navbar">
-        <div class="navbar-tabs" id="navbar-tabs">
-            <ul class="navbar-tabs-ul">
-                <li>{{ user.username }}</li>
+    <div class="d-flex">
+        <nav class="bg-light border-end" id="sidebar-wrapper">
+            <div class="sidebar-heading bg-light text-center py-4"><strong>CRM</strong></div>
+            <div class="list-group list-group-flush">
+                <span class="list-group-item list-group-item-action bg-light">{{ user.username }}</span>
+
+                <!-- Staff Section -->
                 {% if is_staff %}
-                    <li><a href="{% url 'dashboard' %}">Dashboard</a></li>   
-                    <li><a href="{% url 'task_list' %}">Task & Diary Management</a></li>
-                    <li><a href="{% url 'appointment_list' %}">Appointment Management</a></li> 
-                    <li><a href="{% url 'lead-view' %}">Lead </a></li> 
-                    <li><a href="{% url 'customer-view' %}">Customer Records</a></li>
-                    <li><a href="{% url 'profile_page' %}">My Profile</a></li> 
-                {% elif is_accMngr %}
-                    <li><a href="{% url 'dashboard' %}">Dashboard</a></li>   
-                    <li><a href="{% url 'task_list' %}">Task & Diary Management</a></li>
-                    <li><a href="{% url 'appointment_list' %}">Appointment Management</a></li> 
-                    <li><a href="{% url 'lead-view' %}">Lead </a></li> 
-                    <li><a href="{% url 'customer-view' %}">Customer Records</a></li> 
-                    <li><a href="{% url 'profile_page' %}">My Profile</a></li> 
-                    <li><a href="{% url 'mngr_dashboard' %}">Manager Panel</a></li>
-                {% elif is_admin %}
-                    <li><a href="{% url 'dashboard' %}">Dashboard</a></li>   
-                    <li><a href="{% url 'task_list' %}">Task & Diary Management</a></li>
-                    <li><a href="{% url 'appointment_list' %}">Appointment Management</a></li> 
-                    <li><a href="{% url 'lead-view' %}">Lead </a></li> 
-                    <li><a href="{% url 'customer-view' %}">Customer Records</a></li> 
-                    {% comment %} <li><a href="{% url '' %}">Admin Panel</a></li> {% endcomment %}
+                
+                    <a href="{% url 'dashboard' %}" class="list-group-item list-group-item-action bg-light">Dashboard</a>   
+                    <a class="list-group-item list-group-item-action bg-light" data-bs-toggle="collapse" href="#taskSection" role="button" aria-expanded="false" aria-controls="taskSection">
+                        Task & Diary Management
+                    </a>
+                    <div class="collapse bg-white border-start ms-4" id="taskSection">
+                        <a href="{% url 'task_list' %}" class="list-group-item list-group-item-action bg-light border-0">Task List</a> 
+                        <a href="{% url 'task_create' %}" class="list-group-item list-group-item-action bg-light border-0">Create Task</a> 
+                    </div>
+                    <a class="list-group-item list-group-item-action bg-light" data-bs-toggle="collapse" href="#appointmentSection" role="button" aria-expanded="false" aria-controls="appointmentSection">
+                        Appointment Management
+                    </a>
+                    <div class="collapse bg-white border-start ms-4" id="appointmentSection">
+                        <a href="{% url 'appointment_list' %}" class="list-group-item list-group-item-action bg-light border-0">Appointment List</a> 
+                        <a href="{% url 'appointment_create' %}" class="list-group-item list-group-item-action bg-light border-0">Create Appointment</a> 
+                    </div>
+                    <a class="list-group-item list-group-item-action bg-light" data-bs-toggle="collapse" href="#leadSection" role="button" aria-expanded="false" aria-controls="leadSection">
+                        Lead
+                    </a>
+                    <div class="collapse bg-white border-start ms-4" id="leadSection">
+                        <a href="{% url 'lead-view' %}" class="list-group-item list-group-item-action bg-light border-0">Lead List</a> 
+                        <a href="{% url 'lead_create' %}" class="list-group-item list-group-item-action bg-light border-0">Create Lead</a> 
+                    </div>
+                    <a class="list-group-item list-group-item-action bg-light" data-bs-toggle="collapse" href="#customerSection" role="button" aria-expanded="false" aria-controls="customerSection">
+                        Customer Records
+                    </a>
+                    <div class="collapse bg-white border-start ms-4" id="customerSection">
+                        <a href="{% url 'customer-view' %}" class="list-group-item list-group-item-action bg-light border-0">Customer List</a> 
+                        <a href="{% url 'customer_create' %}" class="list-group-item list-group-item-action bg-light border-0">Create Customer</a> 
+                    </div>
+                    <a href="{% url 'profile_page' %}" class="list-group-item list-group-item-action bg-light">My Profile</a> 
+                    <a href="{% url 'master_search' %}" class="list-group-item list-group-item-action bg-light">Search</a> 
+                
                 {% endif %}
-                <li><a href="{% url 'logout' %}">Logout</a></li>
-            </ul>
+
+                <!-- Account Manager Section -->
+                {% if is_accMngr %}
+                    <a href="{% url 'dashboard' %}" class="list-group-item list-group-item-action bg-light">Dashboard</a>   
+                    <a class="list-group-item list-group-item-action bg-light" data-bs-toggle="collapse" href="#taskSection" role="button" aria-expanded="false" aria-controls="taskSection">
+                        Task & Diary Management
+                    </a>
+                    <div class="collapse bg-white border-start ms-4" id="taskSection">
+                        <a href="{% url 'task_list' %}" class="list-group-item list-group-item-action bg-light border-0">Task List</a> 
+                        <a href="{% url 'task_create' %}" class="list-group-item list-group-item-action bg-light border-0">Create Task</a> 
+                    </div>
+                    <a class="list-group-item list-group-item-action bg-light" data-bs-toggle="collapse" href="#appointmentSection" role="button" aria-expanded="false" aria-controls="appointmentSection">
+                        Appointment Management
+                    </a>
+                    <div class="collapse bg-white border-start ms-4" id="appointmentSection">
+                        <a href="{% url 'appointment_list' %}" class="list-group-item list-group-item-action bg-light border-0">Appointment List</a> 
+                        <a href="{% url 'appointment_create' %}" class="list-group-item list-group-item-action bg-light border-0">Create Appointment</a> 
+                    </div>
+                    <a class="list-group-item list-group-item-action bg-light" data-bs-toggle="collapse" href="#leadSection" role="button" aria-expanded="false" aria-controls="leadSection">
+                        Lead
+                    </a>
+                    <div class="collapse bg-white border-start ms-4" id="leadSection">
+                        <a href="{% url 'lead-view' %}" class="list-group-item list-group-item-action bg-light border-0">Lead List</a> 
+                        <a href="{% url 'lead_create' %}" class="list-group-item list-group-item-action bg-light border-0">Create Lead</a> 
+                    </div>
+                    <a class="list-group-item list-group-item-action bg-light" data-bs-toggle="collapse" href="#customerSection" role="button" aria-expanded="false" aria-controls="customerSection">
+                        Customer Records
+                    </a>
+                    <div class="collapse bg-white border-start ms-4" id="customerSection">
+                        <a href="{% url 'customer-view' %}" class="list-group-item list-group-item-action bg-light border-0">Customer List</a> 
+                        <a href="{% url 'customer_create' %}" class="list-group-item list-group-item-action bg-light border-0">Create Customer</a> 
+                    </div> 
+                    {% comment %} <a class="list-group-item list-group-item-action bg-light" data-bs-toggle="collapse" href="#managerSection" role="button" aria-expanded="false" aria-controls="managerSection">
+                        Manager Panel
+                    </a>
+                    <div class="collapse bg-white border-start ms-4" id="managerSection">
+                        <a href="{% url 'customer-view' %}" class="list-group-item list-group-item-action bg-light border-0">Customer List</a> 
+                        <a href="{% url 'customer_create' %}" class="list-group-item list-group-item-action bg-light border-0">Create Customer</a> 
+                    </div>  {% endcomment %}
+                    <a href="{% url 'mngr_dashboard' %}" class="list-group-item list-group-item-action bg-light">Manager Panel</a>
+                    <a href="{% url 'master_search' %}" class="list-group-item list-group-item-action bg-light">Search</a> 
+                {% endif %}
+
+                <!-- Admin Section -->
+                {% if is_admin %}
+                <a class="list-group-item list-group-item-action bg-light" data-bs-toggle="collapse" href="#adminSection" role="button" aria-expanded="false" aria-controls="adminSection">
+                    Admin Options
+                </a>
+                <div class="collapse" id="adminSection">
+                    <a href="{% url 'dashboard' %}" class="list-group-item list-group-item-action bg-light">Dashboard</a>   
+                    <a href="{% url 'task_list' %}" class="list-group-item list-group-item-action bg-light">Task & Diary Management</a>
+                    <a href="{% url 'appointment_list' %}" class="list-group-item list-group-item-action bg-light">Appointment Management</a> 
+                    <a href="{% url 'lead-view' %}" class="list-group-item list-group-item-action bg-light">Lead</a> 
+                    <a href="{% url 'customer-view' %}" class="list-group-item list-group-item-action bg-light">Customer Records</a> 
+                    <a href="{% url 'master_search' %}" class="list-group-item list-group-item-action bg-light">Search</a> 
+                </div>
+                {% endif %}
+
+                <a href="{% url 'logout' %}" class="list-group-item list-group-item-action bg-light">Logout</a>
+            </div>
+        </nav>
+
+        <div id="page-content-wrapper" class="w-100 p-3">
+            <h1>Customer Relationship Management</h1>
+            <main>
+                {% block content %}
+                {% endblock %}
+            </main>
         </div>
     </div>
 </header>
-    <h1>Customer Relationship Management</h1>
-    <main>
-        {% block content %}
-        {% endblock %}
-    </main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
 </body>
+
 </html>

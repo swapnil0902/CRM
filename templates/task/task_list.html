@@ -6,69 +6,81 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Task List</h1>
-    <center><a href="{% url 'task_create' %}">Create New Task</a></center><br/>
+    <div class="container mt-5">
+        <h1 class="mb-4">Task List</h1>
+        <center><a href="{% url 'task_create' %}" class="btn btn-primary">Create New Task</a></center><br/>
 
-    <!-- Filtering Form -->
-    <form method="GET" action="{% url 'task_list' %}">
-        <fieldset>
-            <legend>Filter Tasks</legend>
-            {{ form.as_p }}
-            <button type="submit">Apply Filters</button>
-        </fieldset>
-    </form>
+        <!-- Filtering and Sorting Forms -->
+        <div class="row mb-4">
+            <!-- Filtering Form -->
+            <div class="col-md-6">
+                <form method="GET" action="{% url 'task_list' %}">
+                    <fieldset class="border p-3 rounded">
+                        <legend class="w-auto">Filter Tasks</legend>
+                        <div class="mb-3">
+                            {{ form.as_p }}
+                        </div>
+                        <button type="submit" class="btn btn-primary">Apply Filters</button>
+                    </fieldset>
+                </form>
+            </div>
+            <!-- Sorting Form -->
+            <div class="col-md-6">
+                <form method="GET" action="{% url 'task_list' %}">
+                    <fieldset class="border p-3 rounded">
+                        <legend class="w-auto">Sort Tasks</legend>
+                        <div class="mb-3">
+                            <label for="sort_by" class="form-label">Sort By:</label>
+                            <select id="sort_by" name="sort_by" class="form-select">
+                                <option value="due_date" {% if request.GET.sort_by == "due_date" %}selected{% endif %}>Due Date</option>
+                                <option value="priority" {% if request.GET.sort_by == "priority" %}selected{% endif %}>Priority</option>
+                                <option value="status" {% if request.GET.sort_by == "status" %}selected{% endif %}>Status</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Sort</button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
 
-    <!-- Sorting Form -->
-    <form method="GET" action="{% url 'task_list' %}">
-        <fieldset>
-            <legend>Sort Tasks</legend>
-            <label for="sort_by">Sort By:</label>
-            <select id="sort_by" name="sort_by">
-                <option value="due_date" {% if request.GET.sort_by == "due_date" %}selected{% endif %}>Due Date</option>
-                <option value="priority" {% if request.GET.sort_by == "priority" %}selected{% endif %}>Priority</option>
-                <option value="status" {% if request.GET.sort_by == "status" %}selected{% endif %}>Status</option>
-            </select>
-            <button type="submit">Sort</button>
-        </fieldset>
-    </form>
-
-    <!-- Task Table -->
-    <table>
-        <thead>
-            <tr>
-                <th>Client Name</th>
-                <th>Task Title</th>
-                <th>Description (optional)</th>
-                <th>Due Date</th>
-                <th>Due Time</th>
-                <th>Priority</th>
-                <th>Status</th>
-                <th>Assigned To</th>
-                <th>Customer</th>
-                <th>Update Task</th>
-                <th>Delete Task</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for task in tasks %}
-            <tr>
-                <td>{{ task.client_name }}</td>
-                <td>{{ task.title }}</td>
-                <td>{{ task.description }}</td>
-                <td>{{ task.due_date }}</td>
-                <td>{{ task.due_time }}</td>
-                <td>{{ task.priority }}</td>
-                <td>{{ task.status }}</td>
-                <td>{{ task.assigned_to }}</td>
-                <td>{{ task.customer }}</td>
-                <td><a href="{% url 'task_update' task.pk %}">Update</a></td>
-                <td><a href="{% url 'task_delete' task.pk %}">Delete</a></td>
-            </tr>
-            {% empty %}
+        <!-- Task Table -->
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <td colspan="11">No tasks available.</td>
+                    <th>Client Name</th>
+                    <th>Task Title</th>
+                    <th>Description (optional)</th>
+                    <th>Due Date</th>
+                    <th>Due Time</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Assigned To</th>
+                    <th>Customer</th>
+                    <th>Update Task</th>
+                    <th>Delete Task</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                <tr>
+                    <td>{{ task.client_name }}</td>
+                    <td>{{ task.title }}</td>
+                    <td>{{ task.description }}</td>
+                    <td>{{ task.due_date }}</td>
+                    <td>{{ task.due_time }}</td>
+                    <td>{{ task.priority }}</td>
+                    <td>{{ task.status }}</td>
+                    <td>{{ task.assigned_to }}</td>
+                    <td>{{ task.customer }}</td>
+                    <td><a href="{% url 'task_update' task.pk %}" class="btn btn-warning btn-sm">Update</a></td>
+                    <td><a href="{% url 'task_delete' task.pk %}" class="btn btn-danger btn-sm">Delete</a></td>
+                </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="11" class="text-center">No tasks available.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

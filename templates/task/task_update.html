@@ -1,17 +1,21 @@
 {% extends "crm/base.html" %}
+{% load crispy_forms_tags %}
 {% load static %}
 
 {% block title %}
-    Update Task
+    <title>Update Task</title>
 {% endblock %}
 
-
 {% block content %}
-    <h1>Update Task</h1>
-    <form method="POST">
+<div class="container mt-5">
+    <h1 class="mb-4">Update Task</h1>
+    <form method="POST" class="needs-validation" novalidate>
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Update Task</button>
+        <div class="mb-3">
+            {{ form.as_p }}
+        </div>
+        <button type="submit" class="btn btn-primary">Update Task</button>
+        <a href="{% url 'task_list' %}" class="btn btn-secondary ms-2">Back to Task List</a>
     </form>
-    <a href="{% url 'task_list' %}">Back to Task List</a>
+</div>
 {% endblock %}
