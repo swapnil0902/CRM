@@ -48,5 +48,9 @@ urlpatterns = [
     ################### CUSTOMER URL'S ########################################
     path('customer/', include('customer.urls')),
 
+
+    ################### Search ########################################
+    path('search/', views.master_search, name='master_search'),
+
     ########################### THE END #######################################
 ]

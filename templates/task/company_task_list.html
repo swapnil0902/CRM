@@ -60,8 +60,8 @@
                 <td>{{ task.status }}</td>
                 <td>{{ task.assigned_to }}</td>
                 <td>{{ task.customer }}</td>
-                <td><a href="{% url 'task_update' task.pk %}">Update</a></td>
-                <td><a href="{% url 'task_delete' task.pk %}">Delete</a></td>
+                <td><a href="{% url 'company_task_update' task.pk %}">Update</a></td>
+                <td><a href="{% url 'company_task_delete' task.pk %}">Delete</a></td>
             </tr>
             {% empty %}
                 <tr>

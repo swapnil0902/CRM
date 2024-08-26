@@ -5,40 +5,43 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Appointment List</h1>
-    <a href="{% url 'appointment_create' %}">Create New Appointment</a><br/><br/>
-    <table>
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Start Date/Time</th>
-                <th>End Date/Time</th>
-                <th>Location</th>
-                <th>Attendees</th>
-                <th>Customer</th>
-                <th>Update</th>
-                <th>Delete</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for appointment in appointments %}
-            <tr>
-                <td>{{ appointment.title }}</td>
-                <td>{{ appointment.description }}</td>
-                <td>{{ appointment.start_date }}</td>
-                <td>{{ appointment.end_date }}</td>
-                <td>{{ appointment.location }}</td>
-                <td>{{ appointment.attendees.all|join:", " }}</td>
-                <td>{{ appointment.customer }}</td>
-                <td><a href="{% url 'appointment_update' appointment.pk %}">Update</a></td>
-                <td><a href="{% url 'appointment_delete' appointment.pk %}">Delete</a></td>
-            </tr>
-            {% empty %}
+    <div class="container mt-5">
+        <h1 class="mb-4">Appointment List</h1>
+        <a href="{% url 'appointment_create' %}" class="btn btn-primary mb-3">Create New Appointment</a>
+
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <td colspan="10">No appointments available.</td>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Start Date/Time</th>
+                    <th>End Date/Time</th>
+                    <th>Location</th>
+                    <th>Attendees</th>
+                    <th>Customer</th>
+                    <th>Update</th>
+                    <th>Delete</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for appointment in appointments %}
+                <tr>
+                    <td>{{ appointment.title }}</td>
+                    <td>{{ appointment.description }}</td>
+                    <td>{{ appointment.start_date }}</td>
+                    <td>{{ appointment.end_date }}</td>
+                    <td>{{ appointment.location }}</td>
+                    <td>{{ appointment.attendees.all|join:", " }}</td>
+                    <td>{{ appointment.customer }}</td>
+                    <td><a href="{% url 'appointment_update' appointment.pk %}" class="btn btn-warning btn-sm">Update</a></td>
+                    <td><a href="{% url 'appointment_delete' appointment.pk %}" class="btn btn-danger btn-sm">Delete</a></td>
+                </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="9" class="text-center">No appointments available.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

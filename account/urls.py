@@ -13,8 +13,7 @@ urlpatterns = [
 
     # path('admin/', admin.site.urls),
     ################### Login, Logout, signup, contact-admin #####################################
-    path('loginS/', auth_views.LoginView.as_view(), name='login'),
-    path('login/', views.CustomLoginView.as_view(), name='login'),
+    path('login/', auth_views.LoginView.as_view(), name='login'),
     path('signup/<int:request_id>/', views.signup, name='signup'),
     path('signup/', views.manual_signup, name='Msignup'),
     path('logout/', views.logout_view, name='logout'),

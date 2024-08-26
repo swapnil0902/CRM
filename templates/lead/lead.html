@@ -2,37 +2,43 @@
 {% load static %}
 
 {% block title %}
-    <title>Lead</title>
+    <title>Lead List</title>
 {% endblock %}
 
 {% block content %}
-    <h1>Lead List</h1>
-    <a href="{% url 'lead_create' %}">Create New Lead</a> 
-    <table>
-        <thead>
-            <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-                <th>Phone Number</th>
-                <th>Status</th>
-                <th>Edit?</th>
-                <th>Delete?</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for lead in leads %}
-            <tr>
-                <td>{{ lead.first_name }}</td>
-                <td>{{ lead.last_name }}</td>
-                <td>{{ lead.email }}</td>
-                <td>{{ lead.phone_number }}</td>
-                <td>{{ lead.status }}</td>
-                <td><a href="{% url 'lead_detail' lead.id %}">Edit</a></td>
-                <td><a href="{% url 'lead_delete' lead.id %}">Delete</a></td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-{% endblock %}
+    <div class="container mt-5">
+        <h1 class="mb-4">Lead List</h1>
+        <a href="{% url 'lead_create' %}" class="btn btn-primary mb-3">Create New Lead</a>
 
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th>Status</th>
+                    <th>Edit?</th>
+                    <th>Delete?</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for lead in leads %}
+                <tr>
+                    <td>{{ lead.first_name }}</td>
+                    <td>{{ lead.last_name }}</td>
+                    <td>{{ lead.email }}</td>
+                    <td>{{ lead.phone_number }}</td>
+                    <td>{{ lead.status }}</td>
+                    <td><a href="{% url 'lead_detail' lead.id %}" class="btn btn-warning btn-sm">Edit</a></td>
+                    <td><a href="{% url 'lead_delete' lead.id %}" class="btn btn-danger btn-sm">Delete</a></td>
+                </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center">No leads available.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
