@@ -31,8 +31,7 @@ urlpatterns = [
     ##################################### dashboards #############################################
     path('mngr-dashboard/', views.mngr_dashboard, name='mngr_dashboard'),
    
-    #################################### activate password #######################################
-    path('activate/', views.activate_password, name='activate_password'),
+    
 
     #################################### companies #######################################
     path('companies/', crm_homeview.company_list, name='company_list'),

@@ -37,7 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+<<<<<<< HEAD
     # 'crispy_forms',
+=======
+>>>>>>> 29030d5c852439da06a6586cf61c4e976b8ec430
     'rest_framework',
     'rest_framework.authtoken',
     'account',
