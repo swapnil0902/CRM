@@ -13,7 +13,7 @@ urlpatterns = [
     path('signup/<int:request_id>/', views.signup, name='signup'),
     path('signup/', views.manual_signup, name='Msignup'),
     path('logout/', views.logout_view, name='logout'),
-    path('contact/', views.user_request_view, name='customer_request'),
+    path('contact/', views.user_request_view, name='user_request'),
     
     ########################## request ###########################################################
     path('user-requests/', views.user_requests_view, name='user_requests'),
@@ -23,10 +23,14 @@ urlpatterns = [
 
     ############################# groups #########################################################
     path('groups/', views.group_list, name='group_list'),
-    path('create/', views.group_create, name='group_create'),
     path('create-group/', views.group_create, name='group_create'),
     path('update-group/<int:pk>/', views.group_update, name='group_update'),
     path('groups/<int:pk>/delete/', views.group_delete, name='group_delete'),
+    
+    path('groups-Admin/', views.group_list_Admin, name='group_list_Admin'),
+    path('create-group-Admin/', views.group_create_Admin, name='group_create_Admin'),
+    path('update-group-Admin/<int:pk>/', views.group_update_Admin, name='group_update_Admin'),
+    path('groups-Admin/<int:pk>/delete/', views.group_delete_Admin, name='group_delete_Admin'),
 
     ##################################### dashboards #############################################
     path('mngr-dashboard/', views.mngr_dashboard, name='mngr_dashboard'),
@@ -60,6 +64,5 @@ urlpatterns = [
     path('forgot_password/', views.forgot_password, name='forgot_password'),
     path('verify_otp/', views.verify_otp, name='verify_otp'),
     path('password_reset_confirm/', views.password_reset_confirm, name='password_reset_confirm'), 
-    # path('company-request-submitted/', views.TemplateView.as_view(template_name='account/company_request_submitted.html'), name='company_request_submitted'),
-
+    
 ]

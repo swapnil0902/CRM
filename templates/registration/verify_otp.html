@@ -1,75 +1,54 @@
-{% comment %} {% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="text-center mb-4">Verify OTP</h2>
+            <form method="post" class="border p-4 rounded">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary w-100">Verify OTP</button>
+            </form>
 
-{% block content %}
-  <h2>Verify OTP</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Verify OTP</button>
-  </form>
+            {% if remaining_time > 0 %}
+                <div id="otp-timer" class="text-center mt-3">
+                    <p>OTP expires in: <span id="timer" class="font-weight-bold">{{ remaining_time|floatformat:0 }}</span> seconds</p>
+                </div>
+                <script>
+                    // Get the remaining time from the server
+                    var remainingTime = parseFloat(document.getElementById('timer').textContent);
 
-  {% if remaining_time > 0 %}
-    <div id="otp-timer">
-      <p>OTP expires in: <span id="timer">{{ remaining_time|floatformat:0 }}</span> seconds</p>
+                    function updateTimer() {
+                        remainingTime--;
+                        document.getElementById('timer').textContent = remainingTime;
+
+                        if (remainingTime <= 0) {
+                            // OTP expired, redirect to the 'forgot password' page
+                            window.location.href = "{% url 'forgot_password' %}";
+                        }
+                    }
+
+                    // Update the timer every second
+                    setInterval(updateTimer, 1000);
+                </script>
+            {% else %}
+                <!-- Redirect to 'forgot password' if the OTP is already expired -->
+                <script>
+                    window.location.href = "{% url 'forgot_password' %}";
+                </script>
+                <p class="text-center text-danger">OTP has expired. Redirecting to the forgot password page...</p>
+            {% endif %}
+        </div>
     </div>
-    <script>
-      // Get the remaining time from the server
-      var remainingTime = parseFloat(document.getElementById('timer').textContent);
-
-      function updateTimer() {
-        remainingTime--;
-        document.getElementById('timer').textContent = remainingTime;
-
-        if (remainingTime <= 0) {
-          document.getElementById('otp-timer').innerHTML = '<p>OTP has expired. Please request a new one.</p>';
-        }
-      }
-
-      // Update the timer every second
-      setInterval(updateTimer, 1000);
-    </script>
-  {% else %}
-    <p>OTP has expired. Please request a new one.</p>
-  {% endif %}
-{% endblock %} {% endcomment %}
-
-
-{% comment %} {% extends "base.html" %} {% endcomment %}
-
-{% block content %}
-  <h2>Verify OTP</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Verify OTP</button>
-  </form>
-
-  {% if remaining_time > 0 %}
-    <div id="otp-timer">
-      <p>OTP expires in: <span id="timer">{{ remaining_time|floatformat:0 }}</span> seconds</p>
-    </div>
-    <script>
-      // Get the remaining time from the server
-      var remainingTime = parseFloat(document.getElementById('timer').textContent);
-
-      function updateTimer() {
-        remainingTime--;
-        document.getElementById('timer').textContent = remainingTime;
-
-        if (remainingTime <= 0) {
-          // OTP expired, redirect to the 'forgot password' page
-          window.location.href = "{% url 'forgot_password' %}";
-        }
-      }
-
-      // Update the timer every second
-      setInterval(updateTimer, 1000);
-    </script>
-  {% else %}
-    <!-- Redirect to 'forgot password' if the OTP is already expired -->
-    <script>
-      window.location.href = "{% url 'forgot_password' %}";
-    </script>
-    <p>OTP has expired. Redirecting to the forgot password page...</p>
-  {% endif %}
-{% endblock %}
+</div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFyMlECA5jfh5tjo5TOW1yJO0q7SmBRea9u77Gd5Sgt5o5VfQnjCBXSkx"></script>
+</body>
+</html>
