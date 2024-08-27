@@ -27,11 +27,13 @@ from django.contrib.auth import logout, update_session_auth_hash, authenticate, 
 
 ############################# Dividing Groups #########################################################
 def is_Account_Manager(user):
-    return user.groups.filter(name='Owner').exists()
+    return user.groups.filter(name='Account Manager').exists()
 def is_User(user):
-    return user.groups.filter(name='chef').exists()
+    return user.groups.filter(name='Staff').exists()
 def is_User_or_Manager(user):
     return is_User(user) or is_Account_Manager(user)
+def is_Admin(user):
+    return user.is_superuser
 
 
 ############################# Build-In Django View ######################################################
@@ -100,6 +102,7 @@ class CustomLoginView(View):
 
 ############################# Manager Dashboard ######################################################
 @login_required
+@user_passes_test(is_Account_Manager)
 def mngr_dashboard(request):
     user_profile = request.user.userprofile
     company_users = User.objects.filter(userprofile__company=user_profile.company)
@@ -122,13 +125,20 @@ def home(request):
 
 ############################# Dividing Groups #########################################################
 @login_required
+@user_passes_test(is_Account_Manager)
 def group_list(request):
     groups = Group.objects.all()
     return render(request, 'account/group_list.html', {'groups': groups})
 
+@login_required
+@user_passes_test(is_Admin)
+def group_list_Admin(request):
+    groups = Group.objects.all()
+    return render(request, 'account/group_list_Admin.html', {'groups': groups})
 
 ############################# Creating Groups #########################################################
 @login_required
+@user_passes_test(is_Account_Manager)
 def group_create(request):
     print("insider")
     if request.method == 'POST':
@@ -144,8 +154,25 @@ def group_create(request):
     return render(request, 'account/group_form.html', {'form': form})
 
 
+@login_required
+@user_passes_test(is_Admin)
+def group_create_Admin(request):
+    print("insider")
+    if request.method == 'POST':
+        form = GroupForm(request.POST)
+        if form.is_valid():
+            group = form.save()
+            print("something")
+            return redirect('group_list_Admin')
+        else:
+            print("Form errors:", form.errors)
+    else:
+        form = GroupForm()
+    return render(request, 'account/group_form_Admin.html', {'form': form})
+
 ############################# Updating Groups #########################################################
 @login_required
+@user_passes_test(is_Account_Manager)
 def group_update(request, pk):
     group = get_object_or_404(Group, pk=pk)
     if request.method == 'POST':
@@ -159,8 +186,23 @@ def group_update(request, pk):
     return render(request, 'account/update_group.html', {'form': form})
 
 
+@login_required
+@user_passes_test(is_Admin)
+def group_update_Admin(request, pk):
+    group = get_object_or_404(Group, pk=pk)
+    if request.method == 'POST':
+        form = GroupForm(request.POST, instance=group)
+        if form.is_valid():
+            form.save()
+            return redirect('group_list_Admin')  
+    else:
+        form = GroupForm(instance=group)
+    
+    return render(request, 'account/update_group_Admin.html', {'form': form})
+
 ############################# Deleting Groups #########################################################
 @login_required
+@user_passes_test(is_Account_Manager)
 def group_delete(request, pk):
     group = get_object_or_404(Group, pk=pk)
     if request.method == 'POST':
@@ -168,9 +210,17 @@ def group_delete(request, pk):
         return redirect('group_list')
     return render(request, 'account/group_confirm_delete.html', {'group': group})
 
-
+@login_required
+@user_passes_test(is_Admin)
+def group_delete_Admin(request, pk):
+    group = get_object_or_404(Group, pk=pk)
+    if request.method == 'POST':
+        group.delete()
+        return redirect('group_list_Admin')
+    return render(request, 'account/group_confirm_delete_Admin.html', {'group': group})
 ################################ Sign-Up Page ##########################################################
 @login_required
+@user_passes_test(is_Account_Manager)
 def signup(request, request_id=None):
     if request_id:
         user_request = get_object_or_404(UserRequest, id=request_id)  # Fetch the user request
@@ -228,6 +278,7 @@ def signup(request, request_id=None):
 
 ############################# Adding User Manually ######################################################
 @login_required
+@user_passes_test(is_Account_Manager)
 def manual_signup(request):
     account_manager_profile = UserProfile.objects.get(staff=request.user)
     company = account_manager_profile.company
@@ -303,6 +354,7 @@ def company_request_view(request):
 
 ############################# Adding New Company Manually ##########################################
 @login_required
+@user_passes_test(is_Admin)
 def list_new_company_requests(request):
     requests = CompanyRequest.objects.all()
     return render(request, 'account/list_new_company_requests.html', {'requests': requests})
@@ -315,6 +367,7 @@ def request_submitted_view(request):
 
 ############################# User Profile Lists(Company Wise) ###########################################
 @login_required
+@user_passes_test(is_Account_Manager)
 def user_requests_view(request): 
     user_profile = request.user.userprofile
  
