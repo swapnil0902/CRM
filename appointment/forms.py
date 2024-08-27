@@ -1,7 +1,7 @@
 from django import forms
 from .models import Appointment
 
-
+##################################          #########################################################
 class AppointmentForm(forms.ModelForm):
     start_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
     end_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
@@ -16,4 +16,5 @@ class AppointmentForm(forms.ModelForm):
         
         if user and user.groups.filter(name='Staff').exists():
             self.fields.pop('attendees')
-        
+
+##################################          #########################################################

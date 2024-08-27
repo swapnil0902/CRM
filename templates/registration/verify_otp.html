@@ -1,4 +1,4 @@
-{% comment %} {% extends "base.html" %} {% endcomment %}
+{% comment %} {% extends "base.html" %}
 
 {% block content %}
   <h2>Verify OTP</h2>
@@ -30,5 +30,46 @@
     </script>
   {% else %}
     <p>OTP has expired. Please request a new one.</p>
+  {% endif %}
+{% endblock %} {% endcomment %}
+
+
+{% comment %} {% extends "base.html" %} {% endcomment %}
+
+{% block content %}
+  <h2>Verify OTP</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Verify OTP</button>
+  </form>
+
+  {% if remaining_time > 0 %}
+    <div id="otp-timer">
+      <p>OTP expires in: <span id="timer">{{ remaining_time|floatformat:0 }}</span> seconds</p>
+    </div>
+    <script>
+      // Get the remaining time from the server
+      var remainingTime = parseFloat(document.getElementById('timer').textContent);
+
+      function updateTimer() {
+        remainingTime--;
+        document.getElementById('timer').textContent = remainingTime;
+
+        if (remainingTime <= 0) {
+          // OTP expired, redirect to the 'forgot password' page
+          window.location.href = "{% url 'forgot_password' %}";
+        }
+      }
+
+      // Update the timer every second
+      setInterval(updateTimer, 1000);
+    </script>
+  {% else %}
+    <!-- Redirect to 'forgot password' if the OTP is already expired -->
+    <script>
+      window.location.href = "{% url 'forgot_password' %}";
+    </script>
+    <p>OTP has expired. Redirecting to the forgot password page...</p>
   {% endif %}
 {% endblock %}

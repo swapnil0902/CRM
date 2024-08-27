@@ -86,3 +86,4 @@ def company_appointment_delete(request, pk):
     appointment.delete()
     return redirect('account/company_appointment_list')
 
+#######################################    THE-END    #############################################################

@@ -1,33 +1,31 @@
+import random
 from django.views import View
+from datetime import timedelta
+from django.conf import settings
+from django.utils import timezone
 from django.contrib import messages
+from django.http import HttpResponse
 from django.core.mail import send_mail
+from datetime import datetime, timedelta
 from django.utils.html import strip_tags
+from django.utils.encoding import force_bytes
 from .models import UserRequest, CompanyRequest
 from crm_home.models import Company, UserProfile
 from django.contrib.auth.models import Group, User
+from django.utils.http import urlsafe_base64_encode
 from django.template.loader import render_to_string
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.sites.shortcuts import get_current_site
+from django.contrib.auth.tokens import default_token_generator
 from django.shortcuts import render, get_object_or_404, redirect
+from .forms import UsernamePasswordResetForm, OTPForm, SetNewPasswordForm
 from django.contrib.auth.decorators import login_required,user_passes_test
 from .forms import GroupForm, SignUpForm, UserRequestForm, CompanyRequestForm
 from django.contrib.auth import logout, update_session_auth_hash, authenticate, login as auth_login
 
 
-# @login_required
-# def check_session(request):
-#     if request.user.is_authenticated:
-#         # Session is active
-#         return JsonResponse({'active': True})
-#     else:
-#         # Session has expired
-#         return JsonResponse({'active': False})
-    
-
-
-
-
-
+############################# Dividing Groups #########################################################
 def is_Account_Manager(user):
     return user.groups.filter(name='Owner').exists()
 def is_User(user):
@@ -36,19 +34,14 @@ def is_User_or_Manager(user):
     return is_User(user) or is_Account_Manager(user)
 
 
-
-from django.core.mail import send_mail
-import random
-from django.conf import settings
-
+############################# Build-In Django View ######################################################
 class CustomLoginView(View):
     form_class = AuthenticationForm
     template_name = 'registration/login.html'
-    otp_template_name = 'registration/otp.html'  # Template for OTP verification
+    otp_template_name = 'registration/otp.html' 
 
     def get(self, request):
         if 'otp_verified' in request.session and request.session['otp_verified']:
-            # OTP already verified, proceed with login
             return self._redirect_user(request.user)
 
         form = self.form_class()
@@ -56,10 +49,8 @@ class CustomLoginView(View):
 
     def post(self, request):
         if 'otp_sent' in request.session and request.session['otp_sent']:
-            # OTP was sent, now verify OTP
             otp = request.POST.get('otp')
             if otp and otp == request.session.get('otp'):
-                # OTP is correct
                 user = authenticate(username=request.session['username'], password=request.session['password'])
                 if user:
                     auth_login(request, user)
@@ -68,7 +59,6 @@ class CustomLoginView(View):
             messages.error(request, 'Invalid OTP. Please try again.')
             return render(request, self.otp_template_name)
 
-        # Regular login flow
         form = self.form_class(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
@@ -108,11 +98,8 @@ class CustomLoginView(View):
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email], fail_silently=False)
 
 
-
-
-
+############################# Manager Dashboard ######################################################
 @login_required
-# @user_passes_test(is_Account_Manager)
 def mngr_dashboard(request):
     user_profile = request.user.userprofile
     company_users = User.objects.filter(userprofile__company=user_profile.company)
@@ -126,18 +113,21 @@ def mngr_dashboard(request):
     print(account_managers)
     return render(request, 'account/mngr_dashboard.html', context)
 
+
+############################### Home Page ############################################################
 @login_required
-# @user_passes_test(is_User_or_Manager)
 def home(request):
     return render(request, 'crm/dashboard.html')
 
- 
+
+############################# Dividing Groups #########################################################
 @login_required
-# @user_passes_test(is_User_or_Manager)
 def group_list(request):
     groups = Group.objects.all()
     return render(request, 'account/group_list.html', {'groups': groups})
 
+
+############################# Creating Groups #########################################################
 @login_required
 def group_create(request):
     print("insider")
@@ -154,6 +144,7 @@ def group_create(request):
     return render(request, 'account/group_form.html', {'form': form})
 
 
+############################# Updating Groups #########################################################
 @login_required
 def group_update(request, pk):
     group = get_object_or_404(Group, pk=pk)
@@ -166,6 +157,9 @@ def group_update(request, pk):
         form = GroupForm(instance=group)
     
     return render(request, 'account/update_group.html', {'form': form})
+
+
+############################# Deleting Groups #########################################################
 @login_required
 def group_delete(request, pk):
     group = get_object_or_404(Group, pk=pk)
@@ -174,6 +168,8 @@ def group_delete(request, pk):
         return redirect('group_list')
     return render(request, 'account/group_confirm_delete.html', {'group': group})
 
+
+################################ Sign-Up Page ##########################################################
 @login_required
 def signup(request, request_id=None):
     if request_id:
@@ -229,6 +225,8 @@ def signup(request, request_id=None):
 
     return render(request, 'account/signup.html', {'form': form})
 
+
+############################# Adding User Manually ######################################################
 @login_required
 def manual_signup(request):
     account_manager_profile = UserProfile.objects.get(staff=request.user)
@@ -273,7 +271,7 @@ def manual_signup(request):
     return render(request, 'account/signup.html', {'form': form})
 
 
-
+############################# User Lists #########################################################
 def user_request_view(request):
     companies = Company.objects.all()
 
@@ -290,6 +288,8 @@ def user_request_view(request):
         'form': form  
     })
 
+
+############################# Companies List ######################################################
 def company_request_view(request):
     if request.method == 'POST':
         form = CompanyRequestForm(request.POST)
@@ -299,13 +299,21 @@ def company_request_view(request):
     else:
         form = CompanyRequestForm()
     return render(request, 'account/company_request_form.html', {'form': form})
+
+
+############################# Adding New Company Manually ##########################################
 @login_required
 def list_new_company_requests(request):
     requests = CompanyRequest.objects.all()
     return render(request, 'account/list_new_company_requests.html', {'requests': requests})
 
+
+############################# Requested Company #########################################################
 def request_submitted_view(request):
     return render(request, 'account/request_submitted.html')
+
+
+############################# User Profile Lists(Company Wise) ###########################################
 @login_required
 def user_requests_view(request): 
     user_profile = request.user.userprofile
@@ -315,30 +323,14 @@ def user_requests_view(request):
     return render(request, 'account/user_requests.html', {'user_requests': user_requests})
 
 
+################################## Logout View ############################################################
 @login_required
 def logout_view(request):
     logout(request)
     return redirect("/")
 
 
-from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
-from django.contrib.sites.shortcuts import get_current_site
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_bytes
-from django.template.loader import render_to_string
-from django.core.mail import send_mail
-from django.contrib.auth.tokens import default_token_generator
-from django.contrib import messages
-from .forms import UsernamePasswordResetForm, OTPForm, SetNewPasswordForm  # Ensure these forms are defined
-from django.http import HttpResponse
-
-
-
-import random
-from django.utils import timezone
-from datetime import timedelta
-
+################################## Forgot Password #########################################################
 def forgot_password(request):
     if request.method == 'POST':
         form = UsernamePasswordResetForm(request.POST)
@@ -362,10 +354,9 @@ def forgot_password(request):
                 })
                 send_mail(subject, message, None, [user.email])
                 
-                # Store data in session
                 request.session['reset_username'] = username
                 request.session['otp'] = otp
-                request.session['otp_generated_at'] = otp_generated_at.isoformat()  # Store as ISO 8601 string
+                request.session['otp_generated_at'] = otp_generated_at.isoformat() 
                 
                 return redirect('verify_otp')
             except User.DoesNotExist:
@@ -376,39 +367,7 @@ def forgot_password(request):
     return render(request, 'registration/forgot_password.html', {'form': form})
 
 
-from django.utils import timezone
-from datetime import timedelta
-from django.utils import timezone
-from datetime import datetime, timedelta
-
-# def verify_otp(request):
-#     if request.method == 'POST':
-#         form = OTPForm(request.POST)
-#         if form.is_valid():
-#             entered_otp = form.cleaned_data['otp']
-#             stored_otp = request.session.get('otp')
-#             otp_generated_at = request.session.get('otp_generated_at')
-            
-#             if not otp_generated_at:
-#                 form.add_error(None, 'OTP expired or not found.')
-#             else:
-#                 # Parse ISO 8601 string using datetime
-#                 otp_generated_at = datetime.fromisoformat(otp_generated_at)
-#                 now = timezone.now()  # Get current time
-                
-#                 if now - otp_generated_at > timedelta(minutes=1):
-#                     form.add_error(None, 'OTP has expired. Please request a new one.')
-#                 elif entered_otp == stored_otp:
-#                     return redirect('password_reset_confirm')
-#                 else:
-#                     form.add_error('otp', 'Invalid OTP. Please try again.')
-#     else:
-#         form = OTPForm()
-
-#     return render(request, 'registration/verify_otp.html', {'form': form})
-from django.utils import timezone
-from datetime import datetime, timedelta
-
+################################## OTP Validation #######################################################
 def verify_otp(request):
     if request.method == 'POST':
         form = OTPForm(request.POST)
@@ -416,34 +375,45 @@ def verify_otp(request):
             entered_otp = form.cleaned_data['otp']
             stored_otp = request.session.get('otp')
             otp_generated_at = request.session.get('otp_generated_at')
-            
+
             if not otp_generated_at:
-                form.add_error(None, 'OTP expired or not found.')
+                # Redirect to 'forgot password' page if OTP is not found
+                return redirect('forgot_password')
+
+            otp_generated_at = datetime.fromisoformat(otp_generated_at)
+            now = timezone.now()  # Get current time
+
+            # Check if the OTP has expired
+            if now - otp_generated_at > timedelta(minutes=1):
+                # Redirect to 'forgot password' page if OTP has expired
+                return redirect('forgot_password')
+            elif entered_otp == stored_otp:
+                # Redirect to password reset confirmation if OTP is correct
+                return redirect('password_reset_confirm')
             else:
-                otp_generated_at = datetime.fromisoformat(otp_generated_at)
-                now = timezone.now()  # Get current time
-                
-                if now - otp_generated_at > timedelta(minutes=1):
-                    form.add_error(None, 'OTP has expired. Please request a new one.')
-                elif entered_otp == stored_otp:
-                    return redirect('password_reset_confirm')
-                else:
-                    form.add_error('otp', 'Invalid OTP. Please try again.')
+                # Add an error if the OTP is invalid
+                form.add_error('otp', 'Invalid OTP. Please try again.')
     else:
         form = OTPForm()
         otp_generated_at = request.session.get('otp_generated_at')
         if otp_generated_at:
             otp_generated_at = datetime.fromisoformat(otp_generated_at)
             now = timezone.now()
+            
+            # Calculate the remaining time for OTP expiration
             remaining_time = max(0, 60 - (now - otp_generated_at).total_seconds())
+            
+            # Check if OTP has already expired
+            if remaining_time == 0:
+                # Redirect to 'forgot password' page if OTP has expired
+                return redirect('forgot_password')
         else:
             remaining_time = 0
-    
+
     return render(request, 'registration/verify_otp.html', {'form': form, 'remaining_time': remaining_time})
 
 
-
-
+################################## Reset Password #########################################################
 def password_reset_confirm(request):
     if request.method == 'POST':
         form = SetNewPasswordForm(request.POST)
@@ -463,71 +433,4 @@ def password_reset_confirm(request):
 
     return render(request, 'registration/password_reset_form.html', {'form': form})
 
-
-
-# def forgot_password(request):
-#     if request.method == 'POST':
-#         form = UsernamePasswordResetForm(request.POST)
-#         if form.is_valid():
-#             username = form.cleaned_data['username']
-#             try:
-#                 user = User.objects.get(username=username)
-#                 token = default_token_generator.make_token(user)
-#                 uid = urlsafe_base64_encode(force_bytes(user.pk))
-#                 current_site = get_current_site(request)
-#                 subject = 'Password Reset Requested'
-#                 # otp = "123456"  # You should generate a random OTP and store it securely
-#                 otp = str(random.randint(100000, 999999)) 
-#                 message = render_to_string('registration/password_reset_email.html', {
-#                     'user': user,
-#                     'domain': current_site.domain,
-#                     'uid': uid,
-#                     'token': token,
-#                     'otp': otp,
-#                 })
-#                 send_mail(subject, message, None, [user.email])
-#                 request.session['reset_username'] = username  # Storing username for OTP verification
-#                 request.session['otp'] = otp  # Storing OTP for later verification
-#                 return redirect('verify_otp')  # Redirect to OTP verification page
-#             except User.DoesNotExist:
-#                 form.add_error('username', 'User with this username does not exist.')
-#     else:
-#         form = UsernamePasswordResetForm()
-    
-#     return render(request, 'registration/forgot_password.html', {'form': form})
-
-
-# def verify_otp(request):
-#     if request.method == 'POST':
-#         form = OTPForm(request.POST)
-#         if form.is_valid():
-#             entered_otp = form.cleaned_data['otp']
-#             stored_otp = request.session.get('otp')
-#             if entered_otp == stored_otp:
-#                 return redirect('password_reset_confirm')
-#             else:
-#                 form.add_error('otp', 'Invalid OTP. Please try again.')
-#     else:
-#         form = OTPForm()
-
-#     return render(request, 'registration/verify_otp.html', {'form': form})
-
-
-# def password_reset_confirm(request):
-#     if request.method == 'POST':
-#         form = SetNewPasswordForm(request.POST)
-#         if form.is_valid():
-#             username = request.session.get('reset_username')
-#             new_password = form.cleaned_data['new_password']
-#             try:
-#                 user = User.objects.get(username=username)
-#                 user.set_password(new_password)
-#                 user.save()
-#                 messages.success(request, 'Password reset successfully.')
-#                 return redirect('login')
-#             except User.DoesNotExist:
-#                 form.add_error(None, 'Error resetting password. Please try again.')
-#     else:
-#         form = SetNewPasswordForm()
-
-#     return render(request, 'registration/password_reset_form.html', {'form': form})
+################################## THE-END #########################################################

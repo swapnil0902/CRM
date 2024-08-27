@@ -6,6 +6,8 @@ from rest_framework.authtoken.models import Token
 from django.db.models.signals import post_save, post_delete
 from django.contrib.auth.models import AbstractUser, Group, Permission
 
+
+##################################          #########################################################
 class User(AbstractUser):
     email = models.EmailField(unique=True)
     groups = models.ManyToManyField(
@@ -23,17 +25,21 @@ class User(AbstractUser):
         verbose_name='user permissions',
     )
 
+
+##################################          #########################################################
 @receiver(post_save, sender=settings.AUTH_USER_MODEL) 
 def createAuthToken(sender, instance, created, **kwargs):
     if created:
         Token.objects.create(user = instance)
 
 
+##################################          #########################################################
 @receiver(post_delete, sender=settings.AUTH_USER_MODEL)
 def delete_user_token(sender, instance, **kwargs):
     Token.objects.filter(user=instance).delete()
 
 
+##################################          #########################################################
 class UserRequest(models.Model):
     first_name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
@@ -43,7 +49,9 @@ class UserRequest(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
-    
+
+
+##################################          #########################################################
 class CompanyRequest(models.Model):
     name = models.CharField(max_length=255)
     service = models.CharField(max_length=100)
@@ -53,3 +61,4 @@ class CompanyRequest(models.Model):
     def __str__(self):
         return self.name
 
+##################################          #########################################################
