@@ -1,4 +1,5 @@
 from .models import Company
+from account.views import *
 from task.models import Task
 from lead.models import Lead
 from django.db.models import Q
