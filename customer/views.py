@@ -32,10 +32,6 @@ def customer_create(request):
     return render(request, 'customer/customer_create.html', {'form': form})
 
 
-########################         ##########################################
-def customer_detail(request, customer_id):
-    customer = get_object_or_404(Customer, id=customer_id)
-    return render(request, 'customer/customer_detail.html', {'customer': customer})
 
 
 ########################         ##########################################
