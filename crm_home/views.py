@@ -1,4 +1,5 @@
 from .models import Company
+from account.views import *
 from task.models import Task
 from lead.models import Lead
 from django.db.models import Q
@@ -10,9 +11,10 @@ from account.models import CompanyRequest
 from appointment.models import Appointment
 from django.template.loader import render_to_string
 from django.contrib.auth.forms import UserChangeForm
-from django.contrib.auth.decorators import login_required,user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required,user_passes_test
 from .forms import CompanyForm,AccountManagerForm,CompanyForm,UserUpdateForm
+
 
 
 # Create your views here.
