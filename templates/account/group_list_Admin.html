@@ -1,18 +1,18 @@
-{% extends 'account/mngr_dashboard.html' %}
+{% extends 'account/Admin_Page_base.html' %}
 
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
     <h1 class="mb-4">Groups</h1>
-    <a href="{% url 'group_create' %}" class="btn btn-primary mb-3">Create New Group</a>
+    <a href="{% url 'group_create_Admin' %}" class="btn btn-primary mb-3">Create New Group</a>
     <ul class="list-group">
         {% for group in groups %}
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 {{ group.name }}
                 <div>
-                    <a href="{% url 'group_update' group.pk %}" class="btn btn-warning btn-sm me-2">Edit</a>
-                    <a href="{% url 'group_delete' group.pk %}" class="btn btn-danger btn-sm">Delete</a>
+                    <a href="{% url 'group_update_Admin' group.pk %}" class="btn btn-warning btn-sm me-2">Edit</a>
+                    <a href="{% url 'group_delete_Admin' group.pk %}" class="btn btn-danger btn-sm">Delete</a>
                 </div>
             </li>
         {% empty %}

@@ -9,7 +9,7 @@ from crm_home.models import Company, UserProfile
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseForbidden, HttpResponseNotAllowed
-
+from account.views import *
 
 ######################## Import The User Data ##########################################
 User = get_user_model()
@@ -23,6 +23,7 @@ class LeadViewSet(viewsets.ModelViewSet):
 
 ############################ Lead Lists ################################################
 @login_required
+@user_passes_test(is_User_or_Manager)
 def lead_list(request):
     user = request.user 
     leads = Lead.objects.filter(staff=request.user )
@@ -32,6 +33,7 @@ def lead_list(request):
 ############################# Lead Details(Individual) ##################################
 @login_required
 @api_view(['POST', 'GET'])
+@user_passes_test(is_User)
 def lead_detail(request, lead_id):
     try:
         lead = get_object_or_404(Lead, id=lead_id)
@@ -54,6 +56,8 @@ def lead_detail(request, lead_id):
     
 
 ############################ Creating Leads ###########################################
+@login_required
+@user_passes_test(is_User)
 def lead_create(request):
     if request.method == 'POST':
         form = LeadForm(request.POST, user=request.user)
@@ -85,6 +89,7 @@ def lead_create(request):
 
 ############################ Deleting Leads ###########################################
 @api_view(['GET', 'DELETE'])
+@user_passes_test(is_User)
 def lead_delete(request, lead_id):
     lead = get_object_or_404(Lead, id=lead_id)
 
@@ -94,6 +99,7 @@ def lead_delete(request, lead_id):
 
 ######################## Lead Lists(Company-Wise) ######################################
 @login_required
+@user_passes_test(is_Account_Manager)
 def company_lead_list(request):
     if not request.user.is_authenticated:
         return redirect('login')  
@@ -107,6 +113,7 @@ def company_lead_list(request):
 
 ######################## Lead Lists Details(Individual-Company-Wise) ###################
 @api_view(['POST', 'GET'])
+@user_passes_test(is_User_or_Manager)
 def company_lead_detail(request, lead_id):
     try:
         lead = get_object_or_404(Lead, id=lead_id)
@@ -130,6 +137,7 @@ def company_lead_detail(request, lead_id):
 
 ######################## Deleting Leads(Company) ##########################################
 @api_view(['GET', 'DELETE'])
+@user_passes_test(is_Account_Manager)
 def company_lead_delete(request, lead_id):
     lead = get_object_or_404(Lead, id=lead_id)
 

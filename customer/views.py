@@ -3,13 +3,15 @@ from django.shortcuts import render
 from customer.models import Customer
 from rest_framework.decorators import api_view
 from django.http import HttpResponseNotAllowed, Http404
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required,user_passes_test
 from django.shortcuts import get_object_or_404, redirect, render
+from account.views import *
 
 #create your views here
 
 ######################## Customer Lists ##########################################
 @login_required
+@user_passes_test(is_User_or_Manager)
 def customer_list(request):
     customers = Customer.objects.filter(staff = request.user)
     return render(request, 'customer/customer.html',{'customers': customers})
@@ -17,6 +19,7 @@ def customer_list(request):
 
 ######################## Creating Customers ######################################
 @login_required
+@user_passes_test(is_User_or_Manager)
 def customer_create(request):
     if request.method == 'POST':
         form = CustomerForm(request.POST)
@@ -36,6 +39,7 @@ def customer_create(request):
 # XXXXXXXXXXXXXXX  Customer Detail  XXXXXXXXXXXXXXXXXXXXXXX #
 
 @api_view(['POST', 'GET'])
+@user_passes_test(is_User_or_Manager)
 def customer_detail(request, customer_id):
     try:
         customer = get_object_or_404(Customer, id=customer_id, staff=request.user)
@@ -60,6 +64,7 @@ def customer_detail(request, customer_id):
 
 ######################## Deleting Customers ########################################## 
 @api_view(['GET', 'DELETE'])
+@user_passes_test(is_User_or_Manager)
 def customer_delete(request, customer_id):
     lead = get_object_or_404(Customer, id=customer_id)
 
@@ -69,6 +74,7 @@ def customer_delete(request, customer_id):
 
 ######################## Customer Lists(Company-Wise) ################################
 @login_required
+@user_passes_test(is_User_or_Manager)
 def company_customer_list(request):
     if not request.user.is_authenticated:
         return redirect('login')  
@@ -82,6 +88,7 @@ def company_customer_list(request):
 
 ######################## Delete Customer Lists(Company-Wise) ###########################
 @api_view(['GET', 'DELETE'])
+@user_passes_test(is_User_or_Manager)
 def company_customer_delete(request, customer_id):
     lead = get_object_or_404(Customer, id=customer_id)
 
@@ -91,6 +98,7 @@ def company_customer_delete(request, customer_id):
 
 ######################## Customer Details(Company-Wise) #################################
 @api_view(['POST', 'GET'])
+@user_passes_test(is_User_or_Manager)
 def company_customer_detail(request, customer_id):
     try:
         customer = get_object_or_404(Customer, id=customer_id)

@@ -4,7 +4,7 @@ from django.utils.html import strip_tags
 from account.models import CompanyRequest
 from django.template.loader import render_to_string
 from django.contrib.auth.forms import UserChangeForm
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required,user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import CompanyForm,AccountManagerForm,CompanyForm,UserUpdateForm
 from django.db.models import Q
@@ -12,7 +12,7 @@ from task.models import Task
 from appointment.models import Appointment
 from customer.models import Customer
 from lead.models import Lead
-  
+from account.views import is_Admin,is_Account_Manager,is_User,is_User_or_Manager
 
 # Create your views here.
 ########################### Default Home Page ############################################
@@ -22,18 +22,21 @@ def home(request):
 
 ############################  Dashboard View #############################################
 @login_required
+@user_passes_test(is_User_or_Manager)
 def dashboard(request):
     return render(request, "crm/dashboard.html")
 
 
 ########################### User Profile Page ############################################
 @login_required
+@user_passes_test(is_User_or_Manager)
 def my_profile(request):
     return render(request,"crm_home/my_profile.html")
 
 
 ########################## Updating User Profile ##########################################
 @login_required
+@user_passes_test(is_User_or_Manager)
 def update_user_profile(request):
     if request.method == 'POST':
         form = UserUpdateForm(request.POST, instance=request.user)
@@ -48,6 +51,7 @@ def update_user_profile(request):
 
 ############################ Creating Company ##############################################
 @login_required
+@user_passes_test(is_Admin)
 def create_company(request):
     if request.method == 'POST':
         form = CompanyForm(request.POST)
@@ -62,6 +66,7 @@ def create_company(request):
 
 ############################ Creating Company(Admin) #######################################
 @login_required
+@user_passes_test(is_Admin)
 def prefilled_create_company(request, request_id=None):
     if request_id:
         company = get_object_or_404(CompanyRequest, pk=request_id)
@@ -90,6 +95,7 @@ def prefilled_create_company(request, request_id=None):
 
 ############################# Company Lists ################################################
 @login_required
+@user_passes_test(is_Admin)
 def company_list(request):
     companies = Company.objects.all()
     return render(request, 'crm_home/company_list.html', {'companies': companies})
@@ -97,6 +103,7 @@ def company_list(request):
 
 ############################ Company Details ###############################################
 @login_required
+@user_passes_test(is_Admin)
 def company_detail(request, pk):
     company = get_object_or_404(Company, pk=pk)
     users = company.users.all()
@@ -142,6 +149,7 @@ def company_detail(request, pk):
 
 ############################# Search #############################################################
 @login_required
+@user_passes_test(is_User_or_Manager)
 def master_search(request):
     query = request.GET.get('q', '')
 
