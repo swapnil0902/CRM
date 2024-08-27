@@ -11,7 +11,7 @@ from django.db.models.signals import post_save
 
 
 # Create your models here.
-
+#############################         #############################################################
 class Lead(models.Model):
     STATUS_CHOICES = (
         ('Not Contacted', 'Not Contacted'),
@@ -33,7 +33,7 @@ class Lead(models.Model):
 
 
 
-
+#############################        #############################################################
 @receiver(post_save, sender=Lead)
 def handle_lead_status_change(sender, instance, **kwargs):
     if instance.status == 'Converted to Customer':
@@ -54,3 +54,5 @@ def handle_lead_status_change(sender, instance, **kwargs):
         full_url = f"{url}?{query_params}"
 
         return redirect(full_url)
+
+#############################        #############################################################

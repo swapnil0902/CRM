@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
 
+##################################          #########################################################
 class Company(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
@@ -20,6 +21,8 @@ class Company(models.Model):
         super().save(*args, **kwargs)
 
 
+
+##################################          #########################################################
 class UserProfile(models.Model):
     staff = models.OneToOneField(User, on_delete=models.CASCADE)
     company = models.ForeignKey(Company, related_name='users', on_delete=models.CASCADE)

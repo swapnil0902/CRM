@@ -31,8 +31,6 @@ urlpatterns = [
     ##################################### dashboards #############################################
     path('mngr-dashboard/', views.mngr_dashboard, name='mngr_dashboard'),
    
-    
-
     #################################### companies #######################################
     path('companies/', crm_homeview.company_list, name='company_list'),
     path('company/<int:pk>/', crm_homeview.company_detail, name='company_detail'),
@@ -62,17 +60,6 @@ urlpatterns = [
     path('forgot_password/', views.forgot_password, name='forgot_password'),
     path('verify_otp/', views.verify_otp, name='verify_otp'),
     path('password_reset_confirm/', views.password_reset_confirm, name='password_reset_confirm'), 
-
-
-
-    
-    
-    
-    
-  
-
-
-
     # path('company-request-submitted/', views.TemplateView.as_view(template_name='account/company_request_submitted.html'), name='company_request_submitted'),
 
 ]

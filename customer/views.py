@@ -8,14 +8,14 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 #create your views here
 
-########################         ##########################################
+######################## Customer Lists ##########################################
 @login_required
 def customer_list(request):
     customers = Customer.objects.filter(staff = request.user)
     return render(request, 'customer/customer.html',{'customers': customers})
 
 
-########################         ##########################################
+######################## Creating Customers ######################################
 @login_required
 def customer_create(request):
     if request.method == 'POST':
@@ -32,13 +32,13 @@ def customer_create(request):
     return render(request, 'customer/customer_create.html', {'form': form})
 
 
-########################         ##########################################
+######################## Customer Details/Lists ###################################
 def customer_detail(request, customer_id):
     customer = get_object_or_404(Customer, id=customer_id)
     return render(request, 'customer/customer_detail.html', {'customer': customer})
 
+# XXXXXXXXXXXXXXX  TWO SAME VIEWS CHECK THE CORRECT ONE   XXXXXXXXXXXXXXXXXXXXXXX #
 
-########################         ##########################################
 @api_view(['POST', 'GET'])
 def customer_detail(request, customer_id):
     try:
@@ -62,7 +62,7 @@ def customer_detail(request, customer_id):
         return HttpResponseNotAllowed(['GET', 'POST'])
     
 
-########################         ########################################## 
+######################## Deleting Customers ########################################## 
 @api_view(['GET', 'DELETE'])
 def customer_delete(request, customer_id):
     lead = get_object_or_404(Customer, id=customer_id)
@@ -71,7 +71,7 @@ def customer_delete(request, customer_id):
     return redirect('customer-view')
 
 
-########################         ##########################################
+######################## Customer Lists(Company-Wise) ################################
 @login_required
 def company_customer_list(request):
     if not request.user.is_authenticated:
@@ -84,7 +84,7 @@ def company_customer_list(request):
     return render(request, 'customer/company_customer_list.html', {'customers': customers})
 
 
-########################         ##########################################
+######################## Delete Customer Lists(Company-Wise) ###########################
 @api_view(['GET', 'DELETE'])
 def company_customer_delete(request, customer_id):
     lead = get_object_or_404(Customer, id=customer_id)
@@ -93,7 +93,7 @@ def company_customer_delete(request, customer_id):
     return redirect('company_customer_list')
 
 
-########################         ##########################################
+######################## Customer Details(Company-Wise) #################################
 @api_view(['POST', 'GET'])
 def company_customer_detail(request, customer_id):
     try:
@@ -116,4 +116,4 @@ def company_customer_detail(request, customer_id):
     else:
         return HttpResponseNotAllowed(['GET', 'POST'])
 
-########################         ##########################################
+##################################  THE-END #############################################

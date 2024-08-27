@@ -1,24 +1,27 @@
+from .models import Lead
+from .forms import LeadForm
+from django.http import Http404
+from rest_framework import viewsets
+from .serializers import LeadSerializer
+from django.contrib.auth import get_user_model
+from rest_framework.decorators import api_view
+from crm_home.models import Company, UserProfile
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseForbidden, HttpResponseNotAllowed
-from django.contrib.auth.decorators import login_required
-from .models import Lead
-from crm_home.models import Company, UserProfile
-from .forms import LeadForm
-from django.contrib.auth import get_user_model
-from rest_framework import viewsets
-from rest_framework.decorators import api_view
-from .serializers import LeadSerializer
-from django.http import Http404
 
 
+######################## Import The User Data ##########################################
 User = get_user_model()
-########################         ##########################################
+
+
+####################### Leads Creation Using Viewsets ##################################
 class LeadViewSet(viewsets.ModelViewSet):
     queryset = Lead.objects.all()
     serializer_class = LeadSerializer
 
 
-########################         ##########################################
+############################ Lead Lists ################################################
 @login_required
 def lead_list(request):
     user = request.user 
@@ -26,7 +29,7 @@ def lead_list(request):
     return render(request, 'lead/lead.html', {'leads': leads})
 
 
-########################         ##########################################
+############################# Lead Details(Individual) ##################################
 @login_required
 @api_view(['POST', 'GET'])
 def lead_detail(request, lead_id):
@@ -50,16 +53,7 @@ def lead_detail(request, lead_id):
         return HttpResponseNotAllowed(['GET', 'POST'])
     
 
-########################         ##########################################
-@api_view(['GET', 'DELETE'])
-def lead_delete(request, lead_id):
-    lead = get_object_or_404(Lead, id=lead_id)
-
-    lead.delete()
-    return redirect('lead-view')
-
-
-########################         ##########################################
+############################ Creating Leads ###########################################
 def lead_create(request):
     if request.method == 'POST':
         form = LeadForm(request.POST, user=request.user)
@@ -89,7 +83,16 @@ def lead_create(request):
     return render(request, 'lead/lead_create.html', {'form': form, 'user': request.user})
 
 
-########################         ##########################################
+############################ Deleting Leads ###########################################
+@api_view(['GET', 'DELETE'])
+def lead_delete(request, lead_id):
+    lead = get_object_or_404(Lead, id=lead_id)
+
+    lead.delete()
+    return redirect('lead-view')
+
+
+######################## Lead Lists(Company-Wise) ######################################
 @login_required
 def company_lead_list(request):
     if not request.user.is_authenticated:
@@ -102,7 +105,7 @@ def company_lead_list(request):
     return render(request, 'lead/company_lead_list.html', {'leads': leads})
 
 
-########################         ##########################################
+######################## Lead Lists Details(Individual-Company-Wise) ###################
 @api_view(['POST', 'GET'])
 def company_lead_detail(request, lead_id):
     try:
@@ -125,7 +128,7 @@ def company_lead_detail(request, lead_id):
         return HttpResponseNotAllowed(['GET', 'POST'])
     
 
-########################         ##########################################
+######################## Deleting Leads(Company) ##########################################
 @api_view(['GET', 'DELETE'])
 def company_lead_delete(request, lead_id):
     lead = get_object_or_404(Lead, id=lead_id)
@@ -133,4 +136,4 @@ def company_lead_delete(request, lead_id):
     lead.delete()
     return redirect('company_lead_list')
 
-########################         ##########################################
+################################# THE-END #################################################

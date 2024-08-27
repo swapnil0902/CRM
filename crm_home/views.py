@@ -15,24 +15,24 @@ from lead.models import Lead
   
 
 # Create your views here.
-########################         ##########################################
+########################### Default Home Page ############################################
 def home(request):
     return render(request,"crm_home/index.html")
 
 
-########################         ##########################################
+############################  Dashboard View #############################################
 @login_required
 def dashboard(request):
     return render(request, "crm/dashboard.html")
 
 
-########################         ##########################################
+########################### User Profile Page ############################################
 @login_required
 def my_profile(request):
     return render(request,"crm_home/my_profile.html")
 
 
-########################         ##########################################
+########################## Updating User Profile ##########################################
 @login_required
 def update_user_profile(request):
     if request.method == 'POST':
@@ -46,7 +46,7 @@ def update_user_profile(request):
     return render(request, 'crm_home/update_profile.html', {'form': form})
 
 
-########################         ##########################################
+############################ Creating Company ##############################################
 @login_required
 def create_company(request):
     if request.method == 'POST':
@@ -60,7 +60,7 @@ def create_company(request):
     return render(request, 'crm_home/create_company.html', {'form': form})
 
 
-########################         ##########################################
+############################ Creating Company(Admin) #######################################
 @login_required
 def prefilled_create_company(request, request_id=None):
     if request_id:
@@ -88,14 +88,14 @@ def prefilled_create_company(request, request_id=None):
     return render(request, 'crm_home/create_company.html', {'form': form})
 
 
-########################         ##########################################
+############################# Company Lists ################################################
 @login_required
 def company_list(request):
     companies = Company.objects.all()
     return render(request, 'crm_home/company_list.html', {'companies': companies})
 
 
-########################         ##########################################
+############################ Company Details ###############################################
 @login_required
 def company_detail(request, pk):
     company = get_object_or_404(Company, pk=pk)
@@ -138,9 +138,6 @@ def company_detail(request, pk):
         'users': users,
         'form': form
     })
-########################         ##########################################
-
-
 
 
 ############################# Search #############################################################
@@ -160,3 +157,5 @@ def master_search(request):
         'customers': customers,
         'leads': leads,
     })
+
+############################## THE-END #############################################################
