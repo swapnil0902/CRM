@@ -1,18 +1,19 @@
 from .models import Company
+from task.models import Task
+from lead.models import Lead
+from django.db.models import Q
+from django.utils import timezone
+from customer.models import Customer
 from django.core.mail import send_mail
 from django.utils.html import strip_tags
 from account.models import CompanyRequest
+from appointment.models import Appointment
 from django.template.loader import render_to_string
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import CompanyForm,AccountManagerForm,CompanyForm,UserUpdateForm
-from django.db.models import Q
-from task.models import Task
-from appointment.models import Appointment
-from customer.models import Customer
-from lead.models import Lead
-from account.views import is_Admin,is_Account_Manager,is_User,is_User_or_Manager
+
 
 # Create your views here.
 ########################### Default Home Page ############################################
@@ -24,7 +25,14 @@ def home(request):
 @login_required
 @user_passes_test(is_User_or_Manager)
 def dashboard(request):
-    return render(request, "crm/dashboard.html")
+    future_tasks = Task.objects.filter(due_date__gte=timezone.now(), assigned_to=request.user)
+    future_appointments = Appointment.objects.filter(start_date__gte=timezone.now(), attendees=request.user)
+
+    context = {
+        'future_tasks': future_tasks,
+        'future_appointments': future_appointments,
+    }
+    return render(request, 'crm/dashboard.html', context)
 
 
 ########################### User Profile Page ############################################
