@@ -1,10 +1,9 @@
 from .models import Task
 from .forms import TaskForm,TaskFilterForm
+from rest_framework.decorators import api_view
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from rest_framework.decorators import api_view
-
 
 ######################### Tasks Details #########################################
 @login_required
