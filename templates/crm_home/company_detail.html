@@ -3,28 +3,54 @@
 {% block title %}About Page{% endblock %}
 
 {% block content %}
-<body>
-    <h1>{{ company.name }}</h1>
-    <p>Service: {{ company.service }}</p>
+    <div class="container mt-5">
+        <div class="row">
+            <!-- Company Information -->
+            <div class="col-md-12 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title">{{ company.name }}</h1>
+                        <p class="card-text"><strong>Service:</strong> {{ company.service }}</p>
+                    </div>
+                </div>
+            </div>
 
-    <h2>Users in {{ company.name }}</h2>
-    {% if users %}
-        <ul>
-            {% for user_profile in users %}
-                <li>{{ user_profile.staff.username }}</li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No users associated with this company yet.</p>
-        {% endif %}
-        <h2>Add Account Manager</h2>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Add Account Manager</button>
-        </form>
-    
+            <!-- Users List -->
+            <div class="col-md-12 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Users in {{ company.name }}</h2>
+                        {% if users %}
+                            <ul class="list-group">
+                                {% for user_profile in users %}
+                                    <li class="list-group-item">{{ user_profile.staff.username }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p class="card-text">No users associated with this company yet.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
 
-    <a href="{% url 'company_list' %}">Back to Company List</a>
-</body>
-{% endblock%}
+            <!-- Add Account Manager Form -->
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Add Account Manager</h2>
+                        <form method="post">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <button type="submit" class="btn btn-primary">Add Account Manager</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back to Company List Link -->
+        <div class="mt-4">
+            <a href="{% url 'company_list' %}" class="btn btn-secondary">Back to Company List</a>
+        </div>
+    </div>
+{% endblock %}

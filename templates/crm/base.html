@@ -104,51 +104,6 @@
                     <a href="{% url 'master_search' %}" class="list-group-item list-group-item-action bg-light">Search</a> 
                     <a href="{% url 'logout' %}" class="list-group-item list-group-item-action bg-light">Logout</a> 
                 {% endif %}
-
-                {% if is_admin %}
-                    <a class="list-group-item list-group-item-action bg-light" data-bs-toggle="collapse" href="#adminSection" role="button" aria-expanded="false" aria-controls="adminSection">
-                        Admin Options
-                    </a>
-                    <div class="collapse bg-white border-start ms-4" id="adminSection">
-                        <a href="{% url 'dashboard' %}" class="list-group-item list-group-item-action bg-light">Dashboard</a>   
-                    
-                        <a class="list-group-item list-group-item-action bg-light" data-bs-toggle="collapse" href="#taskSection" role="button" aria-expanded="false" aria-controls="taskSection">
-                            Task & Diary Management
-                        </a>
-                        <div class="collapse bg-white border-start ms-4" id="taskSection">
-                            <a href="{% url 'task_list' %}" class="list-group-item list-group-item-action bg-light border-0">Task List</a> 
-                            <a href="{% url 'task_create' %}" class="list-group-item list-group-item-action bg-light border-0">Create Task</a> 
-                        </div>
-    
-                        <a class="list-group-item list-group-item-action bg-light" data-bs-toggle="collapse" href="#appointmentSection" role="button" aria-expanded="false" aria-controls="appointmentSection">
-                            Appointment Management
-                        </a>
-                        <div class="collapse bg-white border-start ms-4" id="appointmentSection">
-                            <a href="{% url 'appointment_list' %}" class="list-group-item list-group-item-action bg-light border-0">Appointment List</a> 
-                            <a href="{% url 'appointment_create' %}" class="list-group-item list-group-item-action bg-light border-0">Create Appointment</a> 
-                        </div>
-    
-                        <a class="list-group-item list-group-item-action bg-light" data-bs-toggle="collapse" href="#leadSection" role="button" aria-expanded="false" aria-controls="leadSection">
-                            Lead
-                        </a>
-                        <div class="collapse bg-white border-start ms-4" id="leadSection">
-                            <a href="{% url 'lead-view' %}" class="list-group-item list-group-item-action bg-light border-0">Lead List</a> 
-                            <a href="{% url 'lead_create' %}" class="list-group-item list-group-item-action bg-light border-0">Create Lead</a> 
-                        </div>
-    
-                        <a class="list-group-item list-group-item-action bg-light" data-bs-toggle="collapse" href="#customerSection" role="button" aria-expanded="false" aria-controls="customerSection">
-                            Customer Records
-                        </a>
-                        <div class="collapse bg-white border-start ms-4" id="customerSection">
-                            <a href="{% url 'customer-view' %}" class="list-group-item list-group-item-action bg-light border-0">Customer List</a> 
-                            <a href="{% url 'customer_create' %}" class="list-group-item list-group-item-action bg-light border-0">Create Customer</a> 
-                        </div>
-    
-                        <a href="{% url 'mngr_dashboard' %}" class="list-group-item list-group-item-action bg-light">Admin Panel</a>
-                        <a href="{% url 'master_search' %}" class="list-group-item list-group-item-action bg-light">Search</a> 
-                        <a href="{% url 'logout' %}" class="list-group-item list-group-item-action bg-light">Logout</a> 
-                    </div>  
-                {% endif %}
             </div>
         </nav>
 
