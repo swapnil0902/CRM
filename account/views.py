@@ -409,6 +409,45 @@ from datetime import datetime, timedelta
 from django.utils import timezone
 from datetime import datetime, timedelta
 
+# def verify_otp(request):
+#     if request.method == 'POST':
+#         form = OTPForm(request.POST)
+#         if form.is_valid():
+#             entered_otp = form.cleaned_data['otp']
+#             stored_otp = request.session.get('otp')
+#             otp_generated_at = request.session.get('otp_generated_at')
+            
+#             if not otp_generated_at:
+#                 form.add_error(None, 'OTP expired or not found.')
+#             else:
+#                 otp_generated_at = datetime.fromisoformat(otp_generated_at)
+#                 now = timezone.now()  # Get current time
+                
+#                 if now - otp_generated_at > timedelta(minutes=1):
+#                     form.add_error(None, 'OTP has expired. Please request a new one.')
+#                 elif entered_otp == stored_otp:
+#                     return redirect('password_reset_confirm')
+#                 else:
+#                     form.add_error('otp', 'Invalid OTP. Please try again.')
+#     else:
+#         form = OTPForm()
+#         otp_generated_at = request.session.get('otp_generated_at')
+#         if otp_generated_at:
+#             otp_generated_at = datetime.fromisoformat(otp_generated_at)
+#             now = timezone.now()
+#             remaining_time = max(0, 60 - (now - otp_generated_at).total_seconds())
+#         else:
+#             remaining_time = 0
+    
+#     return render(request, 'registration/verify_otp.html', {'form': form, 'remaining_time': remaining_time})
+
+
+from datetime import datetime, timedelta
+from django.shortcuts import render, redirect
+from django.utils import timezone
+from django.contrib import messages
+from .forms import OTPForm
+
 def verify_otp(request):
     if request.method == 'POST':
         form = OTPForm(request.POST)
@@ -416,29 +455,41 @@ def verify_otp(request):
             entered_otp = form.cleaned_data['otp']
             stored_otp = request.session.get('otp')
             otp_generated_at = request.session.get('otp_generated_at')
-            
+
             if not otp_generated_at:
-                form.add_error(None, 'OTP expired or not found.')
+                # Redirect to 'forgot password' page if OTP is not found
+                return redirect('forgot_password')
+
+            otp_generated_at = datetime.fromisoformat(otp_generated_at)
+            now = timezone.now()  # Get current time
+
+            # Check if the OTP has expired
+            if now - otp_generated_at > timedelta(minutes=1):
+                # Redirect to 'forgot password' page if OTP has expired
+                return redirect('forgot_password')
+            elif entered_otp == stored_otp:
+                # Redirect to password reset confirmation if OTP is correct
+                return redirect('password_reset_confirm')
             else:
-                otp_generated_at = datetime.fromisoformat(otp_generated_at)
-                now = timezone.now()  # Get current time
-                
-                if now - otp_generated_at > timedelta(minutes=1):
-                    form.add_error(None, 'OTP has expired. Please request a new one.')
-                elif entered_otp == stored_otp:
-                    return redirect('password_reset_confirm')
-                else:
-                    form.add_error('otp', 'Invalid OTP. Please try again.')
+                # Add an error if the OTP is invalid
+                form.add_error('otp', 'Invalid OTP. Please try again.')
     else:
         form = OTPForm()
         otp_generated_at = request.session.get('otp_generated_at')
         if otp_generated_at:
             otp_generated_at = datetime.fromisoformat(otp_generated_at)
             now = timezone.now()
+            
+            # Calculate the remaining time for OTP expiration
             remaining_time = max(0, 60 - (now - otp_generated_at).total_seconds())
+            
+            # Check if OTP has already expired
+            if remaining_time == 0:
+                # Redirect to 'forgot password' page if OTP has expired
+                return redirect('forgot_password')
         else:
             remaining_time = 0
-    
+
     return render(request, 'registration/verify_otp.html', {'form': form, 'remaining_time': remaining_time})
 
 
