@@ -25,7 +25,7 @@ def customer_create(request):
             customer.staff = request.user  
             customer.company = request.user.userprofile.company 
             customer.save()
-            return redirect('customer_detail', customer_id=customer.id)
+            return redirect('customer-view')
     else:
         form = CustomerForm()
 
@@ -33,7 +33,7 @@ def customer_create(request):
 
 
 
-# XXXXXXXXXXXXXXX  TWO SAME VIEWS CHECK THE CORRECT ONE   XXXXXXXXXXXXXXXXXXXXXXX #
+# XXXXXXXXXXXXXXX  Customer Detail  XXXXXXXXXXXXXXXXXXXXXXX #
 
 @api_view(['POST', 'GET'])
 def customer_detail(request, customer_id):
