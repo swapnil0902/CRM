@@ -5,7 +5,110 @@
     <title>Dashboard</title>
 {% endblock %}
 
-
 {% block content %}
-    <h2>Hi {{user.username}}</h2>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f7fa;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .container {
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 20px;
+    }
+    
+    .card {
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        padding: 20px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    
+    .card h3 {
+        margin-top: 0;
+        color: #333;
+        font-size: 24px;
+    }
+    
+    .card p {
+        color: #555;
+        font-size: 16px;
+        margin: 10px 0;
+    }
+    
+    .card a {
+        display: inline-block;
+        margin-top: 15px;
+        text-decoration: none;
+        color: #007bff;
+        font-weight: bold;
+    }
+    
+    .card a:hover {
+        color: #0056b3;
+    }
+    
+    .dashboard-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .dashboard-header h1 {
+        font-size: 36px;
+        color: #333;
+    }
+    
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+    }
+</style>
+
+<div class="container">
+    <h2>Hi {{ user.username }}</h2>
+
+    <div class="dashboard-section">
+        <h2>Upcoming Appointments</h2>
+        <div class="dashboard-grid">
+            {% for appointment in future_appointments %}
+                <div class="card">
+                    <h3>{{ appointment.title }}</h3>
+                    <p>Start Date: {{ appointment.start_date }} || End Date: {{ appointment.end_date }}</p>
+                    <p>Location: {{ appointment.location }}</p>
+                    <center><a href="{% url 'appointment_update' appointment.pk%}">Edit Your Appointment</a></center>
+                </div>
+            {% empty %}
+                <p>No upcoming appointments.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="dashboard-section">
+        <h2>Upcoming Tasks</h2>
+        <div class="dashboard-grid">
+            {% for task in future_tasks %}
+                <div class="card">
+                    <h3>{{ task.title }}</h3>
+                    <h5>Assiged For: {{task.assigned_to}}</h5>
+                    <p>Due Date: {{ task.due_date }}</p>
+                    <p>Status: {{ task.status }}</p>
+                    <center><a href="{% url 'task_update' task.pk %}">Edit Your Task</a></center>
+                </div>
+            {% empty %}
+                <p>No upcoming tasks.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 {% endblock %}

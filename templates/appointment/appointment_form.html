@@ -2,7 +2,7 @@
 {% extends "crm/base.html" %}
 
 {% block title %}
-    {% if form.instance.pk %}Update Appointment{% else %}Create Appointment{% endif %}
+    {% if form.instance.pk %}<title>Update Appointment</title>{% else %}<title>Create Appointment</title>{% endif %}
 {% endblock %}
 
 {% block content %}
