@@ -2,19 +2,27 @@
 {% load static %}
 
 {% block title %}
-    Delete Task
-{% endblock %}
-
-{% block stylesheets %}
-    <link rel="stylesheet" type="text/css" href="{% static 'task/styles.css' %}">
+    <title>Delete Task</title>
 {% endblock %}
 
 {% block content %}
-    <h1>Delete Task</h1>
-    <p>Are you sure you want to delete "{{ task.title }}"?</p>
-    <form method="POST">
-        {% csrf_token %}
-        <button type="submit">Confirm Delete</button>
-    </form>
-    <a href="{% url 'task_list' %}">Cancel</a>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h1 class="card-title text-center mb-4">Delete Task</h1>
+                        <p class="card-text text-center mb-4">Are you sure you want to delete "<strong>{{ task.title }}</strong>"?</p>
+                        <form method="POST" class="text-center">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-lg">Confirm Delete</button>
+                        </form>
+                        <div class="text-center mt-3">
+                            <a href="{% url 'task_list' %}" class="btn btn-secondary btn-lg">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

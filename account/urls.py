@@ -13,7 +13,7 @@ urlpatterns = [
     path('signup/<int:request_id>/', views.signup, name='signup'),
     path('signup/', views.manual_signup, name='Msignup'),
     path('logout/', views.logout_view, name='logout'),
-    path('contact/', views.user_request_view, name='customer_request'),
+    path('contact/', views.user_request_view, name='user_request'),
     
     ########################## request ###########################################################
     path('user-requests/', views.user_requests_view, name='user_requests'),
