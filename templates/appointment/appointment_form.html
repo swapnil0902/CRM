@@ -2,15 +2,48 @@
 {% extends "crm/base.html" %}
 
 {% block title %}
-    {% if form.instance.pk %}<title>Update Appointment</title>{% else %}<title>Create Appointment</title>{% endif %}
+    {% if form.instance.pk %}
+        <title>Update Appointment</title>
+    {% else %}
+        <title>Create Appointment</title>
+    {% endif %}
 {% endblock %}
 
 {% block content %}
-    <h1>{% if form.instance.pk %}Update Appointment{% else %}Create Appointment{% endif %}</h1>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">{% if form.instance.pk %}Update{% else %}Create{% endif %} Appointment</button>
-    </form>
-    <a href="{% url 'appointment_list' %}">Back to Appointment List</a>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title text-center mb-4">
+                        {% if form.instance.pk %}
+                            Update Appointment
+                        {% else %}
+                            Create Appointment
+                        {% endif %}
+                    </h1>
+                    <form method="POST" novalidate>
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                {% if form.instance.pk %}
+                                    Update
+                                {% else %}
+                                    Create
+                                {% endif %}
+                                Appointment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <a href="{% url 'appointment_list' %}" class="btn btn-secondary">
+                    Back to Appointment List
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
