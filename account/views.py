@@ -26,7 +26,11 @@ from django.contrib.auth import logout,authenticate, login as auth_login
 from .forms import UsernamePasswordResetForm, OTPForm, SetNewPasswordForm
 from django.contrib.auth.decorators import login_required,user_passes_test
 from .forms import GroupForm, SignUpForm, UserRequestForm, CompanyRequestForm
+from django.http import JsonResponse
 
+@login_required
+def check_session(request):
+    return JsonResponse({'status': 'ok'})
 
 ############################### API ##############################################
 

@@ -34,7 +34,7 @@ def lead_list(request):
 ############################# Lead Details(Individual) ##################################
 @login_required
 @api_view(['POST', 'GET'])
-@user_passes_test(is_User)
+@user_passes_test(is_User_or_Manager)
 def lead_detail(request, lead_id):
     try:
         lead = get_object_or_404(Lead, id=lead_id)
