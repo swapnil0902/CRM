@@ -16,28 +16,40 @@
         </div>
         <ul class="list-group list-group-flush">
             {% for staff in staffs %}
-                <li class="list-group-item">
-                    <strong>{{ staff.username }}</strong>: Email - <a href="mailto:{{ staff.email }}">{{ staff.email }}</a>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ staff.username }}</strong>: Email - <a href="mailto:{{ staff.email }}">{{ staff.email }}</a>
+                    </div>
+                    <form method="post" action="{% url 'delete_my_user' staff.id %}" onsubmit="return confirm('Are you sure you want to delete this user?');">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
                 </li>
             {% empty %}
                 <li class="list-group-item">No users found.</li>
             {% endfor %}
         </ul>
-    </div>
-
-    <div class="card mb-4">
-        <div class="card-header">
-            <h2 class="h5">Account Managers</h2>
-        </div>
-        <ul class="list-group list-group-flush">
-            {% for manager in account_managers %}
-                <li class="list-group-item">
-                    <strong>{{ manager.username }}</strong>: Email - <a href="mailto:{{ manager.email }}">{{ manager.email }}</a>
-                </li>
-            {% empty %}
-                <li class="list-group-item">No account managers found.</li>
-            {% endfor %}
-        </ul>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2 class="h5">Account Managers</h2>
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for manager in account_managers %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>{{ manager.username }}</strong>: Email - <a href="mailto:{{ manager.email }}">{{ manager.email }}</a>
+                        </div>
+                        <form method="post" action="{% url 'delete_my_user' manager.id %}" onsubmit="return confirm('Are you sure you want to delete this user?');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item">No account managers found.</li>
+                {% endfor %}
+            </ul>
+        </div>  
     </div>
 </div>
 {% endblock %}

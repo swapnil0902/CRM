@@ -64,5 +64,9 @@ urlpatterns = [
     path('forgot_password/', views.forgot_password, name='forgot_password'),
     path('verify_otp/', views.verify_otp, name='verify_otp'),
     path('password_reset_confirm/', views.password_reset_confirm, name='password_reset_confirm'), 
+
+    #################################### delete account ###########################################
+    path('delete_account/', views.delete_account, name='delete_account'),
+    path('delete_user/<int:user_id>/', views.delete_my_user, name='delete_my_user'),
     
 ]
