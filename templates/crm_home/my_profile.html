@@ -128,6 +128,8 @@
             <input type="email" id="email" name="email" value="{{ user.email }}" {% if not editable %}readonly{% endif %}>
             <a href="{% url 'update_profile' %}" class="btn">Edit Profile</a>
             <a href="{% url 'change_password' %}" class="btn">Change Password</a>
+            <a href="{% url 'delete_account' %}" class="btn btn-danger mt-3">Delete My Account</a>
+
         </div>
     </div>
 
