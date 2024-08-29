@@ -1,13 +1,22 @@
 from .models import Task
+from account.views import *
+from rest_framework import generics
+from .serializers import TaskListSerializer
 from .forms import TaskForm,TaskFilterForm
 from rest_framework.decorators import api_view
 from django.contrib.auth import get_user_model
+from rest_framework.viewsets import ModelViewSet
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from account.views import *
+from rest_framework.permissions import IsAuthenticated,IsAdminUser, IsAuthenticatedOrReadOnly
 
 
 ######################### Tasks Details #########################################
+class TaskList(ModelViewSet):
+    queryset = Task.objects.all()
+    serializer_class = TaskListSerializer
+    permission_classes = (IsAuthenticated,IsAdminUser)
+
 @login_required
 def task_list(request):
     tasks = Task.objects.filter(assigned_to=request.user)
