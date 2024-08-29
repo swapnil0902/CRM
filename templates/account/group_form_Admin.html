@@ -1,9 +1,9 @@
 {% extends 'account/Admin_Page_base.html' %}
-{% block title %}Dashboard{% endblock %}
+{% block title %}New Role{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-    <h2 class="mb-4">Create a New Group</h2>
+    <h2 class="mb-4">Create a New Role</h2>
     <form method="post" action="{% url 'group_create' %}">
         {% csrf_token %}
         <div class="mb-3">
