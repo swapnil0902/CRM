@@ -58,7 +58,7 @@ def lead_detail(request, lead_id):
 
 ############################ Creating Leads ###########################################
 @login_required
-@user_passes_test(is_User)
+@user_passes_test(is_User_or_Manager)
 def lead_create(request):
     if request.method == 'POST':
         form = LeadForm(request.POST, user=request.user)
@@ -90,7 +90,7 @@ def lead_create(request):
 
 ############################ Deleting Leads ###########################################
 @api_view(['GET', 'DELETE'])
-@user_passes_test(is_User)
+@user_passes_test(is_User_or_Manager)
 def lead_delete(request, lead_id):
     lead = get_object_or_404(Lead, id=lead_id)
 
