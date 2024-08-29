@@ -5,7 +5,6 @@ from .serializers import TaskListSerializer
 from .forms import TaskForm,TaskFilterForm
 from rest_framework.decorators import api_view
 from django.contrib.auth import get_user_model
-from rest_framework.viewsets import ModelViewSet
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework.permissions import IsAuthenticated,IsAdminUser, IsAuthenticatedOrReadOnly
@@ -18,6 +17,7 @@ class TaskList(ModelViewSet):
     permission_classes = (IsAuthenticated,IsAdminUser)
 
 @login_required
+@user_passes_test(is_User_or_Manager)
 def task_list(request):
     tasks = Task.objects.filter(assigned_to=request.user)
     form = TaskFilterForm(request.GET or None)
@@ -48,7 +48,7 @@ def task_list(request):
 
 ######################## Creating Tasks ##########################################
 User = get_user_model()
-
+@user_passes_test(is_User_or_Manager)
 def task_create(request):
     if request.method == 'POST':
         form = TaskForm(request.POST, user=request.user)
@@ -75,6 +75,7 @@ def task_create(request):
 
 ########################  Updating Tasks #############################################
 @login_required
+@user_passes_test(is_User_or_Manager)
 def update_task(request, pk):
     task = get_object_or_404(Task, pk=pk)
     form = TaskForm(request.POST or None, instance=task, user = request.user)
@@ -86,6 +87,7 @@ def update_task(request, pk):
 
 ######################## Deleting Tasks ##########################################
 @login_required
+@user_passes_test(is_User_or_Manager)
 def delete_task(request, pk):
     task = get_object_or_404(Task, pk=pk)
     if request.method == 'POST':
@@ -95,6 +97,7 @@ def delete_task(request, pk):
 
 
 ######################## Tasks List(Company-Wise) ##########################################
+@user_passes_test(is_Account_Manager)
 def company_task_list(request):
     company = request.user.userprofile.company
     tasks = Task.objects.filter(assigned_to__userprofile__company=company)
@@ -126,6 +129,7 @@ def company_task_list(request):
 
 ######################## Update Tasks List(Company-Wise) ##########################################
 @login_required
+@user_passes_test(is_Account_Manager)
 def company_task_update(request, pk):
     task = get_object_or_404(Task, pk=pk)
     form = TaskForm(request.POST, instance=task)
@@ -138,6 +142,7 @@ def company_task_update(request, pk):
 ######################## Delete Tasks List(Company-Wise) ##########################################
 @api_view(['GET', 'DELETE'])
 @login_required
+@user_passes_test(is_Account_Manager)
 def company_task_delete(request, pk):
     task = get_object_or_404(Task, pk=pk)
     task.delete()
