@@ -108,7 +108,7 @@ LOGIN_URL = '/login/'
 # settings.py
 # LOGIN_REDIRECT_URL = '/dash/'  # Redirect to the desired path after login
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
 WSGI_APPLICATION = 'CRM.wsgi.application'
