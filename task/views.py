@@ -1,10 +1,10 @@
 from .models import Task
 from account.views import *
-from rest_framework import generics
-from .serializers import TaskListSerializer
 from .forms import TaskForm,TaskFilterForm
-from rest_framework.decorators import api_view
+from .serializers import TaskListSerializer
 from django.contrib.auth import get_user_model
+from rest_framework.decorators import api_view
+from rest_framework.viewsets import ModelViewSet
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework.permissions import IsAuthenticated,IsAdminUser, IsAuthenticatedOrReadOnly
