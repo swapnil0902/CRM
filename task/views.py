@@ -7,14 +7,17 @@ from rest_framework.decorators import api_view
 from rest_framework.viewsets import ModelViewSet
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from rest_framework.permissions import IsAuthenticated,IsAdminUser, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated,IsAdminUser
 
 
-######################### Tasks Details #########################################
+############################### API ##############################################
+
 class TaskList(ModelViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskListSerializer
     permission_classes = (IsAuthenticated,IsAdminUser)
+
+######################### Tasks Details #########################################
 
 @login_required
 @user_passes_test(is_User_or_Manager)

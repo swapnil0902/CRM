@@ -1,13 +1,25 @@
+from account.views import *
 from .forms import CustomerForm
 from django.shortcuts import render
 from customer.models import Customer
+from .serializers import CustomerSerializer
 from rest_framework.decorators import api_view
+from rest_framework.viewsets import ModelViewSet
 from django.http import HttpResponseNotAllowed, Http404
-from django.contrib.auth.decorators import login_required,user_passes_test
 from django.shortcuts import get_object_or_404, redirect, render
-from account.views import *
+from rest_framework.permissions import IsAuthenticated,IsAdminUser
+from django.contrib.auth.decorators import login_required,user_passes_test
+
 
 #create your views here
+
+############################### API ##############################################
+
+class CustomerList(ModelViewSet):
+    queryset = Customer.objects.all()
+    serializer_class = CustomerSerializer
+    permission_classes = (IsAuthenticated,IsAdminUser)
+
 
 ######################## Customer Lists ##########################################
 @login_required

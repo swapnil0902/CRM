@@ -14,13 +14,36 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
+
 from crm_home import views
-from django.contrib.auth import views as auth_views
+from lead.views import LeadViewSet
+from task.views import TaskList
+from django.contrib import admin
 from django.urls import path, include
+from customer.views import CustomerList
+from appointment.views import AppointmentList
+from rest_framework.routers import DefaultRouter
+from django.contrib.auth import views as auth_views
+from account.views import UserRequestList,UserList,CompanyRequestList
+
+
+router = DefaultRouter()
+router.register(r'appointment',AppointmentList)
+#Account
+router.register(r'user_request',UserRequestList)
+router.register(r'user_list',UserList)
+router.register(r'company_request',CompanyRequestList)
+#
+router.register(r'customer',CustomerList)
+router.register(r'lead',LeadViewSet)
+router.register(r'task',TaskList)
 
 
 urlpatterns = [
+    
+    ################### API PART ########################################
+    path('api/',include(router.urls)),
+
     #################### CRM_HOME URLS ########################################
     path('',views.home, name="home"),
     path('dash/', views.dashboard, name="dashboard"),
@@ -50,8 +73,6 @@ urlpatterns = [
 
     ################### Search ########################################
     path('search/', views.master_search, name='master_search'),
-
-    ################### API PART ########################################
 
     ########################### THE END #######################################
 ]
