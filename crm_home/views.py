@@ -115,13 +115,8 @@ def company_list(request):
 @login_required
 @user_passes_test(is_Admin)
 def company_detail(request, pk):
- # Get the company instance
     company = get_object_or_404(Company, pk=pk)
-    
-    # Fetch all users related to the company
     company_users = User.objects.filter(userprofile__company=company)
-    
-    # Filter users by their groups
     staffs = company_users.filter(groups__name='Staff')
     account_managers = company_users.filter(groups__name='Account Manager')          
 

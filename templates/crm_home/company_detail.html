@@ -5,7 +5,6 @@
 {% block content %}
     <div class="container mt-5">
         <div class="row">
-            <!-- Company Information -->
             <div class="col-md-12 mb-4">
                 <div class="card">
                     <div class="card-body">
@@ -16,7 +15,6 @@
             </div>
 
             <div class="row">
-                <!-- Staff List -->
                 <div class="col-md-6 mb-4">
                     {% comment %} <h2>Staff Members</h2> {% endcomment %}
                     {% if staffs %}
@@ -37,7 +35,6 @@
                     {% endif %}
                 </div>
         
-                <!-- Account Managers List -->
                 <div class="col-md-6 mb-4">
                     {% comment %} <h2>Account Managers</h2> {% endcomment %}
                     {% if account_managers %}
@@ -59,7 +56,6 @@
                 </div>
             </div>
 
-            <!-- Add Account Manager Form -->
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
@@ -74,7 +70,6 @@
             </div>
         </div>
 
-        <!-- Back to Company List Link -->
         <div class="mt-4">
             <a href="{% url 'company_list' %}" class="btn btn-secondary">Back to Company List</a>
         </div>
