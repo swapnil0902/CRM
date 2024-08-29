@@ -1,0 +1,94 @@
+#sidebar-wrapper {
+    height: 100vh;
+    min-width: 300px;
+    position: sticky;
+    top: 0; /* Position sticky */
+}
+#container {
+    max-height: 100vh; /* Set max height to the viewport height */
+    overflow-y: auto;  /* Enable vertical scrolling */
+    padding: 20px;     /* Add some padding for content */
+}
+/* Container Styling */
+
+
+/* Heading Styling */
+h1.text-center {
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+/* Form Styling */
+form {
+    width: 100%;
+    max-width: 600px;
+}
+
+/* Label Styling */
+form label {
+    font-family: 'Arial', sans-serif;
+    color: #555;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 8px;
+}
+
+/* Input and Select Styling */
+form input[type="text"],
+form input[type="date"],
+form input[type="email"],
+form input[type="time"],
+form textarea ,
+form select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    font-family: 'Arial', sans-serif;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+form input[type="text"]:focus,
+form input[type="email"]:focus,
+form input[type="date"]:focus,
+form input[type="time"]:focus,
+form textarea :focus,
+form select:focus {
+    border-color: #5cb85c;
+    box-shadow: 0 0 5px rgba(92, 184, 92, 0.5);
+}
+
+/* Option Styling */
+form select option {
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+}
+
+/* Button Styling */
+form button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+    font-family: 'Arial', sans-serif;
+    color: #fff;
+    background-color: #5cb85c;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 8px rgba(92, 184, 92, 0.2);
+}
+
+form button[type="submit"]:hover {
+    background-color: #4cae4c;
+}
+
+/* Paragraph Styling */
+form p {
+    margin-bottom: 20px;
+}

@@ -6,7 +6,7 @@ from django.utils import timezone
 
 
 class Appointment(models.Model):
-    title = models.CharField(max_length=100,null = False, default='Enter the Title')
+    title = models.CharField(max_length=100,blank=False)
     description = models.TextField(blank=True)
     start_date = models.DateField(default=timezone.now)
     end_date = models.DateField(default=timezone.now)
