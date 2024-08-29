@@ -20,7 +20,7 @@ from .forms import CompanyForm,AccountManagerForm,CompanyForm,UserUpdateForm
 # Create your views here.
 ########################### Default Home Page ############################################
 def home(request):
-    return render(request,"crm_home/index.html")
+    return render(request, "crm_home/index.html", )
 
 
 ############################  Dashboard View #############################################
