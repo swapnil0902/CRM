@@ -62,7 +62,7 @@ def customer_detail(request, customer_id):
         form = CustomerForm(request.POST, instance=customer)
         if form.is_valid():
             form.save()
-            return redirect('customer_detail', customer_id=customer_id)
+            return redirect('customer-view', customer_id=customer_id)
         else:
             return render(request, 'customer/customer_detail.html', {'form': form})
 
