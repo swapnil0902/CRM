@@ -1,4 +1,5 @@
-from .models import User,UserRequest,CompanyRequest
+from django.contrib.auth.models import User
+from .models import UserRequest,CompanyRequest
 from rest_framework import serializers
 
 class UserListSerializer(serializers.ModelSerializer):

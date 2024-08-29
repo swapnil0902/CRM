@@ -29,9 +29,11 @@ from account.views import UserRequestList,UserList,CompanyRequestList
 
 router = DefaultRouter()
 router.register(r'appointment',AppointmentList)
+#Account
 router.register(r'user_request',UserRequestList)
 router.register(r'user_list',UserList)
 router.register(r'company_request',CompanyRequestList)
+#
 router.register(r'customer',CustomerList)
 router.register(r'lead',LeadViewSet)
 router.register(r'task',TaskList)
