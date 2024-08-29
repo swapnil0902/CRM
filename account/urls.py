@@ -69,4 +69,6 @@ urlpatterns = [
     path('delete_account/', views.delete_account, name='delete_account'),
     path('delete_user/<int:user_id>/', views.delete_my_user, name='delete_my_user'),
     
+
+    path('check_session/', views.check_session, name='check_session'),
 ]

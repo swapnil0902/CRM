@@ -74,6 +74,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'account.middleware.SessionTimeoutMiddleware',
     'django_otp.middleware.OTPMiddleware',
 ]
 
@@ -101,12 +102,6 @@ TEMPLATES = [
 # CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 LOGIN_URL = '/login/'
-# LOGIN_URL = 'mfa:login'
-# SITE_ID = 1
-# TWO_FACTOR_AUTHENTICATION_REQUIRED = True
-
-# settings.py
-# LOGIN_REDIRECT_URL = '/dash/'  # Redirect to the desired path after login
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
@@ -181,10 +176,10 @@ EMAIL_HOST_PASSWORD = 'ktxcsbrjjycdpexb'
 EMAIL_USE_TLS = True
 
 
-# SESSION_COOKIE_AGE =180  # Time in seconds
+SESSION_COOKIE_AGE =20005  # Time in seconds
 
-# # Expire session on browser close
-# SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+# Expire session on browser close
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
-# # Save the session on every request, so inactivity is properly tracked
-# SESSION_SAVE_EVERY_REQUEST = True
+# Save the session on every request, so inactivity is properly tracked
+SESSION_SAVE_EVERY_REQUEST = True
