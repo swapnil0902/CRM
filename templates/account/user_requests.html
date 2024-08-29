@@ -9,12 +9,11 @@
         <thead class="thead-dark">
             <tr>
                 <th>#</th>
-                <th>Customer Name</th>
+                <th>User Name</th>
                 <th>Email</th>
-                <th>Mobile No</th>
                 <th>Status</th>
                 <th>Company</th>
-                <th>Date Submitted</th>
+                {% comment %} <th>Date Submitted</th> {% endcomment %}
                 <th>Actions</th>
             </tr>
         </thead>
@@ -24,10 +23,9 @@
                 <td>{{ forloop.counter }}</td>
                 <td>{{ request.first_name }}</td>
                 <td>{{ request.email }}</td>
-                <td>{{ request.mobile }}</td>
                 <td>{{ request.approved }}</td>
                 <td>{{ request.company }}</td>
-                <td>{{ request.date_joined|date:"F j, Y" }}</td>
+                {% comment %} <td>{{ request.date_joined}}</td> {% endcomment %}
                 <td>
                     <a href="{% url 'signup' request.id %}" class="btn btn-success btn-sm">Create Account</a>
                 </td>
