@@ -26,6 +26,7 @@ class AppointmentForm(forms.ModelForm):
             user_profile = UserProfile.objects.get(staff=user)
             self.fields['customer'].queryset = Customer.objects.filter(company=user_profile.company)
         except UserProfile.DoesNotExist:
+            # Handle the case where UserProfile does not exist
             self.fields['customer'].queryset = Customer.objects.none()
 
 
