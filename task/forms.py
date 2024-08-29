@@ -1,6 +1,7 @@
 from django import forms
 from .models import Task
 from crm_home.models import UserProfile
+from customer.models import Customer
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 
@@ -25,6 +26,9 @@ class TaskForm(forms.ModelForm):
             self.fields['assigned_to'].required = True  
         else:
             self.fields.pop('assigned_to')
+
+        user_profile = get_object_or_404(UserProfile, staff=user)
+        self.fields['customer'].queryset = Customer.objects.filter(company=user_profile.company)
 
 
 class TaskFilterForm(forms.Form):

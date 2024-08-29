@@ -1,6 +1,7 @@
 import random
 from django.views import View
 from datetime import timedelta
+from django.urls import reverse
 from django.conf import settings
 from django.utils import timezone
 from django.contrib import messages
@@ -485,5 +486,30 @@ def password_reset_confirm(request):
         form = SetNewPasswordForm()
 
     return render(request, 'registration/password_reset_form.html', {'form': form})
+
+
+################################## Delete Account #########################################################
+
+def delete_account(request):
+    if request.method == "POST":
+        user = request.user
+        user.delete()
+        messages.success(request, "Your account has been deleted successfully.")
+        return redirect('home')
+    return render(request, 'account/delete_account.html')
+
+
+################################## Delete My User #########################################################
+
+def delete_my_user(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+
+    # Ensure only users from the same company can be deleted
+    if request.method == 'POST':
+        user.delete()
+        return redirect('mngr_dashboard')  
+    else:
+        return redirect('mngr_dashboard')  
+    
 
 ################################## THE-END #########################################################
