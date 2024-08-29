@@ -1,15 +1,16 @@
 import random
+from .serializers import *
 from django.views import View
 from datetime import timedelta
 from django.conf import settings
 from django.utils import timezone
 from django.contrib import messages
-from django.http import HttpResponse
 from django.core.mail import send_mail
 from datetime import datetime, timedelta
 from django.utils.html import strip_tags
 from django.utils.encoding import force_bytes
 from .models import UserRequest, CompanyRequest
+from rest_framework.viewsets import ModelViewSet
 from crm_home.models import Company, UserProfile
 from django.contrib.auth.models import Group, User
 from django.utils.http import urlsafe_base64_encode
@@ -19,10 +20,31 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.tokens import default_token_generator
 from django.shortcuts import render, get_object_or_404, redirect
+from rest_framework.permissions import IsAuthenticated,IsAdminUser
+from django.contrib.auth import logout,authenticate, login as auth_login
 from .forms import UsernamePasswordResetForm, OTPForm, SetNewPasswordForm
 from django.contrib.auth.decorators import login_required,user_passes_test
 from .forms import GroupForm, SignUpForm, UserRequestForm, CompanyRequestForm
-from django.contrib.auth import logout, update_session_auth_hash, authenticate, login as auth_login
+
+
+############################### API ##############################################
+
+class UserRequestList(ModelViewSet):
+    queryset = UserRequest.objects.all()
+    serializer_class = UserRequestListSerializer
+    permission_classes = (IsAuthenticated,IsAdminUser)
+
+
+class UserList(ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserListSerializer
+    permission_classes = (IsAuthenticated,IsAdminUser)
+
+
+class CompanyRequestList(ModelViewSet):
+    queryset = CompanyRequest.objects.all()
+    serializer_class = CompanyRequestListSerializer
+    permission_classes = (IsAuthenticated,IsAdminUser)
 
 
 ############################# Dividing Groups #########################################################

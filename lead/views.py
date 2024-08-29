@@ -1,15 +1,16 @@
 from .models import Lead
+from account.views import *
 from .forms import LeadForm
 from django.http import Http404
 from rest_framework import viewsets
 from .serializers import LeadSerializer
+from django.http import HttpResponseNotAllowed
 from django.contrib.auth import get_user_model
 from rest_framework.decorators import api_view
 from crm_home.models import Company, UserProfile
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponseForbidden, HttpResponseNotAllowed
-from account.views import *
+
 
 ######################## Import The User Data ##########################################
 User = get_user_model()
