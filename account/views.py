@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.conf import settings
 from django.utils import timezone
 from django.contrib import messages
+from django.http import JsonResponse
 from django.core.mail import send_mail
 from datetime import datetime, timedelta
 from django.utils.html import strip_tags
@@ -14,6 +15,7 @@ from .models import UserRequest, CompanyRequest
 from rest_framework.viewsets import ModelViewSet
 from crm_home.models import Company, UserProfile
 from django.contrib.auth.models import Group, User
+from django.core.exceptions import ValidationError
 from django.utils.http import urlsafe_base64_encode
 from django.template.loader import render_to_string
 from django.contrib.auth.forms import AuthenticationForm
@@ -22,11 +24,13 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.tokens import default_token_generator
 from django.shortcuts import render, get_object_or_404, redirect
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
+from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth import logout,authenticate, login as auth_login
 from .forms import UsernamePasswordResetForm, OTPForm, SetNewPasswordForm
 from django.contrib.auth.decorators import login_required,user_passes_test
 from .forms import GroupForm, SignUpForm, UserRequestForm, CompanyRequestForm
-from django.http import JsonResponse
+
+
 
 @login_required
 def check_session(request):
@@ -529,19 +533,26 @@ def password_reset_confirm(request):
         if form.is_valid():
             username = request.session.get('reset_username')
             new_password = form.cleaned_data['new_password']
+
+            # Validate the new password using Django's validators
             try:
-                user = User.objects.get(username=username)
-                user.set_password(new_password)
-                user.save()
-                messages.success(request, 'Password reset successfully.')
-                return redirect('login')
-            except User.DoesNotExist:
-                form.add_error(None, 'Error resetting password. Please try again.')
+                validate_password(new_password)
+            except ValidationError as e:
+                # Add validation errors to the form
+                form.add_error('new_password', e)
+            else:
+                try:
+                    user = User.objects.get(username=username)
+                    user.set_password(new_password)
+                    user.save()
+                    messages.success(request, 'Password reset successfully.')
+                    return redirect('login')
+                except User.DoesNotExist:
+                    form.add_error(None, 'Error resetting password. Please try again.')
     else:
         form = SetNewPasswordForm()
 
     return render(request, 'registration/password_reset_form.html', {'form': form})
-
 
 ################################## Delete Account #########################################################
 
