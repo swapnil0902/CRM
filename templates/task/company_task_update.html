@@ -6,10 +6,12 @@
 {% endblock %}
 
 {% block stylesheets %}
-        <link rel="stylesheet" type="text/css" href="{% static 'lead/styles.css' %}">
+        {% comment %} <link rel="stylesheet" type="text/css" href="{% static 'lead/styles.css' %}"> {% endcomment %}
+        <link rel="stylesheet" href="{% static 'customer/styles.css' %}"/>
 {% endblock %}
 
 {% block content %}
+<div class="container mt-5 some">
     <h1>Update Task</h1>
     <form method="POST">
         {% csrf_token %}
@@ -17,4 +19,5 @@
         <button type="submit">Update Task</button>
     </form>
     <a href="{% url 'task_list' %}">Back to Task List</a>
+</div>
 {% endblock %}
