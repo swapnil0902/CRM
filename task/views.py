@@ -135,12 +135,16 @@ def company_task_list(request):
 @user_passes_test(is_Account_Manager)
 def company_task_update(request, pk):
     task = get_object_or_404(Task, pk=pk)
-    form = TaskForm(request.POST, instance=task)
-    if form.is_valid():
-        form.save()
-        return redirect('company_task_list')
-    return render(request, 'task/company_task_update.html', {'form': form})
+    
+    if request.method == 'POST':
+        form = TaskForm(request.POST, instance=task, user=request.user)  # Pass the user here
+        if form.is_valid():
+            form.save()
+            return redirect('company_task_list')
+    else:
+        form = TaskForm(instance=task, user=request.user)  # Pass the user here
 
+    return render(request, 'task/company_task_update.html', {'form': form})
 
 ######################## Delete Tasks List(Company-Wise) ##########################################
 @api_view(['GET', 'DELETE'])

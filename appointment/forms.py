@@ -22,7 +22,13 @@ class AppointmentForm(forms.ModelForm):
         if user and user.groups.filter(name='Staff').exists():
             self.fields.pop('attendees')
 
-        user_profile = get_object_or_404(UserProfile, staff=user)
-        self.fields['customer'].queryset = Customer.objects.filter(company=user_profile.company)
+        try:
+            user_profile = UserProfile.objects.get(staff=user)
+            self.fields['customer'].queryset = Customer.objects.filter(company=user_profile.company)
+        except UserProfile.DoesNotExist:
+            # Handle the case where UserProfile does not exist
+            self.fields['customer'].queryset = Customer.objects.none()
+
 
 ##################################          #########################################################
+

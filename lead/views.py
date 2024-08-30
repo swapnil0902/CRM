@@ -44,7 +44,7 @@ def lead_detail(request, lead_id):
         form = LeadForm(request.POST, instance=lead, user = request.user)
         if form.is_valid():
             form.save()
-            return redirect('lead_detail', lead_id=lead_id)
+            return redirect('lead-view')
         else:
             return render(request, 'lead/lead_detail.html', {'lead': lead, 'form': form})
     

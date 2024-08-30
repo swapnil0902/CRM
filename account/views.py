@@ -289,7 +289,7 @@ def signup(request, request_id=None):
             if user_request:
                 user_request.delete()
 
-            return redirect('home')
+            return redirect('mngr_dashboard')
     else:
          
         initial_data = {
@@ -342,7 +342,7 @@ def manual_signup(request):
                 html_message=html_message,   
             )
 
-            return redirect('home')
+            return redirect('mngr_dashboard')
     else:
         form = SignUpForm()
 
