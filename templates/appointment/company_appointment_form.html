@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="container mt-5">
+<div class="container mt-5 some">
     <h1 class="mb-4">{% if form.instance.pk %}Update Appointment{% else %}Create Appointment{% endif %}</h1>
     <form method="POST">
         {% csrf_token %}
