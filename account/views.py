@@ -534,11 +534,9 @@ def password_reset_confirm(request):
             username = request.session.get('reset_username')
             new_password = form.cleaned_data['new_password']
 
-            # Validate the new password using Django's validators
             try:
                 validate_password(new_password)
             except ValidationError as e:
-                # Add validation errors to the form
                 form.add_error('new_password', e)
             else:
                 try:
