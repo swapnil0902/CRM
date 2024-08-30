@@ -1,0 +1,137 @@
+/* .container {
+    display: flex;
+    flex-direction: row;
+}
+.main-content{
+    background-color: aqua;
+}
+
+.sidebar {
+    width: 20%;
+    background-color: #f0f0f0;
+    padding: 20px;
+}
+
+.main-content {
+    width: 80%;
+    padding: 20px;
+}
+
+.box {
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    padding: 5px 0;
+}
+
+h2, h3 {
+    margin-top: 0;
+}
+
+
+
+.container {
+    display: flex;
+}
+
+.sidebar {
+    width: 20%;
+    background-color: #f4f4f4;
+    min-height: 93.9vh;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin: 10px 0;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: #333;
+}
+
+.content {
+    width: 80%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.content h2 {
+    margin-top: 0;
+}
+
+.Requestcontaineer{
+    display: flex;
+    flex-direction: column;
+    background-color: antiquewhite;
+} */
+
+.sidebar {
+    min-height: 100vh; /* Full viewport height */
+    position: sticky; /* Make sidebar sticky */
+    top: 0;
+    background-color: #f8f9fa; /* Light gray background */
+    padding-top: 1rem;
+}
+
+.sidebar h5 {
+    color: #6c757d; /* Muted text color */
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+}
+
+.sidebar .nav-item {
+    margin-bottom: 0.5rem;
+}
+
+.sidebar .nav-item a {
+    color: #495057; /* Dark gray text */
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    display: block;
+    text-decoration: none;
+    border-radius: 0.25rem;
+    transition: background-color 0.2s;
+}
+
+.sidebar .nav-item a:hover {
+    background-color: #e2e6ea; /* Light hover effect */
+    color: #343a40; /* Darker text on hover */
+}
+
+.content {
+    background-color: #ffffff; /* White background for content */
+    padding: 2rem;
+    border-left: 1px solid #dee2e6; /* Light border on the left */
+    border-radius: 0.25rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); /* Subtle shadow */
+}
+
+.content h1 {
+    color: #343a40; /* Dark text color for headings */
+    margin-bottom: 1.5rem;
+}
+
+.content .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.content .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+}
