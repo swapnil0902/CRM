@@ -249,15 +249,20 @@ def group_delete_Admin(request, pk):
 @login_required
 @user_passes_test(is_Account_Manager)
 def signup(request, request_id=None):
+    user_request = None
     if request_id:
-        user_request = get_object_or_404(UserRequest, id=request_id)  # Fetch the user request
+        user_request = get_object_or_404(UserRequest, id=request_id)   
 
     account_manager_profile = UserProfile.objects.get(staff=request.user)
     company = account_manager_profile.company
 
     if request.method == 'POST':
         form = SignUpForm(request.POST)
-        if form.is_valid():
+        email = form.data.get('email')
+    
+        if User.objects.filter(email=email).exists():
+            form.add_error('email', 'A user with this email already exists.')
+        elif form.is_valid():
             user, password = form.save()
             username = form.cleaned_data.get('username')
 
@@ -291,12 +296,10 @@ def signup(request, request_id=None):
 
             return redirect('mngr_dashboard')
     else:
-         
         initial_data = {
-            'first_name': user_request.first_name,
-            'last_name': user_request.last_name,
-            'email': user_request.email,
-            
+            'first_name': user_request.first_name if user_request else '',
+            'last_name': user_request.last_name if user_request else '',
+            'email': user_request.email if user_request else '',
         }
         form = SignUpForm(initial=initial_data)
 
@@ -312,15 +315,19 @@ def manual_signup(request):
 
     if request.method == 'POST':
         form = SignUpForm(request.POST)
-        if form.is_valid():
-            user, password = form.save()
+        email = form.data.get('email')
+ 
+        if User.objects.filter(email=email).exists():
+            form.add_error('email', 'A user with this email already exists.')
+        elif form.is_valid():
+            user, password = form.save() 
             UserProfile.objects.create(
                 staff=user,
                 company=company
             )
-            username = form.cleaned_data.get('username')
             
- 
+            username = form.cleaned_data.get('username')
+
             html_message = render_to_string(
                 'account/email_template.html',  
                 {
@@ -348,14 +355,18 @@ def manual_signup(request):
 
     return render(request, 'account/signup.html', {'form': form})
 
-
 ############################# User Lists #########################################################
 def user_request_view(request):
     companies = Company.objects.all()
 
     if request.method == 'POST':
         form = UserRequestForm(request.POST)
-        if form.is_valid():
+        email = form.data.get('email')  # Retrieve the email from the form data
+
+        # Check if the email already exists in the User model
+        if User.objects.filter(email=email).exists():
+            form.add_error('email', 'A user with this email already exists.')
+        elif form.is_valid():
             form.save()
             print("Form Data:", form.cleaned_data)
             return redirect('request_submitted') 
@@ -371,11 +382,17 @@ def user_request_view(request):
 def company_request_view(request):
     if request.method == 'POST':
         form = CompanyRequestForm(request.POST)
-        if form.is_valid():
+        company_name = form.data.get('name')  # Adjust the field name as per your form
+        
+        # Check if the company name already exists
+        if Company.objects.filter(name=company_name).exists():
+            form.add_error('name', 'A company with this name already exists.')
+        elif form.is_valid():
             form.save()
             return redirect('request_submitted')  
     else:
         form = CompanyRequestForm()
+
     return render(request, 'account/company_request_form.html', {'form': form})
 
 
