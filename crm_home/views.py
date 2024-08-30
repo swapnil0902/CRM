@@ -165,11 +165,26 @@ def company_detail(request, pk):
 @user_passes_test(is_User_or_Manager)
 def master_search(request):
     query = request.GET.get('q', '')
+    user_profile = UserProfile.objects.get(staff=request.user)
+    company = user_profile.company
 
-    tasks = Task.objects.filter(Q(title__icontains=query) | Q(description__icontains=query))
-    appointments = Appointment.objects.filter(Q(title__icontains=query) | Q(description__icontains=query) | Q(location__icontains=query))
-    customers = Customer.objects.filter(Q(first_name__icontains=query) | Q(last_name__icontains=query) | Q(email__icontains=query))
-    leads = Lead.objects.filter(Q(first_name__icontains=query) | Q(last_name__icontains=query) | Q(email__icontains=query))
+    # Assuming Task is related to Customer, and Customer is related to Company
+    tasks = Task.objects.filter(
+        Q(title__icontains=query) | Q(description__icontains=query),
+        customer__company=company
+    )
+    appointments = Appointment.objects.filter(
+        Q(title__icontains=query) | Q(description__icontains=query) | Q(location__icontains=query),
+        customer__company=company
+    )
+    customers = Customer.objects.filter(
+        Q(first_name__icontains=query) | Q(last_name__icontains=query) | Q(email__icontains=query),
+        company=company
+    )
+    leads = Lead.objects.filter(
+        Q(first_name__icontains=query) | Q(last_name__icontains=query) | Q(email__icontains=query),
+        company=company
+    )
 
     return render(request, 'crm_home/search_results.html', {
         'query': query,
@@ -178,5 +193,4 @@ def master_search(request):
         'customers': customers,
         'leads': leads,
     })
-
 ############################## THE-END #############################################################
