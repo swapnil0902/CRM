@@ -403,6 +403,18 @@ def user_requests_view(request):
     return render(request, 'account/user_requests.html', {'user_requests': user_requests})
 
 
+@login_required
+@user_passes_test(is_Account_Manager)
+def delete_user_request(request, request_id):
+    user_request = get_object_or_404(UserRequest, id=request_id)
+    
+    if request.method == 'POST':
+        user_request.delete()
+        messages.success(request, 'User request has been deleted successfully.')
+        return redirect('user_requests')
+    
+    return render(request, 'account/user_requests.html')
+
 ################################## Logout View ############################################################
 @login_required
 def logout_view(request):

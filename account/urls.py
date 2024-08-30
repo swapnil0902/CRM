@@ -18,6 +18,7 @@ urlpatterns = [
     ########################## request ###########################################################
     path('user-requests/', views.user_requests_view, name='user_requests'),
     path('request-submitted/', views.request_submitted_view, name='request_submitted'),
+    path('delete-user-request/<int:request_id>/', views.delete_user_request, name='delete_user_request'),
     path('create-company-from-request/<int:request_id>/', crm_homeview.prefilled_create_company, name='prefilled_create_company'),
     path('list-new-company-requests/', views.list_new_company_requests, name='list_new_company_requests'),
 
