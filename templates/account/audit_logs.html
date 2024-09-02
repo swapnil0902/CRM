@@ -1,0 +1,44 @@
+{% extends "crm/base.html" %}
+
+{% block title %}
+    <title>Audit Logs</title>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Audit Logs</h2>
+
+    {% if audit_logs %}
+        <div class="row">
+            {% for log in audit_logs %}
+                <div class="col-md-4 col-sm-6 mb-4"> 
+                    <div class="card shadow-sm h-100 audit-log-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Username: {{ log.user_name }}</h5>
+                            <p class="card-text"><strong>Role:</strong> {{ log.group }}</p>
+                            <p class="card-text"><strong>Action:</strong> {{ log.description }}</p>
+                            <p class="card-text"><strong>IP Address:</strong> {{ log.ip_address }}</p>
+                            <p class="card-text"><small class="text-muted">Timestamp: {{ log.timestamp }}</small></p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center" role="alert">
+            No audit logs found.
+        </div>
+    {% endif %}
+</div>
+
+<style>
+    .audit-log-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .audit-log-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+</style>
+{% endblock %}
