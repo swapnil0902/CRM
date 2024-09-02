@@ -8,7 +8,7 @@ from django.contrib.auth.models import User, Group
 class CompanyForm(forms.ModelForm):
     class Meta:
         model = Company
-        fields = ['name', 'service']  # Fields to include in the form
+        fields = ['name', 'service']  
 
     name = forms.CharField(
         max_length=255,
@@ -30,7 +30,7 @@ class AccountManagerForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        fields = ['company']  # Only include the company field here
+        fields = ['company']  
 
     def __init__(self, *args, **kwargs):
         super(AccountManagerForm, self).__init__(*args, **kwargs)

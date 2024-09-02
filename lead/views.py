@@ -93,7 +93,6 @@ def lead_create(request):
 @user_passes_test(is_User_or_Manager)
 def lead_delete(request, lead_id):
     lead = get_object_or_404(Lead, id=lead_id)
-
     lead.delete()
     return redirect('lead-view')
 
@@ -106,9 +105,7 @@ def company_lead_list(request):
         return redirect('login')  
 
     company = request.user.userprofile.company
-
     leads = Lead.objects.filter(company=company)
-
     return render(request, 'lead/company_lead_list.html', {'leads': leads})
 
 
@@ -141,7 +138,6 @@ def company_lead_detail(request, lead_id):
 @user_passes_test(is_Account_Manager)
 def company_lead_delete(request, lead_id):
     lead = get_object_or_404(Lead, id=lead_id)
-
     lead.delete()
     return redirect('company_lead_list')
 

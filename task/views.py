@@ -137,12 +137,12 @@ def company_task_update(request, pk):
     task = get_object_or_404(Task, pk=pk)
     
     if request.method == 'POST':
-        form = TaskForm(request.POST, instance=task, user=request.user)  # Pass the user here
+        form = TaskForm(request.POST, instance=task, user=request.user)  
         if form.is_valid():
             form.save()
             return redirect('company_task_list')
     else:
-        form = TaskForm(instance=task, user=request.user)  # Pass the user here
+        form = TaskForm(instance=task, user=request.user)  
 
     return render(request, 'task/company_task_update.html', {'form': form})
 
