@@ -124,8 +124,9 @@ def company_lead_detail(request, lead_id):
         form = LeadForm(request.POST, instance=lead, user = request.user)
         if form.is_valid():
             form.save()
-            return redirect('company_lead_detail', lead_id=lead_id)
+            return redirect('company_lead_list')
         else:
+            print(form.errors)
             return render(request, 'lead/company_lead_detail.html', {'lead': lead, 'form': form})
     
     elif request.method == 'GET':

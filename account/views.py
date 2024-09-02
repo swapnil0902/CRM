@@ -67,7 +67,7 @@ def is_Admin(user):
     return user.is_superuser
 
 
-############################# Build-In Django View ######################################################
+############################# Built-In Django View ######################################################
 class CustomLoginView(View):
     form_class = AuthenticationForm
     template_name = 'registration/login.html'
@@ -78,6 +78,8 @@ class CustomLoginView(View):
             return self._redirect_user(request.user)
 
         form = self.form_class()
+
+
         return render(request, self.template_name, {'form': form})
 
     def post(self, request):

@@ -168,7 +168,6 @@ def master_search(request):
     user_profile = UserProfile.objects.get(staff=request.user)
     company = user_profile.company
 
-    # Assuming Task is related to Customer, and Customer is related to Company
     tasks = Task.objects.filter(
         Q(title__icontains=query) | Q(description__icontains=query),
         customer__company=company
