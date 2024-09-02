@@ -1,6 +1,7 @@
 from .models import Lead
 from account.views import *
 from .forms import LeadForm
+from django.db.models import Q
 from django.http import Http404
 from rest_framework import viewsets
 from .serializers import LeadSerializer
@@ -26,9 +27,19 @@ class LeadViewSet(viewsets.ModelViewSet):
 @login_required
 @user_passes_test(is_User_or_Manager)
 def lead_list(request):
-    user = request.user 
-    leads = Lead.objects.filter(staff=request.user )
-    return render(request, 'lead/lead.html', {'leads': leads})
+    user = request.user
+    leads = Lead.objects.filter(staff=user)
+    query = request.GET.get('q', '')  
+ 
+    if query:
+        leads = leads.filter(
+            Q(first_name__icontains=query) | 
+            Q(last_name__icontains=query) |
+            Q(email__icontains=query) |
+            Q(phone_number__icontains=query)
+        )
+
+    return render(request, 'lead/lead.html', {'leads': leads, 'query': query})
 
 
 ############################# Lead Details(Individual) ##################################
@@ -43,6 +54,14 @@ def lead_detail(request, lead_id):
     if request.method == 'POST':
         form = LeadForm(request.POST, instance=lead, user = request.user)
         if form.is_valid():
+            user_details = get_user_details(request)
+            create_audit_log(
+                username=user_details['username'],
+                user_company=user_details['user_company'],
+                group=user_details['group_names'],
+                description=f"Lead Details are updated",
+                ip_address=user_details['ip_address']
+            )
             form.save()
             return redirect('lead-view')
         else:
@@ -78,6 +97,14 @@ def lead_create(request):
                     return render(request, 'lead/lead_create.html', {'form': form, 'user': request.user})
 
             lead.save()
+            user_details = get_user_details(request)
+            create_audit_log(
+                username=user_details['username'],
+                user_company=user_details['user_company'],
+                group=user_details['group_names'],
+                description=f"New Lead is created",
+                ip_address=user_details['ip_address']
+            )
             return redirect('lead-view')
     else:
         form = LeadForm(user=request.user)
@@ -93,7 +120,14 @@ def lead_create(request):
 @user_passes_test(is_User_or_Manager)
 def lead_delete(request, lead_id):
     lead = get_object_or_404(Lead, id=lead_id)
-
+    user_details = get_user_details(request)
+    create_audit_log(
+        username=user_details['username'],
+        user_company=user_details['user_company'],
+        group=user_details['group_names'],
+        description=f"Lead is Deleted ",
+        ip_address=user_details['ip_address']
+    )
     lead.delete()
     return redirect('lead-view')
 
@@ -123,6 +157,14 @@ def company_lead_detail(request, lead_id):
     if request.method == 'POST':
         form = LeadForm(request.POST, instance=lead, user = request.user)
         if form.is_valid():
+            user_details = get_user_details(request)
+            create_audit_log(
+                username=user_details['username'],
+                user_company=user_details['user_company'],
+                group=user_details['group_names'],
+                description=f"Lead details are Updated",
+                ip_address=user_details['ip_address']
+            )
             form.save()
             return redirect('company_lead_detail', lead_id=lead_id)
         else:
@@ -141,7 +183,14 @@ def company_lead_detail(request, lead_id):
 @user_passes_test(is_Account_Manager)
 def company_lead_delete(request, lead_id):
     lead = get_object_or_404(Lead, id=lead_id)
-
+    user_details = get_user_details(request)
+    create_audit_log(
+        username=user_details['username'],
+        user_company=user_details['user_company'],
+        group=user_details['group_names'],
+        description=f"Lead is Deleted",
+        ip_address=user_details['ip_address']
+    )
     lead.delete()
     return redirect('company_lead_list')
 

@@ -8,12 +8,25 @@
 {% block content %}
     <div class="container mt-5">
         <h1 class="mb-4">Task List</h1>
-        <center><a href="{% url 'task_create' %}" class="btn btn-primary">Create New Task</a></center><br/>
+        {% comment %} <center><a href="{% url 'task_create' %}" class="btn btn-primary">Create New Task</a></center><br/> {% endcomment %}
 
-        <!-- Filtering and Sorting Forms -->
+        <!-- Filtering, Sorting, and Search Forms -->
+        <div class="row mb-8">
+            <form method="GET" action="{% url 'task_list' %}">
+                <div class="input-group mb-3">
+                    <input type="text" name="q" class="form-control" placeholder="Search tasks..." value="{{ query }}">
+                    <button class="btn btn-outline-primary" type="submit">Search</button>
+                    <a href="{% url 'task_create' %}" class="btn btn-primary">Create New Task</a>
+                    <a href="{% url 'task_list' %}" class="btn btn-secondary ml-2">Reload</a>
+                </div>
+            </form>
+        </div>
         <div class="row mb-4">
+            <!-- Search Form -->
+            
+
             <!-- Filtering Form -->
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <form method="GET" action="{% url 'task_list' %}">
                     <fieldset class="border p-3 rounded">
                         <legend class="w-auto">Filter Tasks</legend>
@@ -24,8 +37,9 @@
                     </fieldset>
                 </form>
             </div>
+
             <!-- Sorting Form -->
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <form method="GET" action="{% url 'task_list' %}">
                     <fieldset class="border p-3 rounded">
                         <legend class="w-auto">Sort Tasks</legend>

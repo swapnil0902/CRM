@@ -65,6 +65,7 @@
 
                     <a href="{% url 'profile_page' %}" class="list-group-item list-group-item-action bg-light">My Profile</a> 
                     <a href="{% url 'master_search' %}" class="list-group-item list-group-item-action bg-light">Search</a> 
+                    <a href="{% url 'audit_logs' %}" class="list-group-item list-group-item-action bg-light">Audit Logs</a> 
                     <a href="{% url 'logout' %}" class="list-group-item list-group-item-action bg-light">Logout</a> 
                 
                 {% endif %}
@@ -106,6 +107,7 @@
                     <a href="{% url 'profile_page' %}" class="list-group-item list-group-item-action bg-light">My Profile</a>
                     <a href="{% url 'mngr_dashboard' %}" class="list-group-item list-group-item-action bg-light">Manager Panel</a>
                     <a href="{% url 'master_search' %}" class="list-group-item list-group-item-action bg-light">Search</a> 
+                    <a href="{% url 'audit_logs' %}" class="list-group-item list-group-item-action bg-light">Audit Logs</a> 
                     <a href="{% url 'logout' %}" class="list-group-item list-group-item-action bg-light">Logout</a> 
                 {% endif %}
             </div>
@@ -126,25 +128,38 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <script>
-    let warningTimeout;
-    const SESSION_TIMEOUT_WARNING = 30 * 1000; // 10 minutes
-
+    let inactivityTimeout;
+    const SESSION_TIMEOUT_WARNING = 3 * 60 * 1000; // 3 minutes in milliseconds (180,000 ms)
 
     function startInactivityTimer() {
-        clearTimeout(warningTimeout);
+        // Clear the timeout if there's any user activity
+        clearTimeout(inactivityTimeout);
 
-        warningTimeout = setTimeout(showWarning, SESSION_TIMEOUT_WARNING);
+        // Set a new timeout to show a warning after a period of inactivity
+        inactivityTimeout = setTimeout(showWarning, SESSION_TIMEOUT_WARNING);
     }
 
     function showWarning() {
         alert("You will be logged out soon due to inactivity.");
     }
 
-    // Reset timer on user interaction
-    window.onload = startInactivityTimer;
-    document.onmousemove = startInactivityTimer;
-    document.onkeypress = startInactivityTimer;
+    function resetTimer() {
+        // Only start the inactivity timer if there is no user activity
+        clearTimeout(inactivityTimeout); // Stop the current timer
+        startInactivityTimer(); // Restart the timer
+    }
+
+    // Attach event listeners to detect user activity
+    window.onload = resetTimer;
+    document.onmousemove = resetTimer;
+    document.onkeypress = resetTimer;
+    document.onscroll = resetTimer;  // Optional: reset timer on scroll
+    document.onclick = resetTimer;   // Optional: reset timer on click
+
+    // Start the timer when the page loads
+    startInactivityTimer();
 </script>
+
 
 {% if messages %}
     <div class="container mt-3">

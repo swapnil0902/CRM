@@ -7,10 +7,21 @@
     <h1 class="mb-4">List of Companies</h1>
     <div class="list-group">
         {% for company in companies %}
-            <a href="{% url 'company_detail' company.pk %}" class="list-group-item list-group-item-action">
-                <h5 class="mb-1">{{ company.name }}</h5>
-                <p class="mb-1">{{ company.service }}</p>
-            </a>
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <a href="{% url 'company_detail' company.pk %}" class="text-decoration-none">
+                        <h5 class="mb-1">{{ company.name }}</h5>
+                        <p class="mb-1">{{ company.service }}</p>
+                    </a>
+                </div>
+                <div>
+                    <a href="{% url 'delete_company' company.pk %}" 
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('Are you sure you want to delete this company?');">
+                        Delete
+                    </a>
+                </div>
+            </div>
         {% empty %}
             <div class="alert alert-warning" role="alert">
                 No companies found.

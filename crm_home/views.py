@@ -16,8 +16,6 @@ from django.contrib.auth.decorators import login_required,user_passes_test
 from .forms import CompanyForm,AccountManagerForm,CompanyForm,UserUpdateForm
 
 
-
-# Create your views here.
 ########################### Default Home Page ############################################
 def home(request):
     return render(request, "crm_home/index.html", )
@@ -66,6 +64,14 @@ def create_company(request):
     if request.method == 'POST':
         form = CompanyForm(request.POST)
         if form.is_valid():
+            user_details = get_user_details(request)
+            create_audit_log(
+                username=user_details['username'],
+                user_company=user_details['user_company'],
+                group=user_details['group_names'],
+                description=f"New Company is  created by Admin",
+                ip_address=user_details['ip_address']
+            )
             form.save()
             return redirect('company_list') 
     else:
@@ -93,6 +99,14 @@ def prefilled_create_company(request, request_id=None):
         form = CompanyForm(request.POST)
         if form.is_valid():
             form.save()
+            user_details = get_user_details(request)
+            create_audit_log(
+                username=user_details['username'],
+                user_company=user_details['user_company'],
+                group=user_details['group_names'],
+                description=f"New Company  is created by Admin",
+                ip_address=user_details['ip_address']
+            )
             return redirect('company_list') 
         else:
             return render(request, 'crm_home/create_company.html', {'form': form})
@@ -125,7 +139,14 @@ def company_detail(request, pk):
         if form.is_valid():
             user_profile, password = form.save()  
 
-           
+            user_details = get_user_details(request)
+            create_audit_log(
+                username=user_details['username'],
+                user_company=user_details['user_company'],
+                group=user_details['group_names'],
+                description=f"New Account Manager is created for {company}",
+                ip_address=user_details['ip_address']
+            )
             html_message = render_to_string(
                 'account/email_template.html',
                 {
@@ -160,6 +181,22 @@ def company_detail(request, pk):
     })
 
 
+
+@login_required
+@user_passes_test(is_Admin)
+def delete_company(request, company_id):
+    company = get_object_or_404(Company, pk=company_id)
+    user_details = get_user_details(request)
+    create_audit_log(
+        username=user_details['username'],
+        user_company=user_details['user_company'],
+        group=user_details['group_names'],
+        description=f"{company}  is deleted",
+        ip_address=user_details['ip_address']
+    )
+    company.delete()
+    messages.success(request, 'Company has been deleted successfully.')
+    return redirect('company_list')
 ############################# Search #############################################################
 @login_required
 @user_passes_test(is_User_or_Manager)
@@ -168,7 +205,6 @@ def master_search(request):
     user_profile = UserProfile.objects.get(staff=request.user)
     company = user_profile.company
 
-    # Assuming Task is related to Customer, and Customer is related to Company
     tasks = Task.objects.filter(
         Q(title__icontains=query) | Q(description__icontains=query),
         customer__company=company
