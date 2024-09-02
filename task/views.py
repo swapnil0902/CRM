@@ -76,6 +76,14 @@ def task_create(request):
                 else:
                     form.add_error('assigned_to', 'You must assign this task to a staff member.')
                     return render(request, 'task/task_create.html', {'form': form})
+            user_details = get_user_details(request)
+            create_audit_log(
+                username=user_details['username'],
+                user_company=user_details['user_company'],
+                group=user_details['group_names'],
+                description=f"New Task is created",
+                ip_address=user_details['ip_address']
+            )
             task.save()
             return redirect('task_list')
     else:
@@ -91,6 +99,14 @@ def update_task(request, pk):
     task = get_object_or_404(Task, pk=pk)
     form = TaskForm(request.POST or None, instance=task, user = request.user)
     if form.is_valid():
+        user_details = get_user_details(request)
+        create_audit_log(
+            username=user_details['username'],
+            user_company=user_details['user_company'],
+            group=user_details['group_names'],
+            description=f"Task is Updated",
+            ip_address=user_details['ip_address']
+        )
         form.save()
         return redirect('task_list')
     return render(request, 'task/task_update.html', {'form': form})
@@ -102,6 +118,14 @@ def update_task(request, pk):
 def delete_task(request, pk):
     task = get_object_or_404(Task, pk=pk)
     if request.method == 'POST':
+        user_details = get_user_details(request)
+        create_audit_log(
+            username=user_details['username'],
+            user_company=user_details['user_company'],
+            group=user_details['group_names'],
+            description=f"Task Updated",
+            ip_address=user_details['ip_address']
+        )
         task.delete()
         return redirect('task_list')
     return render(request, 'task/task_delete.html', {'task': task})
@@ -147,6 +171,14 @@ def company_task_update(request, pk):
     if request.method == 'POST':
         form = TaskForm(request.POST, instance=task, user=request.user)  
         if form.is_valid():
+            user_details = get_user_details(request)
+            create_audit_log(
+                username=user_details['username'],
+                user_company=user_details['user_company'],
+                group=user_details['group_names'],
+                description=f"Task is updated by Manager",
+                ip_address=user_details['ip_address']
+            )
             form.save()
             return redirect('company_task_list')
     else:
@@ -160,6 +192,14 @@ def company_task_update(request, pk):
 @user_passes_test(is_Account_Manager)
 def company_task_delete(request, pk):
     task = get_object_or_404(Task, pk=pk)
+    user_details = get_user_details(request)
+    create_audit_log(
+        username=user_details['username'],
+        user_company=user_details['user_company'],
+        group=user_details['group_names'],
+        description=f"Task is deleted by Manager",
+        ip_address=user_details['ip_address']
+    )
     task.delete()
     return redirect('company_task_list')
 
