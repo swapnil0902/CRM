@@ -443,9 +443,8 @@ def user_request_view(request):
 
     if request.method == 'POST':
         form = UserRequestForm(request.POST)
-        email = form.data.get('email')  # Retrieve the email from the form data
+        email = form.data.get('email')  
 
-        # Check if the email already exists in the User model
         if User.objects.filter(email=email).exists():
             form.add_error('email', 'A user with this email already exists.')
         elif form.is_valid():
@@ -464,9 +463,8 @@ def user_request_view(request):
 def company_request_view(request):
     if request.method == 'POST':
         form = CompanyRequestForm(request.POST)
-        company_name = form.data.get('name')  # Adjust the field name as per your form
+        company_name = form.data.get('name') 
         
-        # Check if the company name already exists
         if Company.objects.filter(name=company_name).exists():
             form.add_error('name', 'A company with this name already exists.')
         elif form.is_valid():
@@ -511,9 +509,7 @@ def request_submitted_view(request):
 @user_passes_test(is_Account_Manager)
 def user_requests_view(request): 
     user_profile = request.user.userprofile
- 
     user_requests = UserRequest.objects.filter(company=user_profile.company)
-     
     return render(request, 'account/user_requests.html', {'user_requests': user_requests})
 
 
@@ -521,7 +517,6 @@ def user_requests_view(request):
 @user_passes_test(is_Account_Manager)
 def delete_user_request(request, request_id):
     user_request = get_object_or_404(UserRequest, id=request_id)
-    
     if request.method == 'POST':
         user_request.delete()
         user_details = get_user_details(request)
@@ -534,7 +529,6 @@ def delete_user_request(request, request_id):
         )
         messages.success(request, 'User request has been deleted successfully.')
         return redirect('user_requests')
-    
     return render(request, 'account/user_requests.html')
 
 ################################## Logout View ############################################################
@@ -564,8 +558,8 @@ def forgot_password(request):
                 uid = urlsafe_base64_encode(force_bytes(user.pk))
                 current_site = get_current_site(request)
                 subject = 'Password Reset Requested'
-                otp = str(random.randint(100000, 999999))  # Generate a random OTP
-                otp_generated_at = timezone.now()  # Store the current time
+                otp = str(random.randint(100000, 999999))  
+                otp_generated_at = timezone.now() 
                 
                 message = render_to_string('registration/password_reset_email.html', {
                     'user': user,
@@ -599,21 +593,16 @@ def verify_otp(request):
             otp_generated_at = request.session.get('otp_generated_at')
 
             if not otp_generated_at:
-                # Redirect to 'forgot password' page if OTP is not found
                 return redirect('forgot_password')
 
             otp_generated_at = datetime.fromisoformat(otp_generated_at)
-            now = timezone.now()  # Get current time
+            now = timezone.now() 
 
-            # Check if the OTP has expired
             if now - otp_generated_at > timedelta(minutes=1):
-                # Redirect to 'forgot password' page if OTP has expired
                 return redirect('forgot_password')
             elif entered_otp == stored_otp:
-                # Redirect to password reset confirmation if OTP is correct
                 return redirect('password_reset_confirm')
             else:
-                # Add an error if the OTP is invalid
                 form.add_error('otp', 'Invalid OTP. Please try again.')
     else:
         form = OTPForm()
@@ -621,17 +610,11 @@ def verify_otp(request):
         if otp_generated_at:
             otp_generated_at = datetime.fromisoformat(otp_generated_at)
             now = timezone.now()
-            
-            # Calculate the remaining time for OTP expiration
             remaining_time = max(0, 60 - (now - otp_generated_at).total_seconds())
-            
-            # Check if OTP has already expired
             if remaining_time == 0:
-                # Redirect to 'forgot password' page if OTP has expired
                 return redirect('forgot_password')
         else:
             remaining_time = 0
-
     return render(request, 'registration/verify_otp.html', {'form': form, 'remaining_time': remaining_time})
 
 
@@ -642,7 +625,6 @@ def password_reset_confirm(request):
         if form.is_valid():
             username = request.session.get('reset_username')
             new_password = form.cleaned_data['new_password']
-
             try:
                 validate_password(new_password)
             except ValidationError as e:
@@ -666,7 +648,6 @@ def password_reset_confirm(request):
                     form.add_error(None, 'Error resetting password. Please try again.')
     else:
         form = SetNewPasswordForm()
-
     return render(request, 'registration/password_reset_form.html', {'form': form})
 
 ################################## Delete Account #########################################################
@@ -694,8 +675,6 @@ def delete_account(request):
 @user_passes_test(is_Account_Manager)
 def delete_my_user(request, user_id):
     user = get_object_or_404(User, id=user_id)
-
-    # Ensure only users from the same company can be deleted
     if request.method == 'POST':
         user_details = get_user_details(request)
         create_audit_log(

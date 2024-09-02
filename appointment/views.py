@@ -65,7 +65,6 @@ def appointment_update(request, pk):
             return redirect('appointment_list')
     else:
         form = AppointmentForm(instance=appointment, user=request.user)
-    
     return render(request, 'appointment/appointment_form.html', {'form': form})
 
 

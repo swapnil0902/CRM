@@ -65,13 +65,10 @@ def customer_create(request):
             return redirect('customer-view')
     else:
         form = CustomerForm()
-
     return render(request, 'customer/customer_create.html', {'form': form})
 
 
-
-# XXXXXXXXXXXXXXX  Customer Detail  XXXXXXXXXXXXXXXXXXXXXXX #
-
+########################  Customer Detail  ######################################
 @api_view(['POST', 'GET'])
 @user_passes_test(is_User_or_Manager)
 def customer_detail(request, customer_id):
@@ -129,9 +126,7 @@ def company_customer_list(request):
         return redirect('login')  
 
     company = request.user.userprofile.company
-
     customers = Customer.objects.filter(company=company)
-
     return render(request, 'customer/company_customer_list.html', {'customers': customers})
 
 

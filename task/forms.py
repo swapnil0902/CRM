@@ -9,8 +9,6 @@ class TaskForm(forms.ModelForm):
     due_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
     due_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}))
 
-
-    
     class Meta:
         model = Task
         fields = ['client_name', 'title', 'description', 'due_date', 'due_time', 'priority', 'status', 'assigned_to', 'customer']

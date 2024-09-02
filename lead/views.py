@@ -140,9 +140,7 @@ def company_lead_list(request):
         return redirect('login')  
 
     company = request.user.userprofile.company
-
     leads = Lead.objects.filter(company=company)
-
     return render(request, 'lead/company_lead_list.html', {'leads': leads})
 
 
