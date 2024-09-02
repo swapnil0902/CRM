@@ -8,7 +8,19 @@
 {% block content %}
     <div class="container mt-5">
         <h1 class="mb-4">Lead List</h1>
-        <a href="{% url 'lead_create' %}" class="btn btn-primary mb-3">Create New Lead</a>
+
+        <!-- Search Form -->
+        <div class="row mb-8">
+            <form method="GET" action="{% url 'lead-view' %}">
+                <div class="input-group mb-3">
+                    <input type="text" name="q" class="form-control" placeholder="Search tasks..." value="{{ query }}">
+                    <button class="btn btn-outline-primary" type="submit">Search</button>
+                    <a href="{% url 'lead_create' %}" class="btn btn-primary">Create New Lead</a>
+                    <a href="{% url 'lead-view' %}" class="btn btn-secondary ml-2">Reload</a>
+                </div>
+            </form>
+        </div>
+        
 
         <table class="table table-striped">
             <thead>

@@ -1,6 +1,7 @@
 from account.views import *
 from .forms import CustomerForm
 from django.shortcuts import render
+from django.db.models import Q
 from customer.models import Customer
 from .serializers import CustomerSerializer
 from rest_framework.decorators import api_view
@@ -25,8 +26,21 @@ class CustomerList(ModelViewSet):
 @login_required
 @user_passes_test(is_User_or_Manager)
 def customer_list(request):
-    customers = Customer.objects.filter(staff = request.user)
-    return render(request, 'customer/customer.html',{'customers': customers})
+    customers = Customer.objects.filter(staff=request.user)
+    query = request.GET.get('q', '')  
+ 
+    if query:
+        customers = customers.filter(
+            Q(first_name__icontains=query) |
+            Q(last_name__icontains=query) |
+            Q(email__icontains=query) |
+            Q(phone_number__icontains=query) |
+            Q(address__icontains=query) |
+            Q(company__name__icontains=query)
+        )
+
+    return render(request, 'customer/customer.html', {'customers': customers, 'query': query})
+
 
 
 ######################## Creating Customers ######################################
@@ -40,6 +54,14 @@ def customer_create(request):
             customer.staff = request.user  
             customer.company = request.user.userprofile.company 
             customer.save()
+            user_details = get_user_details(request)
+            create_audit_log(
+                username=user_details['username'],
+                user_company=user_details['user_company'],
+                group=user_details['group_names'],
+                description=f"A New Customer is added ",
+                ip_address=user_details['ip_address']
+            )
             return redirect('customer-view')
     else:
         form = CustomerForm()
@@ -59,6 +81,14 @@ def customer_detail(request, customer_id):
         form = CustomerForm(request.POST, instance=customer)
         if form.is_valid():
             form.save()
+            user_details = get_user_details(request)
+            create_audit_log(
+                username=user_details['username'],
+                user_company=user_details['user_company'],
+                group=user_details['group_names'],
+                description=f"Customer Details are Updated",
+                ip_address=user_details['ip_address']
+            )
             return redirect('customer-view')
         else:
             return render(request, 'customer/customer_detail.html', {'form': form})
@@ -76,6 +106,14 @@ def customer_detail(request, customer_id):
 @user_passes_test(is_User_or_Manager)
 def customer_delete(request, customer_id):
     lead = get_object_or_404(Customer, id=customer_id)
+    user_details = get_user_details(request)
+    create_audit_log(
+        username=user_details['username'],
+        user_company=user_details['user_company'],
+        group=user_details['group_names'],
+        description=f"Lead is deleted",
+        ip_address=user_details['ip_address']
+    )
     lead.delete()
     return redirect('customer-view')
 
@@ -97,6 +135,14 @@ def company_customer_list(request):
 @user_passes_test(is_User_or_Manager)
 def company_customer_delete(request, customer_id):
     lead = get_object_or_404(Customer, id=customer_id)
+    user_details = get_user_details(request)
+    create_audit_log(
+        username=user_details['username'],
+        user_company=user_details['user_company'],
+        group=user_details['group_names'],
+        description=f"Lead is Deleted",
+        ip_address=user_details['ip_address']
+    )
     lead.delete()
     return redirect('company_customer_list')
 
@@ -113,6 +159,14 @@ def company_customer_detail(request, customer_id):
     if request.method == 'POST':
         form = CustomerForm(request.POST, instance=customer)
         if form.is_valid():
+            user_details = get_user_details(request)
+            create_audit_log(
+                username=user_details['username'],
+                user_company=user_details['user_company'],
+                group=user_details['group_names'],
+                description=f"Customer details are updated",
+                ip_address=user_details['ip_address']
+            )
             form.save()
             return redirect('company_customer_detail', customer_id=customer_id)
         else:

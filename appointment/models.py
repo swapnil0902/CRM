@@ -12,7 +12,7 @@ class Appointment(models.Model):
     end_date = models.DateField(default=timezone.now)
     location = models.CharField(max_length=255, blank=True)
     attendees = models.ManyToManyField(User, related_name='appointments', blank=True)
-    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null = False, default=7)
 
     def __str__(self):
         return self.title

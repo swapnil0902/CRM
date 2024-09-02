@@ -171,7 +171,7 @@ EMAIL_HOST_PASSWORD = 'ktxcsbrjjycdpexb'
 EMAIL_USE_TLS = True
 
 
-SESSION_COOKIE_AGE = 60000000  # Time in seconds
+SESSION_COOKIE_AGE = 220000  # Time in seconds
 
 # Expire session on browser close
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True

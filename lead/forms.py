@@ -22,3 +22,4 @@ class LeadForm(forms.ModelForm):
             self.fields['staff'].required = True  
         else:
             self.fields.pop('staff')
+

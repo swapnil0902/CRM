@@ -8,10 +8,11 @@ from django.utils import timezone
 from django.contrib import messages
 from django.http import JsonResponse
 from django.core.mail import send_mail
+from crm_home.models import UserProfile
 from datetime import datetime, timedelta
 from django.utils.html import strip_tags
 from django.utils.encoding import force_bytes
-from .models import UserRequest, CompanyRequest
+from .models import UserRequest, CompanyRequest,AuditLogDetails
 from rest_framework.viewsets import ModelViewSet
 from crm_home.models import Company, UserProfile
 from django.contrib.auth.models import Group, User
@@ -21,6 +22,7 @@ from django.template.loader import render_to_string
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
+from account.utils import get_user_details,create_audit_log;
 from django.contrib.auth.tokens import default_token_generator
 from django.shortcuts import render, get_object_or_404, redirect
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
@@ -67,7 +69,7 @@ def is_Admin(user):
     return user.is_superuser
 
 
-############################# Build-In Django View ######################################################
+############################# Built-In Django View ######################################################
 class CustomLoginView(View):
     form_class = AuthenticationForm
     template_name = 'registration/login.html'
@@ -78,6 +80,8 @@ class CustomLoginView(View):
             return self._redirect_user(request.user)
 
         form = self.form_class()
+
+
         return render(request, self.template_name, {'form': form})
 
     def post(self, request):
@@ -88,8 +92,17 @@ class CustomLoginView(View):
                 if user:
                     auth_login(request, user)
                     request.session['otp_verified'] = True
+                    user_details = get_user_details(request)
+
+                    create_audit_log(
+                        username=user_details['username'],
+                        user_company=user_details['user_company'],
+                        group=user_details['group_names'],
+                        description="Logged In",
+                        ip_address=user_details['ip_address']
+                    )
                     return self._redirect_user(user)
-            messages.error(request, 'Invalid OTP. Please try again.')
+            # messages.error(request, 'Invalid OTP. Please try again.')
             return render(request, self.otp_template_name)
 
         form = self.form_class(request, data=request.POST)
@@ -101,7 +114,7 @@ class CustomLoginView(View):
             request.session['otp'] = otp
             request.session['otp_sent'] = True
             self.send_otp_via_email(user.email, otp)
-            messages.info(request, 'An OTP has been sent to your email. Please enter it to continue.')
+            # messages.info(request, 'An OTP has been sent to your email. Please enter it to continue.')
             return render(request, self.otp_template_name)
         else:
             messages.error(request, 'Invalid username or password.')
@@ -129,6 +142,8 @@ class CustomLoginView(View):
         subject = 'Your OTP Code'
         message = f'Your OTP code is {otp}'
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email], fail_silently=False)
+
+
 
 
 ############################# Manager Dashboard ######################################################
@@ -176,7 +191,14 @@ def group_create(request):
         form = GroupForm(request.POST)
         if form.is_valid():
             group = form.save()
-            print("something")
+            user_details = get_user_details(request)
+            create_audit_log(
+                username=user_details['username'],
+                user_company=user_details['user_company'],
+                group=user_details['group_names'],
+                description=f"Role-{group.name} Created by Account Manager",
+                ip_address=user_details['ip_address']
+            )
             return redirect('group_list')
         else:
             print("Form errors:", form.errors)
@@ -193,7 +215,14 @@ def group_create_Admin(request):
         form = GroupForm(request.POST)
         if form.is_valid():
             group = form.save()
-            print("something")
+            user_details = get_user_details(request)
+            create_audit_log(
+                username=user_details['username'],
+                user_company=user_details['user_company'],
+                group=user_details['group_names'],
+                description=f"Role-{group.name} Created by Admin",
+                ip_address=user_details['ip_address']
+            )
             return redirect('group_list_Admin')
         else:
             print("Form errors:", form.errors)
@@ -210,6 +239,14 @@ def group_update(request, pk):
         form = GroupForm(request.POST, instance=group)
         if form.is_valid():
             form.save()
+            user_details = get_user_details(request)
+            create_audit_log(
+                username=user_details['username'],
+                user_company=user_details['user_company'],
+                group=user_details['group_names'],
+                description=f"Role-{form.name} Updated by Account Manager",
+                ip_address=user_details['ip_address']
+            )
             return redirect('group_list')  
     else:
         form = GroupForm(instance=group)
@@ -225,6 +262,14 @@ def group_update_Admin(request, pk):
         form = GroupForm(request.POST, instance=group)
         if form.is_valid():
             form.save()
+            user_details = get_user_details(request)
+            create_audit_log(
+                username=user_details['username'],
+                user_company=user_details['user_company'],
+                group=user_details['group_names'],
+                description=f"Role-{form.name} Updated by Admin",
+                ip_address=user_details['ip_address']
+            )
             return redirect('group_list_Admin')  
     else:
         form = GroupForm(instance=group)
@@ -238,6 +283,14 @@ def group_delete(request, pk):
     group = get_object_or_404(Group, pk=pk)
     if request.method == 'POST':
         group.delete()
+        user_details = get_user_details(request)
+        create_audit_log(
+            username=user_details['username'],
+            user_company=user_details['user_company'],
+            group=user_details['group_names'],
+            description=f"Role-{group.name} deleted by Account Manager",
+            ip_address=user_details['ip_address']
+        )
         return redirect('group_list')
     return render(request, 'account/group_confirm_delete.html', {'group': group})
 
@@ -247,8 +300,18 @@ def group_delete_Admin(request, pk):
     group = get_object_or_404(Group, pk=pk)
     if request.method == 'POST':
         group.delete()
+        user_details = get_user_details(request)
+        create_audit_log(
+            username=user_details['username'],
+            user_company=user_details['user_company'],
+            group=user_details['group_names'],
+            description=f"Role-{group.name} Deleted by Admin",
+            ip_address=user_details['ip_address']
+        )
         return redirect('group_list_Admin')
     return render(request, 'account/group_confirm_delete_Admin.html', {'group': group})
+
+
 ################################ Sign-Up Page ##########################################################
 @login_required
 @user_passes_test(is_Account_Manager)
@@ -274,7 +337,14 @@ def signup(request, request_id=None):
                 staff=user,
                 company=company
             )
-            print('created')
+            user_details = get_user_details(request)
+            create_audit_log(
+                username=user_details['username'],
+                user_company=user_details['user_company'],
+                group=user_details['group_names'],
+                description=f"Account with-{username} Created by Account Manager",
+                ip_address=user_details['ip_address']
+            )
             
             html_message = render_to_string(
                 'account/email_template.html',  
@@ -331,6 +401,14 @@ def manual_signup(request):
             )
             
             username = form.cleaned_data.get('username')
+            user_details = get_user_details(request)
+            create_audit_log(
+                username=user_details['username'],
+                user_company=user_details['user_company'],
+                group=user_details['group_names'],
+                description=f"Account with-{username} Created by Account Manager",
+                ip_address=user_details['ip_address']
+            )
 
             html_message = render_to_string(
                 'account/email_template.html',  
@@ -406,6 +484,21 @@ def list_new_company_requests(request):
     return render(request, 'account/list_new_company_requests.html', {'requests': requests})
 
 
+@login_required
+@user_passes_test(is_Account_Manager)
+def delete_request(request, request_id):
+    company_request = get_object_or_404(CompanyRequest, id=request_id)
+    user_details = get_user_details(request)
+    create_audit_log(
+        username=user_details['username'],
+        user_company=user_details['user_company'],
+        group=user_details['group_names'],
+        description=f"Company request is Deleted",
+        ip_address=user_details['ip_address']
+    )
+    company_request.delete()
+    messages.success(request, 'Request has been deleted successfully.')
+    return redirect('list_new_company_requests')
 ############################# Requested Company #########################################################
 def request_submitted_view(request):
     return render(request, 'account/request_submitted.html')
@@ -426,6 +519,14 @@ def delete_user_request(request, request_id):
     user_request = get_object_or_404(UserRequest, id=request_id)
     if request.method == 'POST':
         user_request.delete()
+        user_details = get_user_details(request)
+        create_audit_log(
+            username=user_details['username'],
+            user_company=user_details['user_company'],
+            group=user_details['group_names'],
+            description=f"request-{user_request.first_name} deleted by Account Manager",
+            ip_address=user_details['ip_address']
+        )
         messages.success(request, 'User request has been deleted successfully.')
         return redirect('user_requests')
     return render(request, 'account/user_requests.html')
@@ -433,6 +534,14 @@ def delete_user_request(request, request_id):
 ################################## Logout View ############################################################
 @login_required
 def logout_view(request):
+    user_details = get_user_details(request)
+    create_audit_log(
+        username=user_details['username'],
+        user_company=user_details['user_company'],
+        group=user_details['group_names'],
+        description=f"{user_details['username']} user logged out",
+        ip_address=user_details['ip_address']
+    )
     logout(request)
     return redirect("/")
 
@@ -525,6 +634,14 @@ def password_reset_confirm(request):
                     user = User.objects.get(username=username)
                     user.set_password(new_password)
                     user.save()
+                    user_details = get_user_details(request)
+                    create_audit_log(
+                        username=user_details['username'],
+                        user_company=user_details['user_company'],
+                        group=user_details['group_names'],
+                        description=f"request-{username} changed Account Password",
+                        ip_address=user_details['ip_address']
+                    )
                     messages.success(request, 'Password reset successfully.')
                     return redirect('login')
                 except User.DoesNotExist:
@@ -534,10 +651,19 @@ def password_reset_confirm(request):
     return render(request, 'registration/password_reset_form.html', {'form': form})
 
 ################################## Delete Account #########################################################
-
+@login_required
+@user_passes_test(is_User_or_Manager)
 def delete_account(request):
     if request.method == "POST":
         user = request.user
+        user_details = get_user_details(request)
+        create_audit_log(
+            username=user_details['username'],
+            user_company=user_details['user_company'],
+            group=user_details['group_names'],
+            description=f"{user_details['username']} User Deleted his Account",
+            ip_address=user_details['ip_address']
+        )
         user.delete()
         messages.success(request, "Your account has been deleted successfully.")
         return redirect('home')
@@ -545,14 +671,44 @@ def delete_account(request):
 
 
 ################################## Delete My User #########################################################
-
+@login_required
+@user_passes_test(is_Account_Manager)
 def delete_my_user(request, user_id):
     user = get_object_or_404(User, id=user_id)
     if request.method == 'POST':
+        user_details = get_user_details(request)
+        create_audit_log(
+            username=user_details['username'],
+            user_company=user_details['user_company'],
+            group=user_details['group_names'],
+            description=f"{user.first_name} Account deleted by the Account Manager[{user_details['username']}]",
+            ip_address=user_details['ip_address']
+        )
         user.delete()
         return redirect('mngr_dashboard')  
     else:
         return redirect('mngr_dashboard')  
     
+
+################################## Audit Log View #########################################################
+
+
+@login_required
+@user_passes_test(is_User_or_Manager)
+def audit_log_view(request):
+    # Fetch all audit logs from the database
+    audit_logs = AuditLogDetails.objects.filter(user_name=request.user.username).order_by('-timestamp')
+
+    # Render the template with the audit logs
+    return render(request, 'account/audit_logs.html', {'audit_logs': audit_logs})
+
+@login_required
+@user_passes_test(is_Admin)
+def audit_log_view_Admin(request):
+    # Fetch all audit logs from the database
+    audit_logs = AuditLogDetails.objects.filter(user_name=request.user.username).order_by('-timestamp')
+
+    # Render the template with the audit logs
+    return render(request, 'account/audit_logs_Admin.html', {'audit_logs': audit_logs})
 
 ################################## THE-END #########################################################

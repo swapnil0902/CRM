@@ -42,3 +42,18 @@ class CompanyRequest(models.Model):
         return self.name
 
 ##################################          #########################################################
+# models.py
+
+from django.db import models
+from django.utils import timezone
+
+class AuditLogDetails(models.Model):
+    user_name = models.CharField(max_length=150)
+    user_company = models.CharField(max_length=255) 
+    group = models.CharField(max_length=255)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)  
+    timestamp = models.DateTimeField(default=timezone.now)
+    description=models.CharField(max_length=500) 
+
+    def __str__(self):
+        return f"AuditLog({self.username}, {self.user_company}, {self.group}, {self.timestamp})"

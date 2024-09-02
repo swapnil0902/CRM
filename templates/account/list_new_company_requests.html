@@ -27,6 +27,11 @@
                            class="btn btn-success btn-sm">
                            Create Company
                         </a>
+                        <a href="{% url 'delete_request' request_id=request.id %}" 
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('Are you sure you want to delete this request?');">
+                           Delete Request
+                        </a>
                     </td>
                 </tr>
             {% empty %}

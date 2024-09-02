@@ -11,7 +11,7 @@ from django.db.models.signals import post_save
 
 
 # Create your models here.
-#############################         #############################################################
+#############################   Lead Model   #############################################################
 class Lead(models.Model):
     STATUS_CHOICES = (
         ('Not Contacted', 'Not Contacted'),

@@ -21,7 +21,7 @@ urlpatterns = [
     path('delete-user-request/<int:request_id>/', views.delete_user_request, name='delete_user_request'),
     path('create-company-from-request/<int:request_id>/', crm_homeview.prefilled_create_company, name='prefilled_create_company'),
     path('list-new-company-requests/', views.list_new_company_requests, name='list_new_company_requests'),
-
+    
     ############################# groups #########################################################
     path('groups/', views.group_list, name='group_list'),
     path('create-group/', views.group_create, name='group_create'),
@@ -41,6 +41,7 @@ urlpatterns = [
     path('company/<int:pk>/', crm_homeview.company_detail, name='company_detail'),
     path('create-company/', crm_homeview.create_company, name="create_company"),
     path('request-company/', views.company_request_view, name='request_company'),
+    path('delete-company/<int:company_id>/', crm_homeview.delete_company, name='delete_company'),
 
     #################################### customer list ###########################################
     path('company_customers/', cust_views.company_customer_list, name='company_customer_list'),
@@ -69,7 +70,8 @@ urlpatterns = [
     #################################### delete account ###########################################
     path('delete_account/', views.delete_account, name='delete_account'),
     path('delete_user/<int:user_id>/', views.delete_my_user, name='delete_my_user'),
-    
-
+    path('delete-request/<int:request_id>/', views.delete_request, name='delete_request'),
+    path('audit-logs/', views.audit_log_view, name='audit_logs'),
+    path('audit-logs-Admin/', views.audit_log_view_Admin, name='audit_logs_Admin'),
     path('check_session/', views.check_session, name='check_session'),
 ]

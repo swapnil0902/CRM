@@ -1,5 +1,6 @@
 from .models import Task
 from account.views import *
+from django.db.models import Q
 from .forms import TaskForm,TaskFilterForm
 from .serializers import TaskListSerializer
 from django.contrib.auth import get_user_model
@@ -24,7 +25,13 @@ class TaskList(ModelViewSet):
 def task_list(request):
     tasks = Task.objects.filter(assigned_to=request.user)
     form = TaskFilterForm(request.GET or None)
-
+    query = request.GET.get('q', '')   
+ 
+    if query:
+        tasks = tasks.filter(
+            Q(title__icontains=query) | Q(description__icontains=query) | Q(client_name__icontains=query)
+        )
+ 
     if form.is_valid():
         priority = form.cleaned_data.get('priority')
         status = form.cleaned_data.get('status')
@@ -41,12 +48,13 @@ def task_list(request):
             tasks = tasks.filter(due_date__gte=start_date)
         elif end_date:
             tasks = tasks.filter(due_date__lte=end_date)
-
+ 
     sort_by = request.GET.get('sort_by', 'due_date')
     if sort_by in ['due_date', 'priority', 'status']:
         tasks = tasks.order_by(sort_by)
 
-    return render(request, 'task/task_list.html', {'tasks': tasks, 'form': form})
+    return render(request, 'task/task_list.html', {'tasks': tasks, 'form': form, 'query': query})
+
 
 
 ######################## Creating Tasks ##########################################

@@ -26,8 +26,6 @@
         <!-- Delete Lead Form -->
         <form method="post" action="{% url 'lead_detail' lead.id %}" class="mt-4 mx-auto">
             {% csrf_token %}
-            <input type="hidden" name="_method" value="DELETE">
-            <button type="submit" class="btn btn-danger" style="background-color:red">Delete Lead</button>
         </form>
         
         <!-- Back to List Link -->
