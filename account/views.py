@@ -12,7 +12,6 @@ from crm_home.models import UserProfile
 from datetime import datetime, timedelta
 from django.utils.html import strip_tags
 from django.utils.encoding import force_bytes
-from .models import UserRequest, CompanyRequest,AuditLogDetails
 from rest_framework.viewsets import ModelViewSet
 from crm_home.models import Company, UserProfile
 from django.contrib.auth.models import Group, User
@@ -24,6 +23,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
 from account.utils import get_user_details,create_audit_log;
 from django.contrib.auth.tokens import default_token_generator
+from .models import UserRequest, CompanyRequest,AuditLogDetails
 from django.shortcuts import render, get_object_or_404, redirect
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from django.contrib.auth.password_validation import validate_password
@@ -80,8 +80,6 @@ class CustomLoginView(View):
             return self._redirect_user(request.user)
 
         form = self.form_class()
-
-
         return render(request, self.template_name, {'form': form})
 
     def post(self, request):
@@ -142,8 +140,6 @@ class CustomLoginView(View):
         subject = 'Your OTP Code'
         message = f'Your OTP code is {otp}'
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email], fail_silently=False)
-
-
 
 
 ############################# Manager Dashboard ######################################################
@@ -696,19 +692,15 @@ def delete_my_user(request, user_id):
 @login_required
 @user_passes_test(is_User_or_Manager)
 def audit_log_view(request):
-    # Fetch all audit logs from the database
     audit_logs = AuditLogDetails.objects.filter(user_name=request.user.username).order_by('-timestamp')
 
-    # Render the template with the audit logs
     return render(request, 'account/audit_logs.html', {'audit_logs': audit_logs})
 
 @login_required
 @user_passes_test(is_Admin)
 def audit_log_view_Admin(request):
-    # Fetch all audit logs from the database
     audit_logs = AuditLogDetails.objects.filter(user_name=request.user.username).order_by('-timestamp')
 
-    # Render the template with the audit logs
     return render(request, 'account/audit_logs_Admin.html', {'audit_logs': audit_logs})
 
 ################################## THE-END #########################################################

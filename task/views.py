@@ -29,7 +29,7 @@ def task_list(request):
  
     if query:
         tasks = tasks.filter(
-            Q(title__icontains=query) | Q(description__icontains=query) | Q(client_name__icontains=query)
+            Q(title__icontains=query) | Q(description__icontains=query) 
         )
  
     if form.is_valid():
@@ -54,7 +54,6 @@ def task_list(request):
         tasks = tasks.order_by(sort_by)
 
     return render(request, 'task/task_list.html', {'tasks': tasks, 'form': form, 'query': query})
-
 
 
 ######################## Creating Tasks ##########################################

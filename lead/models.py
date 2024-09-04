@@ -32,7 +32,6 @@ class Lead(models.Model):
         return f'{self.first_name} {self.last_name}'
 
 
-
 #############################        #############################################################
 @receiver(post_save, sender=Lead)
 def handle_lead_status_change(sender, instance, **kwargs):

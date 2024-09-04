@@ -56,7 +56,6 @@
                 <table class="table table-striped table-bordered">
                     <thead>
                         <tr>
-                            <th>Client Name</th>
                             <th>Task Title</th>
                             <th>Description (optional)</th>
                             <th>Due Date</th>
@@ -72,7 +71,6 @@
                     <tbody>
                         {% for task in tasks %}
                         <tr>
-                            <td>{{ task.client_name }}</td>
                             <td>{{ task.title }}</td>
                             <td>{{ task.description }}</td>
                             <td>{{ task.due_date }}</td>

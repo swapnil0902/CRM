@@ -1,15 +1,16 @@
+from account.utils import *
+from account.views import *
+from django.db.models import Q
 from .models import Appointment
 from .forms import AppointmentForm
+from account.models import AuditLogDetails
 from .serializers import AppointmentSerializer
 from rest_framework.decorators import api_view
 from rest_framework.viewsets import ModelViewSet
-from django.contrib.auth.decorators import login_required,user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
-from account.models import AuditLogDetails
-from django.db.models import Q
-from account.utils import *
-from account.views import *;
+from django.contrib.auth.decorators import login_required,user_passes_test
+
 ############################### API ##############################################
 
 class AppointmentList(ModelViewSet):
@@ -91,23 +92,19 @@ def appointment_delete(request, pk):
 @login_required
 @user_passes_test(is_User_or_Manager)
 def appointment_list(request):
-    # Get the search query from the GET parameters
     query = request.GET.get('q', '')
 
-    # Fetch user profile and associated company
     user_profile = UserProfile.objects.get(staff=request.user)
     company = user_profile.company
 
-    # Filter appointments based on the search query and user/company association
     appointments = Appointment.objects.filter(
         Q(title__icontains=query) | 
         Q(description__icontains=query) | 
         Q(location__icontains=query),
         attendees=request.user,
-        customer__company=company  # Filter based on company association
+        customer__company=company 
     ).distinct()
 
-    # Pass the search query back to the template to keep it in the search input
     return render(request, 'appointment/appointment_list.html', {'appointments': appointments, 'query': query})
 
 

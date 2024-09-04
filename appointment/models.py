@@ -1,9 +1,7 @@
-# models.py
 from django.db import models
-from django.contrib.auth.models import User
-from customer.models import Customer
 from django.utils import timezone
-
+from customer.models import Customer
+from django.contrib.auth.models import User
 
 class Appointment(models.Model):
     title = models.CharField(max_length=100,blank=False)

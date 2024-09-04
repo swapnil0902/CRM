@@ -124,6 +124,11 @@ def company_list(request):
     companies = Company.objects.all()
     return render(request, 'crm_home/company_list.html', {'companies': companies})
 
+##########################################################
+
+
+
+
 
 ############################ Company Details ###############################################
 @login_required
@@ -181,7 +186,7 @@ def company_detail(request, pk):
     })
 
 
-
+############################ Company Delete #################################################
 @login_required
 @user_passes_test(is_Admin)
 def delete_company(request, company_id):
@@ -197,6 +202,8 @@ def delete_company(request, company_id):
     company.delete()
     messages.success(request, 'Company has been deleted successfully.')
     return redirect('company_list')
+
+
 ############################# Search #############################################################
 @login_required
 @user_passes_test(is_User_or_Manager)

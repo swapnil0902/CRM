@@ -1,4 +1,3 @@
-# myapp/middleware.py
 from django.conf import settings
 from django.utils import timezone
 
@@ -7,7 +6,6 @@ class SessionTimeoutMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        # Extend session expiry time on user interaction
         if request.user.is_authenticated:
             request.session.set_expiry(settings.SESSION_COOKIE_AGE)
         

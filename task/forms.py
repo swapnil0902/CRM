@@ -11,7 +11,7 @@ class TaskForm(forms.ModelForm):
 
     class Meta:
         model = Task
-        fields = ['client_name', 'title', 'description', 'due_date', 'due_time', 'priority', 'status', 'assigned_to', 'customer']
+        fields = [ 'title', 'description', 'due_date', 'due_time', 'priority', 'status', 'assigned_to', 'customer']
     
 
     def __init__(self, *args, **kwargs):

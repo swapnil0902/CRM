@@ -14,8 +14,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 
 
 ######################## Import The User Data ##########################################
-User = get_user_model()
 
+User = get_user_model()
 
 ####################### Leads Creation Using Viewsets ##################################
 class LeadViewSet(viewsets.ModelViewSet):

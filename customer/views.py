@@ -1,7 +1,7 @@
 from account.views import *
+from django.db.models import Q
 from .forms import CustomerForm
 from django.shortcuts import render
-from django.db.models import Q
 from customer.models import Customer
 from .serializers import CustomerSerializer
 from rest_framework.decorators import api_view
@@ -40,7 +40,6 @@ def customer_list(request):
         )
 
     return render(request, 'customer/customer.html', {'customers': customers, 'query': query})
-
 
 
 ######################## Creating Customers ######################################
