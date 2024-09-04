@@ -1,7 +1,3 @@
-Here's a sample `README.md` file for your project:
-
----
-
 # CRM Management System
 
 This CRM Management System is a Django-based web application designed to manage company operations, including handling users, customers, leads, tasks, and appointments. The system supports role-based access control, where different user roles such as Account Manager, Staff, and Superuser have specific permissions. The application integrates essential features such as user authentication, OTP-based login, lead management, and more.

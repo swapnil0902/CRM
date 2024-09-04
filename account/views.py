@@ -197,7 +197,8 @@ def group_create(request):
             )
             return redirect('group_list')
         else:
-            print("Form errors:", form.errors)
+            print("Form errors:", form.errors
+                  )
     else:
         form = GroupForm()
     return render(request, 'account/group_form.html', {'form': form})
@@ -630,14 +631,7 @@ def password_reset_confirm(request):
                     user = User.objects.get(username=username)
                     user.set_password(new_password)
                     user.save()
-                    user_details = get_user_details(request)
-                    create_audit_log(
-                        username=user_details['username'],
-                        user_company=user_details['user_company'],
-                        group=user_details['group_names'],
-                        description=f"request-{username} changed Account Password",
-                        ip_address=user_details['ip_address']
-                    )
+                   
                     messages.success(request, 'Password reset successfully.')
                     return redirect('login')
                 except User.DoesNotExist:
